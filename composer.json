@@ -1,0 +1,11 @@
+{
+    "name": "m3m0r7/php-os",
+    "description": "An operating system written in PHP",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "PHPOS\\": "src/"
+        }
+    },
+    "require": {}
+}
