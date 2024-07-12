@@ -15,5 +15,5 @@ interface RuntimeInterface
     public function variables(): VariableCollection;
     public function operations(): OperationCollection;
     public function call(OperationType $operationType, DestinationInterface $destination, SourceInterface ...$sources): string;
-    public function raw(string $asm, DestinationInterface $destination, SourceInterface ...$sources): string;
+    public function callRaw(string $asm, DestinationInterface|null $destination = null, SourceInterface ...$sources): string;
 }

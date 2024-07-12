@@ -45,11 +45,11 @@ class Runtime implements RuntimeInterface
             ->process($destination, ...$sources);
     }
 
-    public function raw(string $asm, DestinationInterface $destination, SourceInterface ...$sources): string
+    public function callRaw(string $asm, DestinationInterface|null $destination = null, SourceInterface ...$sources): string
     {
         return rtrim(sprintf(
             $asm,
-            (string) $destination,
+            (string) ($destination ?? ''),
             implode(", ", array_map(fn (SourceInterface $source) => (string) $source, $sources)),
         ), ', ');
     }

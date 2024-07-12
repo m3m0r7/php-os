@@ -3,9 +3,7 @@ declare(strict_types=1);
 namespace PHPOS\Service;
 
 use PHPOS\Architecture\Register\DataRegisterInterface;
-use PHPOS\Architecture\Register\RegisterInterface;
 use PHPOS\Architecture\Register\RegisterType;
-use PHPOS\BootloaderInterface;
 use PHPOS\Instruction;
 use PHPOS\InstructionInterface;
 use PHPOS\Operation\Int_;

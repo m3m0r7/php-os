@@ -5,10 +5,10 @@ namespace PHPOS\Operation;
 use PHPOS\Architecture\Architecture;
 use PHPOS\Architecture\Operation\DestinationInterface;
 use PHPOS\Architecture\Operation\OperationInterface;
-use PHPOS\Architecture\Operation\OperationType;
 use PHPOS\Architecture\Operation\SourceInterface;
+use PHPOS\Architecture\Variable\VariableType;
 
-class Jz implements OperationInterface
+class EndOfBootLoader implements OperationInterface
 {
     public function __construct(protected Architecture $architecture)
     {
@@ -17,14 +17,17 @@ class Jz implements OperationInterface
 
     public function process(DestinationInterface $destination, SourceInterface ...$sources): string
     {
+        $variables = $this->architecture->runtime()->variables();
+        $db = $variables->get(VariableType::BITS_8);
+
         return $this->architecture
             ->runtime()
             ->callRaw(
                 <<< __ASM__
-                jz %s, %s
+                times 510-($-$$) {$db->realName()} 0
+                {$db->realName()} 0x55
+                {$db->realName()} 0xAA
                 __ASM__,
-                $destination,
-                ...$sources
             );
     }
 }
