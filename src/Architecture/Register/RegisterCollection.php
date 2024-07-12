@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace PHPOS\Architecture\Register;
 
-use PHPOS\Architecture\Collection\Collection;
+use PHPOS\Collection\Collection;
 
 class RegisterCollection extends Collection
 {

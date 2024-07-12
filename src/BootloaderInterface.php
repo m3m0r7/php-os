@@ -7,4 +7,5 @@ use PHPOS\Architecture\ArchitectureInterface;
 interface BootloaderInterface
 {
     public function architecture(): ArchitectureInterface;
+    public function option(): OptionInterface;
 }

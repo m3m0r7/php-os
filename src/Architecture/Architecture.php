@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace PHPOS\Architecture;
 
-use PHPOS\Architecture\Register\RegisterCollection;
 use PHPOS\Exception\RuntimeNotRegisteredException;
 use PHPOS\Runtime;
 use PHPOS\RuntimeInterface;
@@ -16,8 +15,9 @@ class Architecture implements ArchitectureInterface
         $this->registerArchitecture(
             ArchitectureType::x86_84,
             new Runtime(
-                \PHPOS\Architecture\Register\x86_64::registers(),
-                \PHPOS\Architecture\Variable\x86_64::variables(),
+                \PHPOS\Architecture\Register\x86_64\Register::registers(),
+                \PHPOS\Architecture\Variable\x86_64\Variable::variables(),
+                \PHPOS\Architecture\Operation\x86_64\Mnemonic::operations(),
             )
         );
     }

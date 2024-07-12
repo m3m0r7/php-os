@@ -7,12 +7,17 @@ use PHPOS\Architecture\ArchitectureInterface;
 
 class Bootloader implements BootloaderInterface
 {
-    public function __construct(public readonly ArchitectureInterface $architecture) {
+    public function __construct(public readonly ArchitectureInterface $architecture, protected readonly OptionInterface $option) {
 
     }
 
     public function architecture(): ArchitectureInterface
     {
         return $this->architecture;
+    }
+
+    public function option(): OptionInterface
+    {
+        return $this->option;
     }
 }

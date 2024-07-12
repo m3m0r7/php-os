@@ -1,4 +1,5 @@
 .idea
 test*.php
 composer.lock
+generators
 /vendor/

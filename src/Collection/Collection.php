@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace PHPOS\Architecture\Collection;
+namespace PHPOS\Collection;
 
 use PHPOS\Exception\CollectionCannotGetException;
 use PHPOS\Exception\CollectionCannotSetException;

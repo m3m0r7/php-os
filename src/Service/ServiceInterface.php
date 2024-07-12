@@ -2,10 +2,12 @@
 declare(strict_types=1);
 namespace PHPOS\Service;
 
+use PHPOS\BootloaderInterface;
 use PHPOS\InstructionInterface;
 
 interface ServiceInterface
 {
-    public function __construct(InstructionInterface $instruction);
-    public function assemble(): InstructionInterface;
+    public function process(): InstructionInterface;
+
+    public function label(): string;
 }
