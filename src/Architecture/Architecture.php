@@ -15,6 +15,7 @@ class Architecture implements ArchitectureInterface
         $this->registerArchitecture(
             ArchitectureType::x86_84,
             new Runtime(
+                $this,
                 \PHPOS\Architecture\Register\x86_64\Register::registers(),
                 \PHPOS\Architecture\Variable\x86_64\Variable::variables(),
                 \PHPOS\Architecture\Operation\x86_64\Mnemonic::operations(),

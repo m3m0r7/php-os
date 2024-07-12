@@ -17,12 +17,6 @@ class PrintCharacter implements ServiceInterface
 
     public function process(): InstructionInterface
     {
-        $registers = $this->bootloader->architecture()->runtime()->registers();
-
-        $ac = $registers->get(RegisterType::ACCUMULATOR);
-
-        assert($ac instanceof DataRegisterInterface);
-
         [$register] = $this->parameters;
 
         return (new Instruction($this->bootloader))
@@ -30,7 +24,7 @@ class PrintCharacter implements ServiceInterface
                 $this->label(),
                 fn (InstructionInterface $instruction) =>
                 $instruction
-                    ->append(Mov::class, $register)
+                    ->append(Mov::class, $register, new Hex(0x0E))
                     ->append(Int_::class, new Hex(0x10))
                     ->append(Ret::class)
             );

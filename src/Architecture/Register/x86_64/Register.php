@@ -7,6 +7,7 @@ use PHPOS\Architecture\Register\IndexRegister;
 use PHPOS\Architecture\Register\RegisterCollection;
 use PHPOS\Architecture\Register\RegisterInterface;
 use PHPOS\Architecture\Register\RegisterType;
+use PHPOS\Architecture\Register\SegmentRegister;
 
 enum Register implements RegisterInterface
 {
@@ -49,7 +50,11 @@ enum Register implements RegisterInterface
             ->set(RegisterType::COUNTER, new DataRegister(self::ECX, self::ECH, self::ECL))
             ->set(RegisterType::BASE, new DataRegister(self::EBX, self::EBH, self::EBL))
             ->set(RegisterType::SOURCE_INDEX, new IndexRegister(self::ESI))
-            ->set(RegisterType::DESTINATION_INDEX, new IndexRegister(self::EDI));
+            ->set(RegisterType::DESTINATION_INDEX, new IndexRegister(self::EDI))
+            ->set(RegisterType::CODE_SEGMENT, new SegmentRegister(self::CS))
+            ->set(RegisterType::DATA_SEGMENT, new SegmentRegister(self::DS))
+            ->set(RegisterType::STACK_SEGMENT, new SegmentRegister(self::SS))
+            ->set(RegisterType::EXTRA_SEGMENT, new SegmentRegister(self::ES));
     }
 
     public function realName(): string

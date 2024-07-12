@@ -26,7 +26,7 @@ trait GeneralOperand
         if (is_int($this->valueOf)) {
             return "{$this->valueOf}";
         }
-        if ($this->valueOf instanceof \Stringable) {
+        if ($this->valueOf instanceof \Stringable || is_string($this->valueOf)) {
             return "{$this->valueOf}";
         }
 

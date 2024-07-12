@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace PHPOS;
 
+use PHPOS\Architecture\ArchitectureInterface;
 use PHPOS\Architecture\Operation\DestinationInterface;
 use PHPOS\Architecture\Operation\OperationCollection;
 use PHPOS\Architecture\Operation\OperationType;
@@ -11,7 +12,10 @@ use PHPOS\Architecture\Variable\VariableCollection;
 
 class Runtime implements RuntimeInterface
 {
+    protected array $definedVariables = [];
+
     public function __construct(
+        protected ArchitectureInterface $architecture,
         protected RegisterCollection $registers,
         protected VariableCollection $variables,
         protected OperationCollection $operations,
@@ -52,5 +56,16 @@ class Runtime implements RuntimeInterface
             (string) ($destination ?? ''),
             implode(", ", array_map(fn (SourceInterface $source) => (string) $source, $sources)),
         ), ', ');
+    }
+
+    public function setVariable(string $variableName, string $value): RuntimeInterface
+    {
+        $this->definedVariables[$variableName] = $value;
+        return $this;
+    }
+
+    public function definedVariables(): array
+    {
+        return $this->definedVariables;
     }
 }

@@ -14,15 +14,6 @@ class Start implements ServiceInterface
 
     public function process(): InstructionInterface
     {
-        $registers = $this->bootloader->architecture()->runtime()->registers();
-
-        $ac = $registers->get(RegisterType::ACCUMULATOR);
-
-        assert($ac instanceof DataRegisterInterface);
-
-        $return = new Return_($this->bootloader, $this);
-        $printCharacter = new PrintCharacter($this->bootloader, $this, $ac->high());
-
         return (new Instruction($this->bootloader))
             ->section(
                 'start',

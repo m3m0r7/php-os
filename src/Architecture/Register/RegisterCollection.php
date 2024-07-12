@@ -14,7 +14,7 @@ class RegisterCollection extends Collection
         return $this;
     }
 
-    public function get(RegisterType $registerType): DataRegisterInterface|IndexRegisterInterface
+    public function get(RegisterType $registerType): DataRegisterInterface|SegmentRegisterInterface|IndexRegisterInterface
     {
         return $this->items[$registerType->name];
     }

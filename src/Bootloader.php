@@ -4,15 +4,16 @@ namespace PHPOS;
 
 use PHPOS\Architecture\ArchitectureInterface;
 use PHPOS\Service\EndOfBootLoader;
-use PHPOS\Service\PrintCharacter;
+use PHPOS\Service\HelloWorld;
 use PHPOS\Service\PrintString;
-use PHPOS\Service\Return_;
 use PHPOS\Service\ServiceInterface;
 use PHPOS\Service\Start;
+use PHPOS\Service\Variable;
 
 class Bootloader implements BootloaderInterface
 {
-    protected array $services = [];
+    protected array $initializeServices = [];
+    protected array $postServices = [];
     public function __construct(public readonly ArchitectureInterface $architecture, protected readonly OptionInterface $option) {
 
     }
@@ -27,27 +28,54 @@ class Bootloader implements BootloaderInterface
         return $this->option;
     }
 
-    public function registerService(string $serviceName): self
+    public function registerInitializeService(string $serviceName): self
     {
-        $this->services[] = $serviceName;
+        $this->initializeServices[] = $serviceName;
         return $this;
     }
 
-    public function initialize(): self
+    public function registerPostService(string $serviceName): self
     {
-        $this->registerService(Start::class);
-        $this->registerService(PrintString::class);
+        $this->postServices[] = $serviceName;
+        return $this;
+    }
 
-        // NOTE: Should be end
-        $this->registerService(EndOfBootLoader::class);
+    public function registerInitializeServices(): self
+    {
+        $this->registerInitializeService(Start::class);
+        $this->registerInitializeService(HelloWorld::class);
+        $this->registerInitializeService(PrintString::class);
 
         return $this;
     }
 
-    public function assembly(): self
+    public function registerPostServices(): self
+    {
+        $this->registerPostService(EndOfBootLoader::class);
+
+        return $this;
+    }
+
+    public function assemble(): self
     {
         $assembly = '';
-        foreach ($this->services as $service) {
+        foreach ($this->initializeServices as $service) {
+            $service = new $service($this);
+
+            assert($service instanceof ServiceInterface);
+            $assembly .= $service->process()->assemble() . "\n";
+        }
+
+        foreach ($this->architecture->runtime()->definedVariables() as $name => $value) {
+            $assembly .= (new Variable(
+                $this,
+                null,
+                $name,
+                $value,
+            ))->process()->assemble() . "\n";
+        }
+
+        foreach ($this->postServices as $service) {
             $service = new $service($this);
 
             assert($service instanceof ServiceInterface);
