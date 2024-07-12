@@ -16,9 +16,6 @@ class PrintCharacter implements ServiceInterface
 {
     use BaseService;
 
-    public function __construct(protected BootloaderInterface $bootloader, protected RegisterInterface $register)
-    {}
-
     public function process(): InstructionInterface
     {
         $registers = $this->bootloader->architecture()->runtime()->registers();
@@ -27,14 +24,16 @@ class PrintCharacter implements ServiceInterface
 
         assert($ac instanceof DataRegisterInterface);
 
+        [$register] = $this->parameters;
+
         return (new Instruction($this->bootloader))
             ->section(
                 $this->label(),
                 fn (InstructionInterface $instruction) =>
                 $instruction
-                    ->append(Mov::class, $this->register)
+                    ->append(Mov::class, $register)
                     ->append(Int_::class, 0x10)
-                    ->append(Ret::class, $this)
+                    ->append(Ret::class)
             );
     }
 }

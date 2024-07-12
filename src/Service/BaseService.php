@@ -7,12 +7,29 @@ use PHPOS\InstructionInterface;
 
 trait BaseService
 {
+    protected array $parameters = [];
+
+    public function __construct(protected BootloaderInterface $bootloader, protected ?ServiceInterface $parent = null, ...$parameters)
+    {
+        $this->parameters = $parameters;
+    }
+
     public function label(): string
     {
-        return $this->bootloader->option()->prefix() . preg_replace(
+        $name = $this->formatClassName(get_class($this));
+
+        if ($this->parent !== null) {
+            return $this->parent->label() . '_' . $name;
+        }
+        return $this->bootloader->option()->prefix() . $name;
+    }
+
+    private function formatClassName($name): string
+    {
+        return preg_replace(
             '/[!@#$%^&*()_+|.><?.,\-=\\\]/',
             '_',
-            get_class($this),
+            $name,
         );
     }
 }

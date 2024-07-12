@@ -22,7 +22,10 @@ trait GeneralOperand
         if ($this->valueOf instanceof ServiceInterface) {
             return $this->valueOf->label();
         }
-        var_dump(1234, $this->valueOf);
+        if (is_int($this->valueOf)) {
+            return "{$this->valueOf}";
+        }
+        var_dump(1234, $this->valueOf, 0x10);
         exit();
     }
 }

@@ -11,12 +11,13 @@ class Return_ implements ServiceInterface
 {
     use BaseService;
 
-    public function __construct(protected BootloaderInterface $bootloader)
-    {}
-
     public function process(): InstructionInterface
     {
         return (new Instruction($this->bootloader))
-            ->append(Ret::class);
+            ->section(
+                $this->label(),
+                fn (InstructionInterface $instruction) => $instruction
+                    ->append(Ret::class)
+            );
     }
 }

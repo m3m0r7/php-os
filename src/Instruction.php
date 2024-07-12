@@ -4,8 +4,10 @@ namespace PHPOS;
 
 use PHPOS\Architecture\Operation\Destination;
 use PHPOS\Architecture\Operation\Source;
+use PHPOS\Service\ServiceInterface;
+use Traversable;
 
-class Instruction implements InstructionInterface
+class Instruction implements InstructionInterface, \IteratorAggregate
 {
     protected array $instructions = [];
 
@@ -18,11 +20,30 @@ class Instruction implements InstructionInterface
     public function section(string $name, callable $callback): InstructionInterface
     {
         $instruction = new self($this->bootloader);
+        $instruction = $instruction->merge($this);
         $instruction->instructions[] = ["{$name}:", null, null, $this->indentSize];
 
         $instruction->indentSize += 2;
 
         return $callback($instruction);
+    }
+
+    public function include(ServiceInterface $service): self
+    {
+        return $this->merge($service->process());
+    }
+
+    public function merge(InstructionInterface $instruction): self
+    {
+        $new = new self($this->bootloader);
+        foreach ($this->instructions as $record) {
+            $new->instructions[] = $record;
+        }
+        foreach ($instruction->valueOf() as $record) {
+            $new->instructions[] = $record;
+        }
+
+        return $new;
     }
 
     public function append(string $operation, mixed $destination = null, mixed ...$sources): InstructionInterface
@@ -51,5 +72,15 @@ class Instruction implements InstructionInterface
         }
 
         return $results;
+    }
+
+    public function getIterator(): Traversable
+    {
+        return new \ArrayIterator($this->instructions);
+    }
+
+    public function valueOf(): array
+    {
+        return $this->instructions;
     }
 }

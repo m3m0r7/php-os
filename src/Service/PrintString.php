@@ -17,9 +17,6 @@ class PrintString implements ServiceInterface
 {
     use BaseService;
 
-    public function __construct(protected BootloaderInterface $bootloader)
-    {}
-
     public function process(): InstructionInterface
     {
         $registers = $this->bootloader->architecture()->runtime()->registers();
@@ -28,15 +25,20 @@ class PrintString implements ServiceInterface
 
         assert($ac instanceof DataRegisterInterface);
 
+        $return = new Return_($this->bootloader, $this);
+        $printCharacter = new PrintCharacter($this->bootloader, $this, $ac->high());
+
         return (new Instruction($this->bootloader))
+            ->include($return)
+            ->include($printCharacter)
             ->section(
                 $this->label(),
                 fn (InstructionInterface $instruction) =>
                     $instruction
                         ->append(Lodsb::class)
                         ->append(Or_::class, $ac->low(), $ac->low())
-                        ->append(Jz::class, new Return_($this->bootloader))
-                        ->append(Call::class, new PrintCharacter($this->bootloader, $ac->high()))
+                        ->append(Jz::class, $return)
+                        ->append(Call::class, $printCharacter)
                         ->append(Jmp::class, $this)
             );
     }
