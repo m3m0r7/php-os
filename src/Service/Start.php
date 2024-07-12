@@ -4,14 +4,11 @@ namespace PHPOS\Service;
 
 use PHPOS\Architecture\Register\DataRegisterInterface;
 use PHPOS\Architecture\Register\RegisterType;
-use PHPOS\Architecture\Support\Hex;
 use PHPOS\Instruction;
 use PHPOS\InstructionInterface;
-use PHPOS\Operation\Int_;
-use PHPOS\Operation\Mov;
-use PHPOS\Operation\Ret;
+use PHPOS\Operation\Jmp;
 
-class PrintCharacter implements ServiceInterface
+class Start implements ServiceInterface
 {
     use BaseService;
 
@@ -23,16 +20,14 @@ class PrintCharacter implements ServiceInterface
 
         assert($ac instanceof DataRegisterInterface);
 
-        [$register] = $this->parameters;
+        $return = new Return_($this->bootloader, $this);
+        $printCharacter = new PrintCharacter($this->bootloader, $this, $ac->high());
 
         return (new Instruction($this->bootloader))
             ->section(
-                $this->label(),
-                fn (InstructionInterface $instruction) =>
-                $instruction
-                    ->append(Mov::class, $register)
-                    ->append(Int_::class, new Hex(0x10))
-                    ->append(Ret::class)
+                'start',
+                fn (InstructionInterface $instruction) => $instruction
+                    ->append(Jmp::class, 'main'),
             );
     }
 }

@@ -6,7 +6,7 @@ use PHPOS\Architecture\Variable\VariableType;
 use PHPOS\Instruction;
 use PHPOS\InstructionInterface;
 
-class EndOfBootloader implements ServiceInterface
+class EndOfBootLoader implements ServiceInterface
 {
     use BaseService;
 

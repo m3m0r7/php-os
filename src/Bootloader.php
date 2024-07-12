@@ -3,11 +3,12 @@ declare(strict_types=1);
 namespace PHPOS;
 
 use PHPOS\Architecture\ArchitectureInterface;
-use PHPOS\Service\EndOfBootloader;
+use PHPOS\Service\EndOfBootLoader;
 use PHPOS\Service\PrintCharacter;
 use PHPOS\Service\PrintString;
 use PHPOS\Service\Return_;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\Start;
 
 class Bootloader implements BootloaderInterface
 {
@@ -34,10 +35,11 @@ class Bootloader implements BootloaderInterface
 
     public function initialize(): self
     {
+        $this->registerService(Start::class);
         $this->registerService(PrintString::class);
 
         // NOTE: Should be end
-        $this->registerService(EndOfBootloader::class);
+        $this->registerService(EndOfBootLoader::class);
 
         return $this;
     }
