@@ -2,7 +2,7 @@
 
 The PHP-OS is implemented an Operating System written in PHP.
 This is **not an emulator** for architectures (e.g. i386, x86_64 and so on).
-This is making an assembly or image file directly for an operating system.
+This project makes an assembly or image file directly for an operating system.
 
 Moreover, this is very ultra hyper maximum experimental implementation.
 
