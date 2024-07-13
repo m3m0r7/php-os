@@ -17,7 +17,17 @@ trait BaseService
 
     public function label(): string
     {
-        $name = $this->formatClassName(get_class($this));
+        $reflection = new \ReflectionClass($this);
+
+        // NOTE Split with @ because this is border to anonymous class in PHP
+        [$className, $anonymousPath] = explode('@', get_class($this)) + [null, null];
+        if ($reflection->isAnonymous()) {
+
+            // Separate class name and anonymous path
+            $className .= '__anonymous_' . explode(':', basename($anonymousPath))[0];
+        }
+
+        $name = $this->formatClassName($className);
 
         if ($this->parent !== null) {
             return $this->parent->label() . '_' . $name;
@@ -28,7 +38,7 @@ trait BaseService
     private function formatClassName($name): string
     {
         return preg_replace(
-            '/[!@#$%^&*()_+|.><?.,\-=\\\]/',
+            '/[!@#$%^&*()_+|.><?.,\-=\\\\\/:]/',
             '_',
             $name,
         );

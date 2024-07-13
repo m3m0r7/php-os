@@ -20,7 +20,7 @@ class VariableTest extends TestCase
     #[DataProvider('architectures')]
     public function testVariableWith8Bits(BootloaderInterface $bootloader): void
     {
-        $times = new Variable(
+        $variable = new Variable(
             $bootloader,
             null,
             $bootloader->architecture()->runtime()
@@ -29,7 +29,7 @@ class VariableTest extends TestCase
 
         $this->assertSame(
             "variable_name:\n  db \"value\", 0\n",
-            $times->process()->assemble()
+            $variable->process()->assemble()
         );
     }
 
@@ -37,7 +37,7 @@ class VariableTest extends TestCase
     #[DataProvider('architectures')]
     public function testVariableWith16Bits(BootloaderInterface $bootloader): void
     {
-        $times = new Variable(
+        $variable = new Variable(
             $bootloader,
             null,
             $bootloader->architecture()->runtime()
@@ -47,7 +47,7 @@ class VariableTest extends TestCase
 
         $this->assertSame(
             "variable_name:\n  dw \"value\", 0\n",
-            $times->process()->assemble()
+            $variable->process()->assemble()
         );
     }
 }

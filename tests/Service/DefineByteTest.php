@@ -23,7 +23,7 @@ class DefineByteTest extends TestCase
     #[DataProvider('architectures')]
     public function testDefineByteForStringWith8Bits(BootloaderInterface $bootloader): void
     {
-        $times = new DefineByte(
+        $definedByte = new DefineByte(
             $bootloader,
             null,
             new Text('test'),
@@ -31,7 +31,7 @@ class DefineByteTest extends TestCase
 
         $this->assertSame(
             "db \"test\", 0\n",
-            $times->process()->assemble()
+            $definedByte->process()->assemble()
         );
     }
 
@@ -39,7 +39,7 @@ class DefineByteTest extends TestCase
     #[DataProvider('architectures')]
     public function testDefineByteForStringWith16Bits(BootloaderInterface $bootloader): void
     {
-        $times = new DefineByte(
+        $definedByte = new DefineByte(
             $bootloader,
             null,
             new Text('test'),
@@ -48,7 +48,7 @@ class DefineByteTest extends TestCase
 
         $this->assertSame(
             "dw \"test\", 0\n",
-            $times->process()->assemble()
+            $definedByte->process()->assemble()
         );
     }
 
@@ -56,7 +56,7 @@ class DefineByteTest extends TestCase
     #[DataProvider('architectures')]
     public function testDefineByteForHexWith8Bits(BootloaderInterface $bootloader): void
     {
-        $times = new DefineByte(
+        $definedByte = new DefineByte(
             $bootloader,
             null,
             new Hex(0x29),
@@ -64,7 +64,7 @@ class DefineByteTest extends TestCase
 
         $this->assertSame(
             "db 0x29\n",
-            $times->process()->assemble()
+            $definedByte->process()->assemble()
         );
     }
 
@@ -72,7 +72,7 @@ class DefineByteTest extends TestCase
     #[DataProvider('architectures')]
     public function testDefineByteForHexWith16Bits(BootloaderInterface $bootloader): void
     {
-        $times = new DefineByte(
+        $definedByte = new DefineByte(
             $bootloader,
             null,
             new Hex(0xee29, 16),
@@ -81,7 +81,7 @@ class DefineByteTest extends TestCase
 
         $this->assertSame(
             "dw 0xEE29\n",
-            $times->process()->assemble()
+            $definedByte->process()->assemble()
         );
     }
 
@@ -89,7 +89,7 @@ class DefineByteTest extends TestCase
     #[DataProvider('architectures')]
     public function testDefineByteForHexWith16BitsZeroFilled(BootloaderInterface $bootloader): void
     {
-        $times = new DefineByte(
+        $definedByte = new DefineByte(
             $bootloader,
             null,
             new Hex(0x29, 16),
@@ -98,7 +98,7 @@ class DefineByteTest extends TestCase
 
         $this->assertSame(
             "dw 0x0029\n",
-            $times->process()->assemble()
+            $definedByte->process()->assemble()
         );
     }
 }
