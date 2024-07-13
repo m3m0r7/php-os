@@ -30,6 +30,11 @@ class DefineByte implements ServiceInterface
         $destination = $value;
         $sources = [];
 
+        if (!($value instanceof Hex) && (is_string($value) || $value instanceof \Stringable)) {
+            // Add null byte
+            $sources[] = 0;
+        }
+
         return (new Instruction($this->bootloader))
             ->append(
                 fn (DestinationInterface $destination, SourceInterface ...$sources) => $this

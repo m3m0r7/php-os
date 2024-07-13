@@ -18,24 +18,23 @@ class Readable implements ProcessorInterface
     public function process(): string
     {
         $assembly = '';
-        foreach ($this->initializationServices as $service) {
-            $service = new $service($this->bootloader);
+        foreach ($this->initializationServices as [$service, $parameters]) {
+            $service = new $service($this->bootloader, null, ...$parameters);
 
             assert($service instanceof ServiceInterface);
             $assembly .= $service->process()->assemble() . "\n";
         }
 
-        foreach ($this->bootloader->architecture()->runtime()->definedVariables() as $name => $value) {
+        foreach ($this->bootloader->architecture()->runtime()->definedVariables() as $value) {
             $assembly .= (new Variable(
                 $this->bootloader,
                 null,
-                $name,
                 $value,
             ))->process()->assemble() . "\n";
         }
 
-        foreach ($this->postServices as $service) {
-            $service = new $service($this->bootloader);
+        foreach ($this->postServices as [$service, $parameters]) {
+            $service = new $service($this->bootloader, null, ...$parameters);
 
             assert($service instanceof ServiceInterface);
             $assembly .= $service->process()->assemble() . "\n";

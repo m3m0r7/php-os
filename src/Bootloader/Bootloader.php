@@ -33,15 +33,15 @@ class Bootloader implements BootloaderInterface
         return $this->option;
     }
 
-    public function registerInitializationService(string $serviceName): self
+    public function registerInitializationService(string $serviceName, mixed ...$parameters): self
     {
-        $this->initializationServices[] = $serviceName;
+        $this->initializationServices[] = [$serviceName, $parameters];
         return $this;
     }
 
-    public function registerPostService(string $serviceName): self
+    public function registerPostService(string $serviceName, mixed ...$parameters): self
     {
-        $this->postServices[] = $serviceName;
+        $this->postServices[] = [$serviceName, $parameters];
         return $this;
     }
 

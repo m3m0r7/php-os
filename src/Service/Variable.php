@@ -21,19 +21,18 @@ class Variable implements ServiceInterface
         $variables = $this->bootloader->architecture()->runtime()->variables();
 
         /**
-         * @var ?string $name
-         * @var ?VariableDefinitionInterface $value
+         * @var ?VariableDefinitionInterface $variable
          * @var ?VariableType $variableType
          */
-        [$name, $value, $variableType] = $this->parameters + [null, null, null];
+        [$variable, $variableType] = $this->parameters + [null, null, null];
 
         $db = $variables->get($variableType ?? VariableType::BITS_8);
 
-        assert($value instanceof VariableDefinitionInterface);
+        assert($variable instanceof VariableDefinitionInterface);
 
-        $destination = is_string($value->value()) || $value->value() instanceof \Stringable
-            ? new Text($value)
-            : $value;
+        $destination = is_string($variable->value()) || $variable->value() instanceof \Stringable
+            ? new Text((string) $variable->value())
+            : $variable;
 
 
         $sources = [];
@@ -44,7 +43,7 @@ class Variable implements ServiceInterface
 
         return (new Instruction($this->bootloader))
             ->label(
-                $name,
+                $variable->name(),
                 fn (InstructionInterface $instruction) => $instruction
                     ->append(
                         fn (DestinationInterface $destination, SourceInterface ...$sources) => $this

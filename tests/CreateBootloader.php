@@ -10,7 +10,6 @@ use PHPOS\Stream\Memory;
 trait CreateBootloader
 {
     protected Memory $result;
-    protected string $route = __DIR__;
 
     public function setUp(): void
     {

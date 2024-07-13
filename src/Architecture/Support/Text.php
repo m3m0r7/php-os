@@ -8,12 +8,12 @@ use PHPOS\Runtime\VariableDefinitionInterface;
 
 class Text implements \Stringable
 {
-    public function __construct(private VariableDefinitionInterface $variable)
+    public function __construct(private string $variable)
     {
     }
 
     public function __toString(): string
     {
-        return '"' . str_replace('"', '\\"', (string) $this->variable) . '"';
+        return '"' . str_replace('"', '\\"', $this->variable) . '"';
     }
 }

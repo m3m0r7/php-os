@@ -11,7 +11,7 @@ use PHPOS\Architecture\Operation\OperationType;
 use PHPOS\Architecture\Operation\SourceInterface;
 use PHPOS\Architecture\Register\RegisterCollection;
 use PHPOS\Architecture\Variable\VariableCollection;
-use PHPOS\Exception\PHPOSException;
+use PHPOS\Exception\VariableNotFoundException;
 
 class Runtime implements RuntimeInterface
 {
@@ -68,7 +68,7 @@ class Runtime implements RuntimeInterface
 
     public function findVariable(string $variableName): VariableDefinitionInterface
     {
-        return $this->definedVariables[$variableName] ?? throw new PHPOSException(
+        return $this->definedVariables[$variableName] ?? throw new VariableNotFoundException(
             sprintf(
                 'The variable `%s` is not found',
                 $variableName,

@@ -12,6 +12,6 @@ interface BootloaderInterface
     public function architecture(): ArchitectureInterface;
     public function option(): OptionInterface;
     public function assemble(): AssemblyInterface;
-    public function registerInitializationService(string $serviceName): BootloaderInterface;
-    public function registerPostService(string $serviceName): BootloaderInterface;
+    public function registerInitializationService(string $serviceName, mixed ...$parameters): BootloaderInterface;
+    public function registerPostService(string $serviceName, mixed ...$parameters): BootloaderInterface;
 }
