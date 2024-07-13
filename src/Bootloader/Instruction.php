@@ -46,10 +46,12 @@ class Instruction implements InstructionInterface, \IteratorAggregate
         return $new;
     }
 
-    public function append(string $operation, mixed $destination = null, mixed ...$sources): InstructionInterface
+    public function append(string|callable $operation, mixed $destination = null, mixed ...$sources): InstructionInterface
     {
         $this->instructions[] = [
-            new $operation($this->bootloader->architecture()),
+            is_callable($operation)
+                ? $operation
+                : new $operation($this->bootloader->architecture()),
             new Destination($destination),
             array_map(fn ($source) => new Source($source), $sources),
             $this->indentSize,
@@ -66,6 +68,10 @@ class Instruction implements InstructionInterface, \IteratorAggregate
             $results .= str_repeat(' ', $indentSize);
             if (is_string($operation)) {
                 $results .= $operation . "\n";
+                continue;
+            }
+            if (is_callable($operation)) {
+                $results .= $operation($destination, ...$sources) . "\n";
                 continue;
             }
             $results .= $operation->process($destination, ...$sources) . "\n";

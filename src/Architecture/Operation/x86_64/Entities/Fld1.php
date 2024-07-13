@@ -2,20 +2,26 @@
 declare(strict_types=1);
 namespace PHPOS\Architecture\Operation\x86_64\Entities;
 
-use PHPOS\Architecture\Operation\DestinationInterface;
+use PHPOS\Architecture\Operation\GeneralOperation;
 use PHPOS\Architecture\Operation\EntityInterface;
-use PHPOS\Architecture\Operation\SourceInterface;
+use PHPOS\Exception\NotImplementedException;
 
 class Fld1 implements EntityInterface
 {
-    public function process(DestinationInterface $destination, SourceInterface ...$sources): string
+    use GeneralOperation;
+
+    public function name(): string
     {
-        return rtrim(sprintf(
-            <<< __ASM__
-            fld1 %s, %s
-            __ASM__,
-            (string) $destination,
-            implode(", ", array_map(fn (SourceInterface $source) => (string) $source, $sources)),
-        ), ', ');
+        return "fld1";
+    }
+
+    public function opcode(): int
+    {
+        throw new NotImplementedException(
+            sprintf(
+                "The `%s` opcode did not implemented yet",
+                $this->name(),
+            ),
+        );
     }
 }
