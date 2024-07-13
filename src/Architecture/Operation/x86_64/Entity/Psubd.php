@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PHPOS\Architecture\Operation\x86_64\Entities;
+namespace PHPOS\Architecture\Operation\x86_64\Entity;
 
 use PHPOS\Architecture\Operation\GeneralOperation;
 use PHPOS\Architecture\Operation\EntityInterface;
