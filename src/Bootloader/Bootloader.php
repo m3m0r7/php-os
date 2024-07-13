@@ -42,22 +42,6 @@ class Bootloader implements BootloaderInterface
         return $this;
     }
 
-    public function registerInitializationServices(): self
-    {
-        $this->registerInitializationService(Start::class);
-        $this->registerInitializationService(HelloWorld::class);
-        $this->registerInitializationService(PrintString::class);
-
-        return $this;
-    }
-
-    public function registerPostServices(): self
-    {
-        $this->registerPostService(EndOfBootLoader::class);
-
-        return $this;
-    }
-
     public function assemble(): AssemblyInterface
     {
         return new Assembly(
