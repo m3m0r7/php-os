@@ -7,6 +7,7 @@ use PHPOS\Architecture\Register\IndexRegisterInterface;
 use PHPOS\Architecture\Register\RegisterType;
 use PHPOS\Architecture\Register\SegmentRegisterInterface;
 use PHPOS\Architecture\Support\Hex;
+use PHPOS\Bootloader\BootloaderInfo;
 use PHPOS\Bootloader\Instruction;
 use PHPOS\Bootloader\InstructionInterface;
 use PHPOS\Operation\Call;
@@ -39,7 +40,7 @@ class HelloWorld implements ServiceInterface
             ->section(
                 'main',
                 fn (InstructionInterface $instruction) => $instruction
-                    ->append(Mov::class, $ac->value(), new Hex(0x07C0))
+                    ->append(Mov::class, $ac->value(), new Hex(BootloaderInfo::MBR->value))
                     ->append(Mov::class, $ds->segment(), $ac->value())
                     ->append(Mov::class, $es->segment(), $ac->value())
 

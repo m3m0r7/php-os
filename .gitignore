@@ -3,3 +3,5 @@ test*.php
 composer.lock
 generators
 /vendor/
+boot.asm
+boot.bin

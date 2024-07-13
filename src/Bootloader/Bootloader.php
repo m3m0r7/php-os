@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace PHPOS\Bootloader;
 
 use PHPOS\Architecture\ArchitectureInterface;
+use PHPOS\Assembly\Assembly;
+use PHPOS\Assembly\AssemblyInterface;
 use PHPOS\Service\EndOfBootLoader;
 use PHPOS\Service\HelloWorld;
 use PHPOS\Service\PrintString;
@@ -12,7 +14,7 @@ use PHPOS\Service\Variable;
 
 class Bootloader implements BootloaderInterface
 {
-    protected array $initializeServices = [];
+    protected array $initializationServices = [];
     protected array $postServices = [];
     public function __construct(public readonly ArchitectureInterface $architecture, protected readonly OptionInterface $option) {
 
@@ -28,9 +30,9 @@ class Bootloader implements BootloaderInterface
         return $this->option;
     }
 
-    public function registerInitializeService(string $serviceName): self
+    public function registerInitializationService(string $serviceName): self
     {
-        $this->initializeServices[] = $serviceName;
+        $this->initializationServices[] = $serviceName;
         return $this;
     }
 
@@ -40,11 +42,11 @@ class Bootloader implements BootloaderInterface
         return $this;
     }
 
-    public function registerInitializeServices(): self
+    public function registerInitializationServices(): self
     {
-        $this->registerInitializeService(Start::class);
-        $this->registerInitializeService(HelloWorld::class);
-        $this->registerInitializeService(PrintString::class);
+        $this->registerInitializationService(Start::class);
+        $this->registerInitializationService(HelloWorld::class);
+        $this->registerInitializationService(PrintString::class);
 
         return $this;
     }
@@ -56,34 +58,12 @@ class Bootloader implements BootloaderInterface
         return $this;
     }
 
-    public function assemble(): self
+    public function assemble(): AssemblyInterface
     {
-        $assembly = '';
-        foreach ($this->initializeServices as $service) {
-            $service = new $service($this);
-
-            assert($service instanceof ServiceInterface);
-            $assembly .= $service->process()->assemble() . "\n";
-        }
-
-        foreach ($this->architecture->runtime()->definedVariables() as $name => $value) {
-            $assembly .= (new Variable(
-                $this,
-                null,
-                $name,
-                $value,
-            ))->process()->assemble() . "\n";
-        }
-
-        foreach ($this->postServices as $service) {
-            $service = new $service($this);
-
-            assert($service instanceof ServiceInterface);
-            $assembly .= $service->process()->assemble() . "\n";
-        }
-
-        echo $assembly;
-
-        return $this;
+        return new Assembly(
+            $this,
+            $this->initializationServices,
+            $this->postServices,
+        );
     }
 }
