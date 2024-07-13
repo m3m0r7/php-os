@@ -5,3 +5,4 @@ generators
 /vendor/
 boot.asm
 boot.bin
+.php-cs-fixer.cache
