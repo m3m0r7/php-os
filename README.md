@@ -22,7 +22,7 @@ But you can try this architecture with using QEMU on aarch (macOS M1, M2).
 1. Install PHP-OS via composer.
 
 ```
-composer require m3m0r7/php-os
+$ composer require m3m0r7/php-os
 ```
 
 2. Write an example code as `HelloWorld.php` as following.
