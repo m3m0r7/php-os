@@ -88,13 +88,13 @@ $ qemu-system-x86_64 -drive file=boot.bin,format=raw
 ## Test
 
 ```
-$ ./vendor/bin/phpunit src/
+$ ./vendor/bin/phpunit tests/
 ```
 
 ## Linting
 
 ```
-$ ./vendor/bin/php-cs-fixer fix src/
+$ ./vendor/bin/php-cs-fixer fix src/ tests/
 ```
 
 ## License

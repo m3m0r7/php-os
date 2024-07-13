@@ -7,8 +7,14 @@
             "PHPOS\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "PHPOS\\Test\\": "tests/"
+        }
+    },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.59",
-        "phpunit/phpunit": "^11.2"
+        "phpunit/phpunit": "^11.2",
+        "spatie/phpunit-snapshot-assertions": "^5.1"
     }
 }

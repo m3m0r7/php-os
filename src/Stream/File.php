@@ -46,4 +46,10 @@ class File implements StreamInterface
         }
         return $this;
     }
+
+    public function seek(int $pos, int $whence = SEEK_SET): StreamReaderInterface
+    {
+        fseek($this->handle, $pos, $whence);
+        return $this;
+    }
 }

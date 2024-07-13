@@ -1,0 +1,29 @@
+start:
+  jmp main
+main:
+  mov ax, 0x07C0
+  mov ds, ax
+  mov es, ax
+  mov si, hello_world
+  call __php_PHPOS_Service_PrintString
+
+__php_PHPOS_Service_PrintString_PHPOS_Service_Return_:
+  ret 
+__php_PHPOS_Service_PrintString_PHPOS_Service_PrintCharacter:
+  mov ah, 0x0E
+  int 0x10
+  ret 
+__php_PHPOS_Service_PrintString:
+  lodsb 
+  or al, al
+  jz __php_PHPOS_Service_PrintString_PHPOS_Service_Return_
+  call __php_PHPOS_Service_PrintString_PHPOS_Service_PrintCharacter
+  jmp __php_PHPOS_Service_PrintString
+
+hello_world:
+  db "Hello World!", 0
+
+times 510-($-$$) db 0
+db 0x55
+db 0xAA
+
