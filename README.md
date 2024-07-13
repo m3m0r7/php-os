@@ -42,10 +42,15 @@ $bootloader = new \PHPOS\Bootloader\Bootloader(
     ),
 );
 
+// Set variable for printing BIOS screen
+$bootloader->architecture()->runtime()
+    ->setVariable('hello_world', 'Hello World!');
+
+// Initialize bootloader
 $bootloader
     // Print Hello World into BIOS screen
     ->registerInitializationService(\PHPOS\Service\HelloWorld::class)
-    
+
     // Enable Print String service
     ->registerInitializationService(\PHPOS\Service\PrintString::class)
 

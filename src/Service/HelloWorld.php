@@ -30,9 +30,6 @@ class HelloWorld implements ServiceInterface
         $es = $registers->get(RegisterType::EXTRA_SEGMENT);
         assert($es instanceof SegmentRegisterInterface);
 
-        $helloWorld = $this->bootloader->architecture()->runtime()
-            ->setVariable('hello_world', 'Hello World!');
-
         // Test
         return (new Instruction($this->bootloader))
             ->include(new Start($this->bootloader))
@@ -43,7 +40,15 @@ class HelloWorld implements ServiceInterface
                     ->append(Mov::class, $ds->segment(), $ac->value())
                     ->append(Mov::class, $es->segment(), $ac->value())
 
-                    ->append(Mov::class, $si->index(), $helloWorld->name())
+                    ->append(
+                        Mov::class,
+                        $si->index(),
+                        $this->bootloader
+                            ->architecture()
+                            ->runtime()
+                            ->findVariable('hello_world')
+                            ->name(),
+                    )
                     ->append(Call::class, new PrintString($this->bootloader))
             );
     }

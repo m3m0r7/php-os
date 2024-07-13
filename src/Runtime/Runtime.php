@@ -9,6 +9,7 @@ use PHPOS\Architecture\Operation\OperationType;
 use PHPOS\Architecture\Operation\SourceInterface;
 use PHPOS\Architecture\Register\RegisterCollection;
 use PHPOS\Architecture\Variable\VariableCollection;
+use PHPOS\Exception\PHPOSException;
 
 class Runtime implements RuntimeInterface
 {
@@ -61,6 +62,16 @@ class Runtime implements RuntimeInterface
     public function setVariable(string $variableName, string $value): VariableDefinitionInterface
     {
         return $this->definedVariables[$variableName] = new VariableDefinition($variableName, $value);
+    }
+
+    public function findVariable(string $variableName): VariableDefinitionInterface
+    {
+        return $this->definedVariables[$variableName] ?? throw new PHPOSException(
+            sprintf(
+                'The variable `%s` is not found',
+                $variableName,
+            ),
+        );
     }
 
     public function definedVariables(): array

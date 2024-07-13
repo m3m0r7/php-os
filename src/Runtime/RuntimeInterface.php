@@ -17,5 +17,6 @@ interface RuntimeInterface
     public function call(OperationType $operationType, DestinationInterface $destination, SourceInterface ...$sources): string;
     public function callRaw(string $asm, DestinationInterface|null $destination = null, SourceInterface ...$sources): string;
     public function setVariable(string $variableName, string $value): VariableDefinitionInterface;
+    public function findVariable(string $variableName): VariableDefinitionInterface;
     public function definedVariables(): array;
 }
