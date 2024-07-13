@@ -1,7 +1,7 @@
 # PHP-OS
 
-The PHP-OS is implemented an Operating System written in PHP. 
-This is **not an emulator** for architectures (e.g. i386, x86_64 and so on). 
+The PHP-OS is implemented an Operating System written in PHP.
+This is **not an emulator** for architectures (e.g. i386, x86_64 and so on).
 This is making an assembly or image file directly for an operating system.
 
 Moreover, this is very ultra hyper maximum experimental implementation.
@@ -14,8 +14,8 @@ Moreover, this is very ultra hyper maximum experimental implementation.
 
 ## Notice
 
-In currently status, this project only implements  **Intel x86_64** architecture. 
-But you can try this architecture with using QEMU on aarch (macOS M1, M2).  
+In currently status, this project only implements  **Intel x86_64** architecture.
+But you can try this architecture with using QEMU on aarch (macOS M1, M2).
 
 ## Quick Start
 
@@ -78,7 +78,7 @@ $ nasm -f bin boot.asm -o boot.bin
 
 4. Start QEMU with qemu command as following.
 ```
-$ qemu-system-x86_64 -drive file=boot.bin,format=raw  
+$ qemu-system-x86_64 -drive file=boot.bin,format=raw
 ```
 
 5. Show figure as following if you successfully to run the QEMU.

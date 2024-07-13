@@ -1,5 +1,12 @@
 {
     "name": "m3m0r7/php-os",
+    "authors": [
+      {
+        "name": "m3m0r7",
+        "homepage": "https://i.mem.ooo"
+      }
+    ],
+    "license": "MIT",
     "description": "An operating system written in PHP",
     "type": "project",
     "autoload": {
