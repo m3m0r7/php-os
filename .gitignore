@@ -5,4 +5,9 @@ generators
 /vendor/
 boot.asm
 boot.bin
+boot.o
 .php-cs-fixer.cache
+kernel.asm
+kernel.bin
+php-os.img
+dist
