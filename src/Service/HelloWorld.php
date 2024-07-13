@@ -40,7 +40,7 @@ class HelloWorld implements ServiceInterface
             ->section(
                 'main',
                 fn (InstructionInterface $instruction) => $instruction
-                    ->append(Mov::class, $ac->value(), new Hex(BootloaderInfo::MBR->value))
+                    ->append(Mov::class, $ac->value(), new Hex(BootloaderInfo::MBR->value, 16))
                     ->append(Mov::class, $ds->segment(), $ac->value())
                     ->append(Mov::class, $es->segment(), $ac->value())
 
