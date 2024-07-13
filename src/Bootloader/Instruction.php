@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace PHPOS;
+namespace PHPOS\Bootloader;
 
 use PHPOS\Architecture\Operation\Destination;
 use PHPOS\Architecture\Operation\Source;

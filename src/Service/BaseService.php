@@ -2,8 +2,7 @@
 declare(strict_types=1);
 namespace PHPOS\Service;
 
-use PHPOS\BootloaderInterface;
-use PHPOS\InstructionInterface;
+use PHPOS\Bootloader\BootloaderInterface;
 
 trait BaseService
 {

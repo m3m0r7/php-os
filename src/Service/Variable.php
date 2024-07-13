@@ -4,8 +4,8 @@ namespace PHPOS\Service;
 
 use PHPOS\Architecture\Support\Text;
 use PHPOS\Architecture\Variable\VariableType;
-use PHPOS\Instruction;
-use PHPOS\InstructionInterface;
+use PHPOS\Bootloader\Instruction;
+use PHPOS\Bootloader\InstructionInterface;
 
 class Variable implements ServiceInterface
 {

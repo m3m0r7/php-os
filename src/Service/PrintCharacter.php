@@ -2,11 +2,9 @@
 declare(strict_types=1);
 namespace PHPOS\Service;
 
-use PHPOS\Architecture\Register\DataRegisterInterface;
-use PHPOS\Architecture\Register\RegisterType;
 use PHPOS\Architecture\Support\Hex;
-use PHPOS\Instruction;
-use PHPOS\InstructionInterface;
+use PHPOS\Bootloader\Instruction;
+use PHPOS\Bootloader\InstructionInterface;
 use PHPOS\Operation\Int_;
 use PHPOS\Operation\Mov;
 use PHPOS\Operation\Ret;

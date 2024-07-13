@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace PHPOS\Architecture;
 
 use PHPOS\Exception\RuntimeNotRegisteredException;
-use PHPOS\Runtime;
-use PHPOS\RuntimeInterface;
+use PHPOS\Runtime\Runtime;
+use PHPOS\Runtime\RuntimeInterface;
 
 class Architecture implements ArchitectureInterface
 {

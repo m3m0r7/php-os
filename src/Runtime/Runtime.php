@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace PHPOS;
+namespace PHPOS\Runtime;
 
 use PHPOS\Architecture\ArchitectureInterface;
 use PHPOS\Architecture\Operation\DestinationInterface;
@@ -58,10 +58,9 @@ class Runtime implements RuntimeInterface
         ), ', ');
     }
 
-    public function setVariable(string $variableName, string $value): RuntimeInterface
+    public function setVariable(string $variableName, string $value): VariableDefinitionInterface
     {
-        $this->definedVariables[$variableName] = $value;
-        return $this;
+        return $this->definedVariables[$variableName] = new VariableDefinition($variableName, $value);
     }
 
     public function definedVariables(): array

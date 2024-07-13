@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace PHPOS\Service;
 
-use PHPOS\Architecture\Register\DataRegisterInterface;
+use PHPOS\Architecture\Register\DataRegisterWithHighAndLowInterface;
 use PHPOS\Architecture\Register\IndexRegisterInterface;
 use PHPOS\Architecture\Register\RegisterType;
 use PHPOS\Architecture\Register\SegmentRegisterInterface;
 use PHPOS\Architecture\Support\Hex;
-use PHPOS\Instruction;
-use PHPOS\InstructionInterface;
+use PHPOS\Bootloader\Instruction;
+use PHPOS\Bootloader\InstructionInterface;
 use PHPOS\Operation\Call;
 use PHPOS\Operation\Mov;
 
@@ -19,16 +19,19 @@ class HelloWorld implements ServiceInterface
     public function process(): InstructionInterface
     {
         $registers = $this->bootloader->architecture()->runtime()->registers();
-        $ac = $registers->get(RegisterType::ACCUMULATOR);
-        assert($ac instanceof DataRegisterInterface);
+        $ac = $registers->get(RegisterType::ACCUMULATOR_BITS_16);
+        assert($ac instanceof DataRegisterWithHighAndLowInterface);
 
         $ds = $registers->get(RegisterType::DATA_SEGMENT);
         assert($ds instanceof SegmentRegisterInterface);
 
-        $si = $registers->get(RegisterType::SOURCE_INDEX);
+        $si = $registers->get(RegisterType::SOURCE_INDEX_BITS_16);
         assert($si instanceof IndexRegisterInterface);
 
-        $this->bootloader->architecture()->runtime()
+        $es = $registers->get(RegisterType::EXTRA_SEGMENT);
+        assert($es instanceof SegmentRegisterInterface);
+
+        $helloWorld = $this->bootloader->architecture()->runtime()
             ->setVariable('hello_world', 'Hello World!');
 
         // Test
@@ -36,11 +39,12 @@ class HelloWorld implements ServiceInterface
             ->section(
                 'main',
                 fn (InstructionInterface $instruction) => $instruction
-                    ->append(Mov::class, $ac->x(), new Hex(0x07C0))
-                    ->append(Mov::class, $ds->segment(), $ac->x())
+                    ->append(Mov::class, $ac->value(), new Hex(0x07C0))
+                    ->append(Mov::class, $ds->segment(), $ac->value())
+                    ->append(Mov::class, $es->segment(), $ac->value())
 
-                    ->append(Mov::class, $si->index(), new Hex(0x10))
-                    ->append(Call::class, 'hello_world')
+                    ->append(Mov::class, $si->index(), $helloWorld->name())
+                    ->append(Call::class, new PrintString($this->bootloader))
             );
     }
 }

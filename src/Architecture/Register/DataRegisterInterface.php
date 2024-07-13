@@ -4,7 +4,5 @@ namespace PHPOS\Architecture\Register;
 
 interface DataRegisterInterface
 {
-    public function x(): RegisterInterface;
-    public function high(): RegisterInterface;
-    public function low(): RegisterInterface;
+    public function value(): RegisterInterface;
 }

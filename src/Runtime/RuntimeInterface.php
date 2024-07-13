@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace PHPOS;
+namespace PHPOS\Runtime;
 
 use PHPOS\Architecture\Operation\DestinationInterface;
 use PHPOS\Architecture\Operation\OperationCollection;
@@ -16,6 +16,6 @@ interface RuntimeInterface
     public function operations(): OperationCollection;
     public function call(OperationType $operationType, DestinationInterface $destination, SourceInterface ...$sources): string;
     public function callRaw(string $asm, DestinationInterface|null $destination = null, SourceInterface ...$sources): string;
-    public function setVariable(string $variableName, string $value): RuntimeInterface;
+    public function setVariable(string $variableName, string $value): VariableDefinitionInterface;
     public function definedVariables(): array;
 }

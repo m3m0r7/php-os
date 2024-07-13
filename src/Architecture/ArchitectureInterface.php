@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace PHPOS\Architecture;
 
-use PHPOS\RuntimeInterface;
+use PHPOS\Runtime\RuntimeInterface;
 
 interface ArchitectureInterface
 {

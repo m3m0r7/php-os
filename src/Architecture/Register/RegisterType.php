@@ -4,13 +4,29 @@ namespace PHPOS\Architecture\Register;
 
 enum RegisterType
 {
-    case ACCUMULATOR;
-    case BASE;
-    case COUNTER;
-    case DATA;
+    case ACCUMULATOR_BITS_16;
+    case ACCUMULATOR_BITS_32;
+    case ACCUMULATOR_BITS_64;
 
-    case SOURCE_INDEX;
-    case DESTINATION_INDEX;
+    case BASE_BITS_16;
+    case BASE_BITS_32;
+    case BASE_BITS_64;
+
+    case COUNTER_BITS_16;
+    case COUNTER_BITS_32;
+    case COUNTER_BITS_64;
+
+    case DATA_BITS_16;
+    case DATA_BITS_32;
+    case DATA_BITS_64;
+
+    case SOURCE_INDEX_BITS_16;
+    case SOURCE_INDEX_BITS_32;
+    case SOURCE_INDEX_BITS_64;
+
+    case DESTINATION_INDEX_BITS_16;
+    case DESTINATION_INDEX_BITS_32;
+    case DESTINATION_INDEX_BITS_64;
 
     case BASE_POINTER;
     case STACK_POINTER;

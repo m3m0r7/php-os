@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace PHPOS\Service;
 
 use PHPOS\Architecture\Variable\VariableType;
-use PHPOS\Instruction;
-use PHPOS\InstructionInterface;
+use PHPOS\Bootloader\Instruction;
+use PHPOS\Bootloader\InstructionInterface;
 
 class EndOfBootLoader implements ServiceInterface
 {

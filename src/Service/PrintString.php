@@ -2,11 +2,10 @@
 declare(strict_types=1);
 namespace PHPOS\Service;
 
-use PHPOS\Architecture\Register\DataRegisterInterface;
+use PHPOS\Architecture\Register\DataRegisterWithHighAndLowInterface;
 use PHPOS\Architecture\Register\RegisterType;
-use PHPOS\BootloaderInterface;
-use PHPOS\Instruction;
-use PHPOS\InstructionInterface;
+use PHPOS\Bootloader\Instruction;
+use PHPOS\Bootloader\InstructionInterface;
 use PHPOS\Operation\Call;
 use PHPOS\Operation\Jmp;
 use PHPOS\Operation\Jz;
@@ -21,9 +20,9 @@ class PrintString implements ServiceInterface
     {
         $registers = $this->bootloader->architecture()->runtime()->registers();
 
-        $ac = $registers->get(RegisterType::ACCUMULATOR);
+        $ac = $registers->get(RegisterType::ACCUMULATOR_BITS_16);
 
-        assert($ac instanceof DataRegisterInterface);
+        assert($ac instanceof DataRegisterWithHighAndLowInterface);
 
         $return = new Return_($this->bootloader, $this);
         $printCharacter = new PrintCharacter($this->bootloader, $this, $ac->high());
