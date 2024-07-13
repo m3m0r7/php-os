@@ -9,6 +9,11 @@ use Traversable;
 
 class Instruction implements InstructionInterface, \IteratorAggregate
 {
+    protected const CALLEE = 0;
+    protected const DESTINATION = 1;
+    protected const SOURCES = 2;
+    protected const INDENT_SIZE = 3;
+
     protected array $instructions = [];
 
     protected int $indentSize = 0;
@@ -20,6 +25,7 @@ class Instruction implements InstructionInterface, \IteratorAggregate
     public function section(string $name, callable $callback): InstructionInterface
     {
         $instruction = new self($this->bootloader);
+        $instruction->indentSize = $this->indentSize;
         $instruction = $instruction->merge($this);
         $instruction->instructions[] = ["section {$name}", null, null, $this->indentSize];
 
@@ -31,7 +37,9 @@ class Instruction implements InstructionInterface, \IteratorAggregate
     public function label(string $name, callable $callback): InstructionInterface
     {
         $instruction = new self($this->bootloader);
+        $instruction->indentSize = $this->indentSize;
         $instruction = $instruction->merge($this);
+
         $instruction->instructions[] = ["{$name}:", null, null, $this->indentSize];
 
         $instruction->indentSize += 2;
@@ -47,10 +55,13 @@ class Instruction implements InstructionInterface, \IteratorAggregate
     public function merge(InstructionInterface $instruction): self
     {
         $new = new self($this->bootloader);
+        $new->indentSize = $this->indentSize;
+
         foreach ($this->instructions as $record) {
             $new->instructions[] = $record;
         }
         foreach ($instruction->valueOf() as $record) {
+            $record[self::INDENT_SIZE] = $record[self::INDENT_SIZE] + $this->indentSize;
             $new->instructions[] = $record;
         }
 
@@ -60,12 +71,12 @@ class Instruction implements InstructionInterface, \IteratorAggregate
     public function append(string|callable $operation, mixed $destination = null, mixed ...$sources): InstructionInterface
     {
         $this->instructions[] = [
-            is_callable($operation)
+            self::CALLEE => is_callable($operation)
                 ? $operation
                 : new $operation($this->bootloader->architecture()),
-            new Destination($destination),
-            array_map(fn ($source) => new Source($source), $sources),
-            $this->indentSize,
+            self::DESTINATION => new Destination($destination),
+            self::SOURCES => array_map(fn ($source) => new Source($source), $sources),
+            self::INDENT_SIZE => $this->indentSize,
         ];
 
         return $this;

@@ -6,7 +6,7 @@ use PHPOS\Architecture\Register\RegisterInterface;
 
 enum ArchitectureType
 {
-    case x86_84;
+    case x86_64;
     case i386;
     case aarch64;
 }

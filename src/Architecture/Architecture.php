@@ -13,7 +13,7 @@ class Architecture implements ArchitectureInterface
     public function __construct(public readonly ArchitectureType $useArchitectureType)
     {
         $this->registerArchitecture(
-            ArchitectureType::x86_84,
+            ArchitectureType::x86_64,
             new Runtime(
                 $this,
                 \PHPOS\Architecture\Register\x86_64\Register::registers(),
