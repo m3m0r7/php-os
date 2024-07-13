@@ -51,4 +51,3 @@ class VariableTest extends TestCase
         );
     }
 }
-
