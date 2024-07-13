@@ -37,7 +37,7 @@ class HelloWorld implements ServiceInterface
 
         // Test
         return (new Instruction($this->bootloader))
-            ->section(
+            ->label(
                 'main',
                 fn (InstructionInterface $instruction) => $instruction
                     ->append(Mov::class, $ac->value(), new Hex(BootloaderInfo::MBR->value, 16))

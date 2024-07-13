@@ -18,7 +18,7 @@ class PrintCharacter implements ServiceInterface
         [$register] = $this->parameters;
 
         return (new Instruction($this->bootloader))
-            ->section(
+            ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) =>
                 $instruction

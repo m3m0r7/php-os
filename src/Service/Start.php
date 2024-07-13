@@ -13,7 +13,7 @@ class Start implements ServiceInterface
     public function process(): InstructionInterface
     {
         return (new Instruction($this->bootloader))
-            ->section(
+            ->label(
                 'start',
                 fn (InstructionInterface $instruction) => $instruction
                     ->append(Jmp::class, 'main'),

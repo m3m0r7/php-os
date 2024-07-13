@@ -4,55 +4,39 @@ namespace PHPOS\Service;
 
 use PHPOS\Architecture\Operation\DestinationInterface;
 use PHPOS\Architecture\Operation\SourceInterface;
-use PHPOS\Architecture\Support\Text;
 use PHPOS\Architecture\Variable\VariableType;
 use PHPOS\Bootloader\Instruction;
 use PHPOS\Bootloader\InstructionInterface;
-use PHPOS\Runtime\VariableDefinitionInterface;
+use PHPOS\Operation\Jmp;
 
-class Variable implements ServiceInterface
+class Times implements ServiceInterface
 {
     use BaseService;
 
     public function process(): InstructionInterface
     {
-        $variables = $this->bootloader->architecture()->runtime()->variables();
-
         /**
-         * @var ?string $name
-         * @var ?VariableDefinitionInterface $value
-         * @var ?VariableType $variableType
+         * @var string $loops
          */
-        [$name, $value, $variableType] = $this->parameters + [null, null, null];
+        [$loops, $destination, $variableType] = $this->parameters + ['0', '0', VariableType::BITS_8];
 
-        $db = $variables->get($variableType ?? VariableType::BITS_8);
-
-        assert($value instanceof VariableDefinitionInterface);
-
-        $destination = is_string($value->value()) || $value->value() instanceof \Stringable
-            ? new Text($value)
-            : $value;
-
-
-        $sources = [];
-        if ($destination instanceof Text) {
-            // Insert Null-bytes for string
-            $sources = [0];
-        }
 
         return (new Instruction($this->bootloader))
-            ->label(
-                $name,
-                fn (InstructionInterface $instruction) => $instruction
-                    ->append( fn (DestinationInterface $destination, SourceInterface ...$sources) => $this
+            ->append(
+                function (DestinationInterface $destination, SourceInterface ...$sources) use ($loops, $variableType) {
+                    $variables = $this->bootloader->architecture()->runtime()->variables();
+                    $db = $variables->get($variableType);
+
+                    return $this
                         ->bootloader
                         ->architecture()
                         ->runtime()
                         ->callRaw(
                             sprintf(
                                 <<< __ASM__
-                                %s %s
+                                times %s %s %s
                                 __ASM__,
+                                $loops,
                                 $db->realName(),
                                 implode(
                                     ', ',
@@ -64,11 +48,10 @@ class Variable implements ServiceInterface
                                         ),
                                     ],
                                 ),
-                            ),
-                        ),
-                        $destination,
-                        ...$sources
-                    ),
+                            )
+                        );
+                },
+                $destination,
             );
     }
 }

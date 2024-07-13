@@ -21,6 +21,17 @@ class Instruction implements InstructionInterface, \IteratorAggregate
     {
         $instruction = new self($this->bootloader);
         $instruction = $instruction->merge($this);
+        $instruction->instructions[] = ["section {$name}", null, null, $this->indentSize];
+
+        $instruction->indentSize += 2;
+
+        return $callback($instruction);
+    }
+
+    public function label(string $name, callable $callback): InstructionInterface
+    {
+        $instruction = new self($this->bootloader);
+        $instruction = $instruction->merge($this);
         $instruction->instructions[] = ["{$name}:", null, null, $this->indentSize];
 
         $instruction->indentSize += 2;

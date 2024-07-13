@@ -30,7 +30,7 @@ class PrintString implements ServiceInterface
         return (new Instruction($this->bootloader))
             ->include($return)
             ->include($printCharacter)
-            ->section(
+            ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) =>
                     $instruction

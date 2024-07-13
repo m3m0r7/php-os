@@ -13,7 +13,7 @@ class Return_ implements ServiceInterface
     public function process(): InstructionInterface
     {
         return (new Instruction($this->bootloader))
-            ->section(
+            ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction
                     ->append(Ret::class)
