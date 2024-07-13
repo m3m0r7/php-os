@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace PHPOS\Architecture\Variable\x86_64;
 
 use PHPOS\Architecture\Variable\VariableCollection;

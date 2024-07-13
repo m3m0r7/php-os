@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace PHPOS\Service;
 
 use PHPOS\Architecture\Operation\DestinationInterface;
@@ -29,7 +31,8 @@ class DefineByte implements ServiceInterface
         $sources = [];
 
         return (new Instruction($this->bootloader))
-            ->append(fn (DestinationInterface $destination, SourceInterface ...$sources) => $this
+            ->append(
+                fn (DestinationInterface $destination, SourceInterface ...$sources) => $this
                 ->bootloader
                 ->architecture()
                 ->runtime()

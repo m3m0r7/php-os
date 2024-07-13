@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace PHPOS\Bootloader;
 
 use PHPOS\Architecture\ArchitectureInterface;
@@ -16,7 +18,8 @@ class Bootloader implements BootloaderInterface
 {
     protected array $initializationServices = [];
     protected array $postServices = [];
-    public function __construct(public readonly ArchitectureInterface $architecture, protected readonly OptionInterface $option) {
+    public function __construct(public readonly ArchitectureInterface $architecture, protected readonly OptionInterface $option)
+    {
 
     }
 

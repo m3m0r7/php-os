@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace PHPOS\Architecture\Register\x86_64;
 
 use PHPOS\Architecture\Register\DataRegister16Bits;

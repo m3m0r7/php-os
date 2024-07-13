@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace PHPOS\Stream;
 
 use PHPOS\Exception\StreamException;

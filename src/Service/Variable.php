@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace PHPOS\Service;
 
 use PHPOS\Architecture\Operation\DestinationInterface;
@@ -44,7 +46,8 @@ class Variable implements ServiceInterface
             ->label(
                 $name,
                 fn (InstructionInterface $instruction) => $instruction
-                    ->append( fn (DestinationInterface $destination, SourceInterface ...$sources) => $this
+                    ->append(
+                        fn (DestinationInterface $destination, SourceInterface ...$sources) => $this
                         ->bootloader
                         ->architecture()
                         ->runtime()

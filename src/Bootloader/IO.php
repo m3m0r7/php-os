@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace PHPOS\Bootloader;
 
 use PHPOS\Stream\StreamReaderInterface;
@@ -11,8 +13,7 @@ class IO implements IOInterface
         protected ?StreamReaderInterface $stdIn = null,
         protected ?StreamWriterInterface $stdOut = null,
         protected ?StreamWriterInterface $stdErr = null,
-    )
-    {
+    ) {
         if ($this->stdIn === null) {
             $this->stdIn = new \PHPOS\Stream\File(STDIN);
         }

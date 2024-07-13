@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace PHPOS\Architecture\Register;
 
 class IndexRegister16Bits implements StorableRegister, IndexRegisterWithLowInterface
@@ -7,7 +9,8 @@ class IndexRegister16Bits implements StorableRegister, IndexRegisterWithLowInter
     public function __construct(
         public readonly RegisterInterface $index,
         public readonly RegisterInterface $low,
-    ) {}
+    ) {
+    }
 
     public function index(): RegisterInterface
     {

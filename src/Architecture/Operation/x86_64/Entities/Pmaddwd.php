@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace PHPOS\Architecture\Operation\x86_64\Entities;
 
 use PHPOS\Architecture\Operation\GeneralOperation;

@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace PHPOS\Bootloader;
 
 use PHPOS\Stream\StreamInterface;
@@ -10,8 +12,7 @@ class Option implements OptionInterface
 {
     public function __construct(
         protected IOInterface $io,
-    )
-    {
+    ) {
 
     }
 

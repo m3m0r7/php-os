@@ -94,5 +94,9 @@ $ ./vendor/bin/phpunit src/
 ## Linting
 
 ```
-$ ./vendor/bin/php-cs-fixer src/
+$ ./vendor/bin/php-cs-fixer fix src/
 ```
+
+## License
+
+MIT

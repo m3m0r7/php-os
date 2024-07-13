@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace PHPOS\Runtime;
 
 use PHPOS\Architecture\ArchitectureInterface;
@@ -20,11 +22,11 @@ class Runtime implements RuntimeInterface
         protected RegisterCollection $registers,
         protected VariableCollection $variables,
         protected OperationCollection $operations,
-    )
-    {
+    ) {
     }
 
-    public function __debugInfo() {
+    public function __debugInfo()
+    {
         return [];
     }
 

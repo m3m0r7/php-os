@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace PHPOS\Architecture\Register;
 
 class DataRegister16Bits implements StorableRegister, DataRegisterWithHighAndLowInterface
@@ -8,7 +10,8 @@ class DataRegister16Bits implements StorableRegister, DataRegisterWithHighAndLow
         public readonly RegisterInterface $value,
         public readonly RegisterInterface $high,
         public readonly RegisterInterface $low,
-    ) {}
+    ) {
+    }
 
     public function value(): RegisterInterface
     {

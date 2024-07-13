@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace PHPOS\Architecture;
 
 use PHPOS\Exception\RuntimeNotRegisteredException;

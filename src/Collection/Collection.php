@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace PHPOS\Collection;
 
 use PHPOS\Exception\CollectionCannotGetException;
