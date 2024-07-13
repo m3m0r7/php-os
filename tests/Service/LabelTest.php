@@ -24,8 +24,7 @@ class LabelTest extends TestCase
     #[DataProvider('architectures')]
     public function testLabel(BootloaderInterface $bootloader): void
     {
-        $createLabelService = fn (?ServiceInterface $parent) => new class($bootloader, $parent) implements ServiceInterface
-        {
+        $createLabelService = fn (?ServiceInterface $parent) => new class ($bootloader, $parent) implements ServiceInterface {
             use BaseService;
 
             public function process(): InstructionInterface
