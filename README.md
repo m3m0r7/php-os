@@ -112,9 +112,9 @@ main:
   mov ds, ax
   mov es, ax
   mov ss, ax
-  mov si, hello_world
+  mov si, __php_var_SGVsbG8gV29ybGQh
   call __php_PHPOS_Service_BIOS_IO_PrintString
-  ret
+  jmp __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_Standard_Return_
   __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintCharacter:
     mov ah, 0x0E
     int 0x10
@@ -128,12 +128,11 @@ main:
     __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_Standard_Return_:
       ret
 
-hello_world:
+__php_var_SGVsbG8gV29ybGQh:
   db "Hello World!", 0
 
 times 510-($-$$) db 0
 dw 0xAA55
-
 ```
 
 ## Test

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PHPOS\Service;
 
 use PHPOS\OS\CodeInterface;
+use PHPOS\Service\Component\Formatter;
 
 trait BaseService
 {
@@ -27,20 +28,11 @@ trait BaseService
             $className .= '__anonymous_' . explode(':', basename($anonymousPath))[0];
         }
 
-        $name = $this->formatClassName($className);
+        $name = Formatter::removeSign($className);
 
         if ($this->parent !== null) {
             return $this->parent->label() . '_' . $name;
         }
         return $this->code->option()->prefix() . $name;
-    }
-
-    private function formatClassName($name): string
-    {
-        return preg_replace(
-            '/[!@#$%^&*()_+|.><?.,\-=\\\\\/:]/',
-            '_',
-            $name,
-        );
     }
 }

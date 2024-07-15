@@ -24,28 +24,13 @@ class HelloWorld implements ServiceInterface
     public function process(): InstructionInterface
     {
         $registers = $this->code->architecture()->runtime()->registers();
+        $printStringService = new PrintString($this->code, null, 'Hello World!');
 
-        $si = $registers->get(RegisterType::SOURCE_INDEX_BITS_16);
-        assert($si instanceof IndexRegisterInterface);
-
-        $variable = $this->code
-            ->architecture()
-            ->runtime()
-            ->setVariable('hello_world', 'Hello World!');
-
-        $printStringService = new PrintString($this->code);
         return (new Instruction($this->code))
             ->label(
                 OSInfo::ENTRY_POINT,
                 fn (InstructionInterface $instruction) => $instruction
                     ->include(new SetupSegments($this->code))
-                    ->append(
-                        Mov::class,
-                        $si->index(),
-                        $variable->name(),
-                    )
-                    ->append(Call::class, $printStringService)
-                    ->append(Ret::class)
             )
             ->include($printStringService);
     }
