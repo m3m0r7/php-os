@@ -33,26 +33,32 @@ $ composer require m3m0r7/php-os
 
 require __DIR__ . '/vendor/autoload.php';
 
+// Create `dist` directory for store assembly files
+@mkdir(__DIR__ . '/dist');
+
 $bootloader = new \PHPOS\OS\Code(
     new \PHPOS\Architecture\Architecture(
         // Use x86_64 architecture
         \PHPOS\Architecture\ArchitectureType::x86_64,
     ),
     new \PHPOS\OS\Option(
-        new \PHPOS\OS\IO(),
+        new \PHPOS\OS\IO(
+            // Specify save path
+            new \PHPOS\Stream\File(fopen(__DIR__ . '/dist/boot.asm', 'w+')),
+
+            // Or save to on-memory.
+            // new \PHPOS\Stream\Memory(),
+        ),
     ),
 );
 
-// Create `dist` directory for store assembly files
-@mkdir(__DIR__ . '/dist');
-
 // Initialize bootloader
 $bootloader
-    // Define bootloader
+    // Define bootloader sector
     ->registerService(\PHPOS\Service\BIOS\Standard\DefineBitSize::class, \PHPOS\OS\BitType::BIT_16)
     ->registerService(\PHPOS\Service\BIOS\Standard\DefineOrigin::class, \PHPOS\OS\OSInfo::MBR->value)
 
-    // Use a minimum example for printing Hello World into BIOS screen
+    // Print Hello World into BIOS screen
     ->registerService(\PHPOS\Service\Kit\Startup\HelloWorld::class)
 
     // Add bootloader signature
@@ -62,13 +68,8 @@ $bootloader
     ->assemble()
 
     // Save as a boot.asm file
-    ->saveAsReadable(
-        // Specify save path
-        new \PHPOS\Stream\File(fopen(__DIR__ . '/dist/boot.asm', 'w+')),
+    ->saveAsReadable();
 
-        // Or save to on-memory.
-        // new \PHPOS\Stream\Memory(),
-    );
 ```
 
 3. Make nasm instructions and build an OS image as following.

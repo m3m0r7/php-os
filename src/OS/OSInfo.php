@@ -10,6 +10,8 @@ enum OSInfo: int
     public const PAGE_SIZE = 512;
     public const ENTRY_POINT = 'main';
 
+    public const DEFAULT_BOOT_SECTOR = 0;
+
     case MBR = 0x7C00;
     case KERNEL = 0x1000;
 }

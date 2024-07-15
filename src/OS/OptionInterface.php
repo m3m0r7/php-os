@@ -7,4 +7,5 @@ namespace PHPOS\OS;
 interface OptionInterface
 {
     public function prefix(): string;
+    public function io(): IOInterface;
 }

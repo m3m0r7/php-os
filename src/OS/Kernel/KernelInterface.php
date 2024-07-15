@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PHPOS\Kernel;
+namespace PHPOS\OS\Kernel;
 
 interface KernelInterface
 {

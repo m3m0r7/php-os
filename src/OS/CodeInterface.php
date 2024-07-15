@@ -14,4 +14,5 @@ interface CodeInterface
     public function assemble(): AssemblyInterface;
     public function registerService(string $serviceName, mixed ...$parameters): CodeInterface;
     public function registerPostService(string $serviceName, mixed ...$parameters): CodeInterface;
+    public function setSector(int $sector): CodeInterface;
 }

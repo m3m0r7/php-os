@@ -10,6 +10,7 @@ use PHPOS\Stream\StreamWriterInterface;
 class IO implements IOInterface
 {
     public function __construct(
+        protected StreamWriterInterface $dist,
         protected ?StreamReaderInterface $stdIn = null,
         protected ?StreamWriterInterface $stdOut = null,
         protected ?StreamWriterInterface $stdErr = null,
@@ -25,6 +26,11 @@ class IO implements IOInterface
         if ($this->stdErr === null) {
             $this->stdErr = new \PHPOS\Stream\File(STDERR);
         }
+    }
+
+    public function dist(): StreamWriterInterface
+    {
+        return $this->dist;
     }
 
     public function stdIn(): StreamReaderInterface

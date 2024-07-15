@@ -12,9 +12,17 @@ class Code implements CodeInterface
 {
     protected array $services = [];
     protected array $postServices = [];
+    protected int $sector = OSInfo::DEFAULT_BOOT_SECTOR;
+
     public function __construct(public readonly ArchitectureInterface $architecture, protected readonly OptionInterface $option)
     {
 
+    }
+
+    public function setSector(int $sector): CodeInterface
+    {
+        $this->sector = $sector;
+        return $this;
     }
 
     public function architecture(): ArchitectureInterface
