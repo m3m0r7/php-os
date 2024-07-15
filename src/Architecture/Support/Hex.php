@@ -8,7 +8,7 @@ use PHPOS\Exception\HexCannotConvertException;
 
 class Hex implements \Stringable
 {
-    public function __construct(private int $value, protected int $bits = 8)
+    public function __construct(private int $value, protected int $bits = 16)
     {
     }
 

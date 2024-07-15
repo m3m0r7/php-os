@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PHPOS\Architecture\Support;
 
-use PHPOS\Runtime\VariableDefinitionInterface;
+use PHPOS\Runtime\KeyValueInterface;
 
 class Text implements \Stringable
 {

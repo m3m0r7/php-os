@@ -20,6 +20,8 @@ class Instruction implements InstructionInterface, \IteratorAggregate
 
     protected int $indentSize = 0;
 
+    protected array $includedServices = [];
+
     public function __construct(public readonly CodeInterface $bootloader)
     {
     }
@@ -52,6 +54,10 @@ class Instruction implements InstructionInterface, \IteratorAggregate
 
     public function include(ServiceInterface $service): self
     {
+        if (in_array($service->label(), $this->includedServices, true)) {
+            return $this;
+        }
+        $this->includedServices[] = $service->label();
         return $this->merge($service->process());
     }
 

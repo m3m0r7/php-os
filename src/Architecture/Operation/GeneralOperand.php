@@ -6,6 +6,7 @@ namespace PHPOS\Architecture\Operation;
 
 use PHPOS\Architecture\Register\RegisterInterface;
 use PHPOS\Exception\OperandCannotConvertException;
+use PHPOS\OS\DefineInterface;
 use PHPOS\Service\ServiceInterface;
 
 trait GeneralOperand
@@ -28,6 +29,10 @@ trait GeneralOperand
         if (is_int($this->valueOf)) {
             return "{$this->valueOf}";
         }
+        if ($this->valueOf instanceof DefineInterface) {
+            return "{$this->valueOf->name()}";
+        }
+
         if ($this->valueOf instanceof \Stringable || is_string($this->valueOf)) {
             return "{$this->valueOf}";
         }

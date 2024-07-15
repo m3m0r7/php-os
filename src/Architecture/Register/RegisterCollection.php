@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PHPOS\Architecture\Register;
 
 use PHPOS\Collection\Collection;
+use PHPOS\Exception\PHPOSException;
 
 class RegisterCollection extends Collection
 {
@@ -18,6 +19,6 @@ class RegisterCollection extends Collection
 
     public function get(RegisterType $registerType): DataRegisterInterface|SegmentRegisterInterface|IndexRegisterInterface
     {
-        return $this->items[$registerType->name];
+        return $this->items[$registerType->name] ?? throw new PHPOSException(sprintf('The PHP-OS was not registered %s', $registerType->name));
     }
 }

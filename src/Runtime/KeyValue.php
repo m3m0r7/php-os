@@ -6,9 +6,9 @@ namespace PHPOS\Runtime;
 
 use PHPOS\Architecture\Support\Hex;
 
-class VariableDefinition implements VariableDefinitionInterface
+class KeyValue implements KeyValueInterface
 {
-    public function __construct(protected string $name, protected string|Hex|int $value)
+    public function __construct(protected string $name, protected string|Hex|int|null $value)
     {
 
     }
@@ -18,13 +18,17 @@ class VariableDefinition implements VariableDefinitionInterface
         return $this->name;
     }
 
-    public function value(): string|Hex|int
+    public function value(): string|Hex|int|null
     {
         return $this->value;
     }
 
     public function __toString(): string
     {
+        // Return forcibly an empty if value is null
+        if ($this->value === null) {
+            return '';
+        }
         return $this->value;
     }
 }

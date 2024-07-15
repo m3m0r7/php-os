@@ -10,7 +10,7 @@ use PHPOS\Architecture\Support\Text;
 use PHPOS\Architecture\Variable\VariableType;
 use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
-use PHPOS\Runtime\VariableDefinitionInterface;
+use PHPOS\Runtime\KeyValueInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\ServiceInterface;
 
@@ -23,14 +23,14 @@ class Variable implements ServiceInterface
         $variables = $this->code->architecture()->runtime()->variables();
 
         /**
-         * @var ?VariableDefinitionInterface $variable
+         * @var ?KeyValueInterface $variable
          * @var ?VariableType $variableType
          */
         [$variable, $variableType] = $this->parameters + [null, null, null];
 
         $db = $variables->get($variableType ?? VariableType::BITS_8);
 
-        assert($variable instanceof VariableDefinitionInterface);
+        assert($variable instanceof KeyValueInterface);
 
         $destination = is_string($variable->value()) || $variable->value() instanceof \Stringable
             ? new Text((string) $variable->value())

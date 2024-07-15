@@ -72,6 +72,8 @@ enum Register implements RegisterInterface
             ->set(RegisterType::COUNTER_BITS_16, new DataRegister16Bits(self::CX, self::CH, self::CL))
             ->set(RegisterType::COUNTER_BITS_32, new DataRegister32Bits(self::ECX))
             ->set(RegisterType::COUNTER_BITS_64, new DataRegister64Bits(self::RCX))
+            ->set(RegisterType::DATA_BITS_16, new DataRegister16Bits(self::DX, self::DH, self::DL))
+            ->set(RegisterType::DATA_BITS_32, new DataRegister32Bits(self::EDX))
             ->set(RegisterType::BASE_BITS_16, new DataRegister16Bits(self::BX, self::BH, self::BL))
             ->set(RegisterType::BASE_BITS_32, new DataRegister32Bits(self::EBX))
             ->set(RegisterType::BASE_BITS_64, new DataRegister64Bits(self::RBX))

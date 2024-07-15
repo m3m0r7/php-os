@@ -12,10 +12,12 @@ use PHPOS\Architecture\Operation\SourceInterface;
 use PHPOS\Architecture\Register\RegisterCollection;
 use PHPOS\Architecture\Variable\VariableCollection;
 use PHPOS\Exception\VariableNotFoundException;
+use PHPOS\OS\DefineInterface;
 
 class Runtime implements RuntimeInterface
 {
     protected array $definedVariables = [];
+    protected array $definedDefinitions = [];
 
     public function __construct(
         protected ArchitectureInterface $architecture,
@@ -61,12 +63,19 @@ class Runtime implements RuntimeInterface
         ), ', ');
     }
 
-    public function setVariable(string $variableName, string $value): VariableDefinitionInterface
+    public function define(DefineInterface $define): DefineInterface
     {
-        return $this->definedVariables[$variableName] = new VariableDefinition($variableName, $value);
+        $defined = clone $define;
+        $this->definedDefinitions[$define->name()] = new KeyValue($define->name(), $define->value());
+        return $defined;
     }
 
-    public function findVariable(string $variableName): VariableDefinitionInterface
+    public function setVariable(string $variableName, string $value): KeyValueInterface
+    {
+        return $this->definedVariables[$variableName] = new KeyValue($variableName, $value);
+    }
+
+    public function findVariable(string $variableName): KeyValueInterface
     {
         return $this->definedVariables[$variableName] ?? throw new VariableNotFoundException(
             sprintf(
@@ -79,5 +88,10 @@ class Runtime implements RuntimeInterface
     public function definedVariables(): array
     {
         return $this->definedVariables;
+    }
+
+    public function definedDefinitions(): array
+    {
+        return $this->definedDefinitions;
     }
 }

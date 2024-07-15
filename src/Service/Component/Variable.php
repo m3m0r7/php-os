@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace PHPOS\Service\Component;
 
 use PHPOS\OS\CodeInterface;
-use PHPOS\Runtime\VariableDefinitionInterface;
+use PHPOS\Runtime\KeyValueInterface;
 
 class Variable
 {
-    protected VariableDefinitionInterface $variable;
+    protected KeyValueInterface $variable;
 
     public function __construct(protected CodeInterface $code, string $string)
     {
@@ -22,7 +22,7 @@ class Variable
             );
     }
 
-    public static function createBy(CodeInterface $code, string $string): VariableDefinitionInterface
+    public static function createBy(CodeInterface $code, string $string): KeyValueInterface
     {
         return (new self($code, $string))
             ->variable;
