@@ -18,12 +18,10 @@ class HelloWorldTest extends TestCase
     #[DataProvider('architectures')]
     public function testHelloWorld(CodeInterface $bootloader): void
     {
-        $bootloader->architecture()->runtime()
-            ->setVariable('hello_world', 'Hello World!');
-
         $bootloader
+            ->registerService(\PHPOS\Service\BIOS\Standard\DefineBitSize::class, \PHPOS\OS\BitType::BIT_16)
+            ->registerService(\PHPOS\Service\BIOS\Standard\DefineOrigin::class, \PHPOS\OS\OSInfo::MBR->value)
             ->registerService(\PHPOS\Service\Kit\Startup\HelloWorld::class)
-            ->registerService(\PHPOS\Service\BIOS\IO\PrintString::class)
             ->registerPostService(\PHPOS\Service\BIOS\Bootloader\BootloaderSignature::class)
             ->assemble()
             ->saveAsReadable($this->result);
