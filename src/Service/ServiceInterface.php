@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PHPOS\Service;
 
-use PHPOS\Bootloader\InstructionInterface;
+use PHPOS\OS\InstructionInterface;
 
 interface ServiceInterface
 {

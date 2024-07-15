@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace PHPOS\Assembly;
 
-use PHPOS\Architecture\ArchitectureInterface;
 use PHPOS\Assembly\Processor\Readable;
-use PHPOS\Bootloader\BootloaderInterface;
 use PHPOS\Exception\NotImplementedException;
+use PHPOS\OS\CodeInterface;
 use PHPOS\Stream\StreamWriterInterface;
 
 class Assembly implements AssemblyInterface
 {
-    public function __construct(protected BootloaderInterface $bootloader, protected array $initializationServices = [], protected array $postServices = [])
+    public function __construct(protected CodeInterface $bootloader, protected array $services = [], protected array $postServices = [])
     {
     }
 
@@ -20,7 +19,7 @@ class Assembly implements AssemblyInterface
     {
         $processor = new Readable(
             $this->bootloader,
-            $this->initializationServices,
+            $this->services,
             $this->postServices,
         );
 

@@ -4,32 +4,32 @@ declare(strict_types=1);
 
 namespace PHPOS\Test\Service;
 
-use PHPOS\Bootloader\BootloaderInterface;
-use PHPOS\Bootloader\Instruction;
-use PHPOS\Bootloader\InstructionInterface;
 use PHPOS\Operation\Ret;
+use PHPOS\OS\CodeInterface;
+use PHPOS\OS\Instruction;
+use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
-use PHPOS\Service\PrintCharacter;
+use PHPOS\Service\BIOS\IO\PrintCharacter;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Test\CreateBootloader;
+use PHPOS\Test\CreateCode;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
 
 class LabelTest extends TestCase
 {
-    use CreateBootloader;
+    use CreateCode;
     use MatchesSnapshots;
 
     #[DataProvider('architectures')]
-    public function testLabel(BootloaderInterface $bootloader): void
+    public function testLabel(CodeInterface $bootloader): void
     {
         $createLabelService = fn (?ServiceInterface $parent) => new class ($bootloader, $parent) implements ServiceInterface {
             use BaseService;
 
             public function process(): InstructionInterface
             {
-                return (new Instruction($this->bootloader))
+                return (new Instruction($this->code))
                     ->label(
                         $this->label(),
                         fn (InstructionInterface $instruction) => $instruction
@@ -51,16 +51,16 @@ class LabelTest extends TestCase
 
 
     #[DataProvider('architectures')]
-    public function testLabelWithEntity(BootloaderInterface $bootloader): void
+    public function testLabelWithEntity(CodeInterface $bootloader): void
     {
         $printCharacter = new PrintCharacter($bootloader, null);
         $this->assertSame(
-            "__php_PHPOS_Service_PrintCharacter",
+            "__php_PHPOS_Service_BIOS_IO_PrintCharacter",
             $printCharacter->label(),
         );
 
         $this->assertSame(
-            "__php_PHPOS_Service_PrintCharacter_PHPOS_Service_PrintCharacter",
+            "__php_PHPOS_Service_BIOS_IO_PrintCharacter_PHPOS_Service_BIOS_IO_PrintCharacter",
             (new PrintCharacter($bootloader, $printCharacter))->label(),
         );
     }

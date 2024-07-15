@@ -1,0 +1,43 @@
+<?php
+
+declare(strict_types=1);
+
+namespace PHPOS\Service\BIOS\Standard\Segment;
+
+use PHPOS\Architecture\Register\DataRegisterWithHighAndLowInterface;
+use PHPOS\Architecture\Register\RegisterType;
+use PHPOS\Architecture\Register\SegmentRegisterInterface;
+use PHPOS\Operation\Mov;
+use PHPOS\Operation\Xor_;
+use PHPOS\OS\Instruction;
+use PHPOS\OS\InstructionInterface;
+use PHPOS\Service\BaseService;
+use PHPOS\Service\ServiceInterface;
+
+class SetupSegments implements ServiceInterface
+{
+    use BaseService;
+
+    public function process(): InstructionInterface
+    {
+        $registers = $this->code->architecture()->runtime()->registers();
+
+        $ac = $registers->get(RegisterType::ACCUMULATOR_BITS_16);
+        assert($ac instanceof DataRegisterWithHighAndLowInterface);
+
+        $ds = $registers->get(RegisterType::DATA_SEGMENT);
+        assert($ds instanceof SegmentRegisterInterface);
+
+        $es = $registers->get(RegisterType::EXTRA_SEGMENT);
+        assert($es instanceof SegmentRegisterInterface);
+
+        $ss = $registers->get(RegisterType::STACK_SEGMENT);
+        assert($ss instanceof SegmentRegisterInterface);
+
+        return (new Instruction($this->code))
+            ->append(Xor_::class, $ac->value(), $ac->value())
+            ->append(Mov::class, $ds->segment(), $ac->value())
+            ->append(Mov::class, $es->segment(), $ac->value())
+            ->append(Mov::class, $ss->segment(), $ac->value());
+    }
+}

@@ -5,20 +5,20 @@ declare(strict_types=1);
 namespace PHPOS\Test\Service;
 
 use PHPOS\Architecture\Variable\VariableType;
-use PHPOS\Bootloader\BootloaderInterface;
-use PHPOS\Service\Variable;
-use PHPOS\Test\CreateBootloader;
+use PHPOS\OS\CodeInterface;
+use PHPOS\Service\BIOS\Standard\Variable;
+use PHPOS\Test\CreateCode;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
 
 class VariableTest extends TestCase
 {
-    use CreateBootloader;
+    use CreateCode;
     use MatchesSnapshots;
 
     #[DataProvider('architectures')]
-    public function testVariableWith8Bits(BootloaderInterface $bootloader): void
+    public function testVariableWith8Bits(CodeInterface $bootloader): void
     {
         $variable = new Variable(
             $bootloader,
@@ -35,7 +35,7 @@ class VariableTest extends TestCase
 
 
     #[DataProvider('architectures')]
-    public function testVariableWith16Bits(BootloaderInterface $bootloader): void
+    public function testVariableWith16Bits(CodeInterface $bootloader): void
     {
         $variable = new Variable(
             $bootloader,

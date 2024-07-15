@@ -7,21 +7,20 @@ namespace PHPOS\Test\Service;
 use PHPOS\Architecture\Support\Hex;
 use PHPOS\Architecture\Support\Text;
 use PHPOS\Architecture\Variable\VariableType;
-use PHPOS\Bootloader\BootloaderInterface;
-use PHPOS\Service\DefineByte;
-use PHPOS\Service\Times;
-use PHPOS\Test\CreateBootloader;
+use PHPOS\OS\CodeInterface;
+use PHPOS\Service\BIOS\Standard\DefineByte;
+use PHPOS\Test\CreateCode;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
 
 class DefineByteTest extends TestCase
 {
-    use CreateBootloader;
+    use CreateCode;
     use MatchesSnapshots;
 
     #[DataProvider('architectures')]
-    public function testDefineByteForStringWith8Bits(BootloaderInterface $bootloader): void
+    public function testDefineByteForStringWith8Bits(CodeInterface $bootloader): void
     {
         $definedByte = new DefineByte(
             $bootloader,
@@ -37,7 +36,7 @@ class DefineByteTest extends TestCase
 
 
     #[DataProvider('architectures')]
-    public function testDefineByteForStringWith16Bits(BootloaderInterface $bootloader): void
+    public function testDefineByteForStringWith16Bits(CodeInterface $bootloader): void
     {
         $definedByte = new DefineByte(
             $bootloader,
@@ -54,7 +53,7 @@ class DefineByteTest extends TestCase
 
 
     #[DataProvider('architectures')]
-    public function testDefineByteForHexWith8Bits(BootloaderInterface $bootloader): void
+    public function testDefineByteForHexWith8Bits(CodeInterface $bootloader): void
     {
         $definedByte = new DefineByte(
             $bootloader,
@@ -70,7 +69,7 @@ class DefineByteTest extends TestCase
 
 
     #[DataProvider('architectures')]
-    public function testDefineByteForHexWith16Bits(BootloaderInterface $bootloader): void
+    public function testDefineByteForHexWith16Bits(CodeInterface $bootloader): void
     {
         $definedByte = new DefineByte(
             $bootloader,
@@ -87,7 +86,7 @@ class DefineByteTest extends TestCase
 
 
     #[DataProvider('architectures')]
-    public function testDefineByteForHexWith16BitsZeroFilled(BootloaderInterface $bootloader): void
+    public function testDefineByteForHexWith16BitsZeroFilled(CodeInterface $bootloader): void
     {
         $definedByte = new DefineByte(
             $bootloader,

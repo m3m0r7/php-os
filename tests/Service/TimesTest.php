@@ -5,20 +5,20 @@ declare(strict_types=1);
 namespace PHPOS\Test\Service;
 
 use PHPOS\Architecture\Variable\VariableType;
-use PHPOS\Bootloader\BootloaderInterface;
-use PHPOS\Service\Times;
-use PHPOS\Test\CreateBootloader;
+use PHPOS\OS\CodeInterface;
+use PHPOS\Service\BIOS\Standard\Times;
+use PHPOS\Test\CreateCode;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
 
 class TimesTest extends TestCase
 {
-    use CreateBootloader;
+    use CreateCode;
     use MatchesSnapshots;
 
     #[DataProvider('architectures')]
-    public function testTimesWith8Bits(BootloaderInterface $bootloader): void
+    public function testTimesWith8Bits(CodeInterface $bootloader): void
     {
         $times = new Times(
             $bootloader,
@@ -35,7 +35,7 @@ class TimesTest extends TestCase
 
 
     #[DataProvider('architectures')]
-    public function testTimesWith16Bits(BootloaderInterface $bootloader): void
+    public function testTimesWith16Bits(CodeInterface $bootloader): void
     {
         $times = new Times(
             $bootloader,

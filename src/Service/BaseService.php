@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace PHPOS\Service;
 
-use PHPOS\Bootloader\BootloaderInterface;
+use PHPOS\OS\CodeInterface;
 
 trait BaseService
 {
     protected array $parameters = [];
 
-    public function __construct(protected BootloaderInterface $bootloader, protected ?ServiceInterface $parent = null, ...$parameters)
+    public function __construct(protected CodeInterface $code, protected ?ServiceInterface $parent = null, ...$parameters)
     {
         $this->parameters = $parameters;
     }
@@ -32,7 +32,7 @@ trait BaseService
         if ($this->parent !== null) {
             return $this->parent->label() . '_' . $name;
         }
-        return $this->bootloader->option()->prefix() . $name;
+        return $this->code->option()->prefix() . $name;
     }
 
     private function formatClassName($name): string

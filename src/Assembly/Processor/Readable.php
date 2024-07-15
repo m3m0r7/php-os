@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace PHPOS\Assembly\Processor;
 
-use PHPOS\Architecture\ArchitectureInterface;
-use PHPOS\Bootloader\BootloaderInterface;
+use PHPOS\OS\CodeInterface;
+use PHPOS\Service\BIOS\Standard\Variable;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\Variable;
 
 class Readable implements ProcessorInterface
 {
-    public function __construct(protected BootloaderInterface $bootloader, protected array $initializationServices = [], protected array $postServices = [])
+    public function __construct(protected CodeInterface $bootloader, protected array $services = [], protected array $postServices = [])
     {
     }
 
@@ -35,7 +34,8 @@ class Readable implements ProcessorInterface
 
         __HEADER__;
 
-        foreach ($this->initializationServices as [$service, $parameters]) {
+
+        foreach ($this->services as [$service, $parameters]) {
             $service = new $service($this->bootloader, null, ...$parameters);
 
             assert($service instanceof ServiceInterface);
