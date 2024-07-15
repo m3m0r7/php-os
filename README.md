@@ -141,10 +141,11 @@ dw 0xAA55
 $ ./vendor/bin/phpunit tests/
 ```
 
-## Linting
+## Code formatting
 
 ```
-$ ./vendor/bin/php-cs-fixer fix src/ tests/
+$ ./vendor/bin/php-cs-fixer fix src/
+$ ./vendor/bin/php-cs-fixer fix tests/
 ```
 
 ## License
