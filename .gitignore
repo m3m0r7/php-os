@@ -11,3 +11,4 @@ kernel.asm
 kernel.bin
 php-os.img
 dist
+Makefile
