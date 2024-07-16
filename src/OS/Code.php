@@ -7,7 +7,6 @@ namespace PHPOS\OS;
 use PHPOS\Architecture\ArchitectureInterface;
 use PHPOS\Assembly\Assembly;
 use PHPOS\Assembly\AssemblyInterface;
-use PHPOS\Service\BIOS\Standard\DefineBitSize;
 
 class Code implements CodeInterface
 {
@@ -20,6 +19,7 @@ class Code implements CodeInterface
 
     protected BitType $bitType = BitType::BIT_16;
     protected OSInfo|int $origin = 0;
+    protected ?string $name = '';
 
     public function __construct(public readonly ArchitectureInterface $architecture, protected readonly OptionInterface $option = new Option())
     {
@@ -28,6 +28,20 @@ class Code implements CodeInterface
 
         $this->drive = OSInfo::DEFAULT_DRIVE
             ->value;
+    }
+
+    public function setName(string $name): CodeInterface
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function name(): DefineInterface
+    {
+        return new Define(
+            $this->createName(__FUNCTION__),
+            $this->createCodeName(),
+        );
     }
 
     public function setSector(int $sector): CodeInterface
@@ -144,6 +158,11 @@ class Code implements CodeInterface
 
     private function createName(string $name): string
     {
-        return $this->option->prefix() . 'define_' . $this->sector . '_' . $name;
+        return $this->option->prefix() . 'define_' . $this->createCodeName() . '_' . $name;
+    }
+
+    private function createCodeName(): string
+    {
+        return $this->name ?: 'code_' . spl_object_hash($this);
     }
 }

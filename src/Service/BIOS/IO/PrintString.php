@@ -16,7 +16,6 @@ use PHPOS\Operation\Or_;
 use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
-use PHPOS\Service\BIOS\Standard\Return_;
 use PHPOS\Service\Component\Variable;
 use PHPOS\Service\ServiceInterface;
 
@@ -43,7 +42,7 @@ class PrintString implements ServiceInterface
         $ac = $registers->get(RegisterType::ACCUMULATOR_BITS_16);
         assert($ac instanceof DataRegisterWithHighAndLowInterface);
 
-        $return = new Return_($this->code, $this);
+        $printDone = new PrintDone($this->code, $this);
         $printCharacter = new PrintCharacter($this->code, $this, $ac->high());
 
         return (new Instruction($this->code))
@@ -54,7 +53,7 @@ class PrintString implements ServiceInterface
                     ->name(),
             )
             ->append(Call::class, $this->label())
-            ->append(Jmp::class, $return)
+            ->append(Jmp::class, $printDone)
             ->include($printCharacter)
             ->label(
                 $this->label(),
@@ -62,10 +61,10 @@ class PrintString implements ServiceInterface
                     $instruction
                         ->append(Lodsb::class)
                         ->append(Or_::class, $ac->low(), $ac->low())
-                        ->append(Jz::class, $return)
+                        ->append(Jz::class, $printDone)
                         ->append(Call::class, $printCharacter)
                         ->append(Jmp::class, $this)
             )
-            ->include($return);
+            ->include($printDone);
     }
 }

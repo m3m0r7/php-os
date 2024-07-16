@@ -27,6 +27,9 @@ class SetupSegments implements ServiceInterface
         $ac = $registers->get(RegisterType::ACCUMULATOR_BITS_16);
         assert($ac instanceof DataRegisterWithHighAndLowInterface);
 
+        $base = $registers->get(RegisterType::BASE_BITS_16);
+        assert($base instanceof DataRegisterWithHighAndLowInterface);
+
         $ds = $registers->get(RegisterType::DATA_SEGMENT);
         assert($ds instanceof SegmentRegisterInterface);
 
@@ -42,6 +45,7 @@ class SetupSegments implements ServiceInterface
         return (new Instruction($this->code))
             ->append(Cli::class)
             ->append(Xor_::class, $ac->value(), $ac->value())
+            ->append(Xor_::class, $base->value(), $base->value())
             ->append(Mov::class, $ds->segment(), $ac->value())
             ->append(Mov::class, $es->segment(), $ac->value())
             ->append(Mov::class, $ss->segment(), $ac->value())

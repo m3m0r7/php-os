@@ -19,8 +19,9 @@ class HelloWorld implements ServiceInterface
 
     public function process(): InstructionInterface
     {
-        $registers = $this->code->architecture()->runtime()->registers();
-        $printStringService = new PrintString($this->code, null, 'Hello World!');
+        [$text] = $this->parameters + ['Hello World!'];
+
+        $printStringService = new PrintString($this->code, null, $text);
 
         return (new Instruction($this->code))
             ->label(

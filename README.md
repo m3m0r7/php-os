@@ -55,7 +55,7 @@ $bootloader
     ->registerPostService(\PHPOS\Service\BIOS\Bootloader\BootloaderSignature::class);
 
 // Bundle the code into an OS image
-$bundler = new \PHPOS\OS\Bundler(
+$bundler = new \PHPOS\OS\Bundler\Bundler(
     new \PHPOS\OS\ConfigureOption(
         __DIR__ . '/dist',
         'php-os.img',
@@ -86,7 +86,7 @@ $ qemu-system-x86_64 -drive file=./dist/build/php-os.img,format=raw
 <img src="./doc/demo.png" width="100%">
 
 
-The quick start example will generate a `boot.asm` as following:
+The quick start example will generate an assembly file as following:
 ```asm
 ;
 ;   _______  ____  ____  _______            ___     ______
@@ -108,13 +108,14 @@ The quick start example will generate a `boot.asm` as following:
 main:
   cli
   xor ax, ax
+  xor bx, bx
   mov ds, ax
   mov es, ax
   mov ss, ax
   mov sp, 31744
   mov si, __php_var_SGVsbG8gV29ybGQh
   call __php_PHPOS_Service_BIOS_IO_PrintString
-  jmp __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_Standard_Return_
+  jmp __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone
   __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintCharacter:
     mov ah, 0x000E
     int 16
@@ -122,10 +123,10 @@ main:
   __php_PHPOS_Service_BIOS_IO_PrintString:
     lodsb
     or al, al
-    jz __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_Standard_Return_
+    jz __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone
     call __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintCharacter
     jmp __php_PHPOS_Service_BIOS_IO_PrintString
-    __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_Standard_Return_:
+    __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone:
       ret
   hlt
 
@@ -135,6 +136,10 @@ __php_var_SGVsbG8gV29ybGQh:
 times 510-($-$$) db 0
 dw 0xAA55
 ```
+
+### See examples
+
+- [Call a code in something sector](doc/example/01-call-code-in-something-sector/README)
 
 ## Test
 

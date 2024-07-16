@@ -8,7 +8,7 @@ use PHPOS\Service\ServiceInterface;
 
 interface InstructionInterface
 {
-    public function label(string $name, callable $callback): InstructionInterface;
+    public function label(string $name, callable $callback = null): InstructionInterface;
     public function section(string $name, callable $callback): InstructionInterface;
     public function merge(InstructionInterface $instruction): InstructionInterface;
     public function include(ServiceInterface $service): InstructionInterface;

@@ -19,7 +19,7 @@ class ReturnTest extends TestCase
     public function testReturn(CodeInterface $bootloader): void
     {
         $result = $bootloader
-            ->registerService(\PHPOS\Service\BIOS\Standard\Return_::class)
+            ->registerService(\PHPOS\Service\BIOS\IO\PrintDone::class)
             ->assemble()
             ->asText();
 

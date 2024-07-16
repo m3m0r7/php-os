@@ -26,4 +26,6 @@ interface CodeInterface
     public function bits(): BitType;
     public function setOrigin(OSInfo|int $origin): self;
     public function origin(): int;
+    public function setName(string $name): CodeInterface;
+    public function name(): DefineInterface;
 }

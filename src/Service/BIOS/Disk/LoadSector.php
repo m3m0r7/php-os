@@ -65,6 +65,8 @@ class LoadSector implements ServiceInterface
 
         $diskError = new DiskError($this->code);
 
+        $finishLabel = $this->label() . '_finish';
+
         return (new Instruction($this->code))
             ->label(
                 $this->label(),
@@ -104,10 +106,11 @@ class LoadSector implements ServiceInterface
                         ->append(Jc::class, $diskError->label())
 
                         // Jump to loaded origin
-                        ->append(Jmp::class, new Hex($code->origin(), 16))
+                        ->append(Jmp::class, $finishLabel)
 
                         ->append(Ret::class)
             )
-            ->include($diskError);
+            ->include($diskError)
+            ->label($finishLabel);
     }
 }

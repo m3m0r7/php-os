@@ -17,7 +17,7 @@
 
 mov si, __php_var_
 call __php_PHPOS_Service_BIOS_IO_PrintString
-jmp __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_Standard_Return_
+jmp __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone
 __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintCharacter:
   mov ah, 0x000E
   int 16
@@ -25,10 +25,10 @@ __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintCharacter:
 __php_PHPOS_Service_BIOS_IO_PrintString:
   lodsb 
   or al, al
-  jz __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_Standard_Return_
+  jz __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone
   call __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintCharacter
   jmp __php_PHPOS_Service_BIOS_IO_PrintString
-  __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_Standard_Return_:
+  __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone:
     ret 
 
 __php_var_:

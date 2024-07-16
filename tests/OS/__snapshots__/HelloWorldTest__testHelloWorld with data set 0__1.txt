@@ -22,13 +22,14 @@
 main:
   cli 
   xor ax, ax
+  xor bx, bx
   mov ds, ax
   mov es, ax
   mov ss, ax
   mov sp, 0
   mov si, __php_var_SGVsbG8gV29ybGQh
   call __php_PHPOS_Service_BIOS_IO_PrintString
-  jmp __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_Standard_Return_
+  jmp __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone
   __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintCharacter:
     mov ah, 0x000E
     int 16
@@ -36,10 +37,10 @@ main:
   __php_PHPOS_Service_BIOS_IO_PrintString:
     lodsb 
     or al, al
-    jz __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_Standard_Return_
+    jz __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone
     call __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintCharacter
     jmp __php_PHPOS_Service_BIOS_IO_PrintString
-    __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_Standard_Return_:
+    __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone:
       ret 
   hlt 
 

@@ -26,7 +26,7 @@ class Instruction implements InstructionInterface, \IteratorAggregate
     {
     }
 
-    public function section(string $name, callable $callback): InstructionInterface
+    public function section(string $name, callable $callback = null): InstructionInterface
     {
         $instruction = new self($this->bootloader);
         $instruction = $instruction->merge($this);
@@ -36,10 +36,10 @@ class Instruction implements InstructionInterface, \IteratorAggregate
         // Forcibly to 2 indents
         $instruction->indentSize = 2;
 
-        return $callback($instruction);
+        return $callback ? $callback($instruction) : $instruction;
     }
 
-    public function label(string $name, callable $callback): InstructionInterface
+    public function label(string $name, callable $callback = null): InstructionInterface
     {
         $instruction = new self($this->bootloader);
         $instruction->indentSize = $this->indentSize;
@@ -49,7 +49,7 @@ class Instruction implements InstructionInterface, \IteratorAggregate
 
         $instruction->indentSize += 2;
 
-        return $callback($instruction);
+        return $callback ? $callback($instruction) : $instruction;
     }
 
     public function include(ServiceInterface $service): self

@@ -2,8 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PHPOS\OS;
+namespace PHPOS\OS\Bundler;
 
+use PHPOS\OS\AssemblerType;
+use PHPOS\OS\CodeInterface;
+use PHPOS\OS\ConfigureOptionInterface;
 use PHPOS\Utility\AutomaticallyGeneratedFileSignature;
 
 class Bundler
@@ -41,6 +44,17 @@ class Bundler
             'w+',
         );
 
+        // Create assembly files
+        foreach ($this->configureOption->codes() as $code) {
+            assert($code instanceof CodeInterface);
+            $asmHandle = fopen(
+                $asmDirectory . '/' . $code->name() . '.asm',
+                'w+'
+            );
+            fwrite($asmHandle, $code->assemble()->asText());
+            fclose($asmHandle);
+        }
+
         $fileNames = [];
 
         $makeFile .= 'EXTENSION_NAME=' . $this->configureOption->compiledExtensionName() . "\n";
@@ -52,7 +66,7 @@ class Bundler
         $filePaths = [];
         foreach ($this->configureOption->codes() as $code) {
             assert($code instanceof CodeInterface);
-            $fileNames[] = $fileName = $this->createNameByCode($code);
+            $fileNames[] = $fileName = $code->name();
 
             $filePaths[] = '$(DIST_PATH)/' . $fileName  . '.$(EXTENSION_NAME)';
         }
@@ -60,12 +74,12 @@ class Bundler
         $makeFile .= "\n";
         $makeFile .= "\n";
 
-        foreach ($fileNames as $fileName) {
-            $makeFile .= "$(DIST_PATH)/{$fileName}.$(EXTENSION_NAME): $(ASM_PATH)/{$fileName}.asm\n";
+        foreach ($fileNames as $basedFileName) {
+            $makeFile .= "$(DIST_PATH)/{$basedFileName}.$(EXTENSION_NAME): $(ASM_PATH)/{$basedFileName}.asm\n";
             $makeFile .= "\t" . $this->assembleCommand(
-                "$(ASM_PATH)/{$fileName}.asm",
-                "$(DIST_PATH)/{$fileName}.$(EXTENSION_NAME)",
-            );
+                    "$(ASM_PATH)/{$basedFileName}.asm",
+                    "$(DIST_PATH)/{$basedFileName}.$(EXTENSION_NAME)",
+                );
             $makeFile .= "\n";
         }
 
@@ -87,31 +101,14 @@ class Bundler
         $makeFile .= "clean:\n";
         $makeFile .= "\t\\rm -f $(OS_IMAGE) $(FILE_PATHS)\n";
 
-
         // Add all recipe
         $makeFile .= "all: $(OS_IMAGE) $(FILE_PATHS)\n";
 
         // Add .PHONY
         $makeFile .= ".PHONY: clean all\n";
 
-        // Create assembly files
-        foreach ($this->configureOption->codes() as $code) {
-            assert($code instanceof CodeInterface);
-            $asmHandle = fopen(
-                $asmDirectory . '/' . $this->createNameByCode($code) . '.asm',
-                'w+'
-            );
-            fwrite($asmHandle, $code->assemble()->asText());
-            fclose($asmHandle);
-        }
-
         fwrite($handle, AutomaticallyGeneratedFileSignature::createHeader('#') . $makeFile);
         fclose($handle);
-    }
-
-    protected function createNameByCode(CodeInterface $code): string
-    {
-        return (string) spl_object_id($code);
     }
 
     protected function transferCommand(string $from, string $to, int $seek = 0): string
