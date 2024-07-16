@@ -18,13 +18,13 @@ class BootloaderSignatureTest extends TestCase
     #[DataProvider('architectures')]
     public function testEndOfBootLoader(CodeInterface $bootloader): void
     {
-        $bootloader
+        $result = $bootloader
             ->registerService(\PHPOS\Service\BIOS\Bootloader\BootloaderSignature::class)
             ->assemble()
-            ->asText($this->result);
+            ->asText();
 
         $this->assertMatchesTextSnapshot(
-            $this->result->all(),
+            $result,
         );
     }
 }

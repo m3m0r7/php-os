@@ -9,11 +9,8 @@ use PHPOS\Stream\Memory;
 
 trait CreateCode
 {
-    protected Memory $result;
-
     public function setUp(): void
     {
-        $this->result = new Memory();
     }
 
     public static function architectures(): array
@@ -21,9 +18,6 @@ trait CreateCode
         $createBootloader = fn (ArchitectureType $architectureType) => new \PHPOS\OS\Code(
             new \PHPOS\Architecture\Architecture(
                 $architectureType,
-            ),
-            new \PHPOS\OS\Option(
-                new \PHPOS\OS\IO(),
             ),
         );
         return [

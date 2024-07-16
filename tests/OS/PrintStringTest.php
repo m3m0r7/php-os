@@ -18,13 +18,13 @@ class PrintStringTest extends TestCase
     #[DataProvider('architectures')]
     public function testPrintString(CodeInterface $bootloader): void
     {
-        $bootloader
+        $result = $bootloader
             ->registerService(\PHPOS\Service\BIOS\IO\PrintString::class)
             ->assemble()
-            ->asText($this->result);
+            ->asText();
 
         $this->assertMatchesTextSnapshot(
-            $this->result->all(),
+            $result,
         );
     }
 }

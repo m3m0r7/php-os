@@ -18,13 +18,13 @@ class ReturnTest extends TestCase
     #[DataProvider('architectures')]
     public function testReturn(CodeInterface $bootloader): void
     {
-        $bootloader
+        $result = $bootloader
             ->registerService(\PHPOS\Service\BIOS\Standard\Return_::class)
             ->assemble()
-            ->asText($this->result);
+            ->asText();
 
         $this->assertMatchesTextSnapshot(
-            $this->result->all(),
+            $result,
         );
     }
 }
