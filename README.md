@@ -78,7 +78,7 @@ $ cd dist && make clean && make all
 
 4. Start QEMU with qemu command as following.
 ```
-$ qemu-system-x86_64 -drive file=./dist/php-os.img,format=raw
+$ qemu-system-x86_64 -drive file=./dist/build/php-os.img,format=raw
 ```
 
 5. Show figure as following if you successfully to run the QEMU.
