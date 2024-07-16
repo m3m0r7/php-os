@@ -21,7 +21,7 @@ trait CreateCode
             ),
         );
         return [
-            [$createBootloader(ArchitectureType::x86_64)],
+            [$createBootloader(ArchitectureType::x86_64)->setName('x86_64_test_code')],
         ];
     }
 }

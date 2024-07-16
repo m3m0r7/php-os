@@ -18,10 +18,10 @@ class TimesTest extends TestCase
     use MatchesSnapshots;
 
     #[DataProvider('architectures')]
-    public function testTimesWith8Bits(CodeInterface $bootloader): void
+    public function testTimesWith8Bits(CodeInterface $code): void
     {
         $times = new Times(
-            $bootloader,
+            $code,
             null,
             'test',
             '0',
@@ -35,10 +35,10 @@ class TimesTest extends TestCase
 
 
     #[DataProvider('architectures')]
-    public function testTimesWith16Bits(CodeInterface $bootloader): void
+    public function testTimesWith16Bits(CodeInterface $code): void
     {
         $times = new Times(
-            $bootloader,
+            $code,
             null,
             'test',
             '0',

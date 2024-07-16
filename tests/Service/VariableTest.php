@@ -18,12 +18,12 @@ class VariableTest extends TestCase
     use MatchesSnapshots;
 
     #[DataProvider('architectures')]
-    public function testVariableWith8Bits(CodeInterface $bootloader): void
+    public function testVariableWith8Bits(CodeInterface $code): void
     {
         $variable = new Variable(
-            $bootloader,
+            $code,
             null,
-            $bootloader->architecture()->runtime()
+            $code->architecture()->runtime()
                 ->setVariable('variable_name', 'value'),
         );
 
@@ -35,12 +35,12 @@ class VariableTest extends TestCase
 
 
     #[DataProvider('architectures')]
-    public function testVariableWith16Bits(CodeInterface $bootloader): void
+    public function testVariableWith16Bits(CodeInterface $code): void
     {
         $variable = new Variable(
-            $bootloader,
+            $code,
             null,
-            $bootloader->architecture()->runtime()
+            $code->architecture()->runtime()
                 ->setVariable('variable_name', 'value'),
             VariableType::BITS_16
         );

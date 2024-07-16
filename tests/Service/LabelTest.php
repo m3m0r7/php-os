@@ -22,9 +22,9 @@ class LabelTest extends TestCase
     use MatchesSnapshots;
 
     #[DataProvider('architectures')]
-    public function testLabel(CodeInterface $bootloader): void
+    public function testLabel(CodeInterface $code): void
     {
-        $createLabelService = fn (?ServiceInterface $parent) => new class ($bootloader, $parent) implements ServiceInterface {
+        $createLabelService = fn (?ServiceInterface $parent) => new class ($code, $parent) implements ServiceInterface {
             use BaseService;
 
             public function process(): InstructionInterface
@@ -51,9 +51,9 @@ class LabelTest extends TestCase
 
 
     #[DataProvider('architectures')]
-    public function testLabelWithEntity(CodeInterface $bootloader): void
+    public function testLabelWithEntity(CodeInterface $code): void
     {
-        $printCharacter = new PrintCharacter($bootloader, null);
+        $printCharacter = new PrintCharacter($code, null);
         $this->assertSame(
             "__php_PHPOS_Service_BIOS_IO_PrintCharacter",
             $printCharacter->label(),
@@ -61,7 +61,7 @@ class LabelTest extends TestCase
 
         $this->assertSame(
             "__php_PHPOS_Service_BIOS_IO_PrintCharacter_PHPOS_Service_BIOS_IO_PrintCharacter",
-            (new PrintCharacter($bootloader, $printCharacter))->label(),
+            (new PrintCharacter($code, $printCharacter))->label(),
         );
     }
 }

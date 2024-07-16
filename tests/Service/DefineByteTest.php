@@ -20,10 +20,10 @@ class DefineByteTest extends TestCase
     use MatchesSnapshots;
 
     #[DataProvider('architectures')]
-    public function testDefineByteForStringWith8Bits(CodeInterface $bootloader): void
+    public function testDefineByteForStringWith8Bits(CodeInterface $code): void
     {
         $definedByte = new DefineByte(
-            $bootloader,
+            $code,
             null,
             new Text('test'),
         );
@@ -36,10 +36,10 @@ class DefineByteTest extends TestCase
 
 
     #[DataProvider('architectures')]
-    public function testDefineByteForStringWith16Bits(CodeInterface $bootloader): void
+    public function testDefineByteForStringWith16Bits(CodeInterface $code): void
     {
         $definedByte = new DefineByte(
-            $bootloader,
+            $code,
             null,
             new Text('test'),
             VariableType::BITS_16
@@ -53,10 +53,10 @@ class DefineByteTest extends TestCase
 
 
     #[DataProvider('architectures')]
-    public function testDefineByteForHexWith8Bits(CodeInterface $bootloader): void
+    public function testDefineByteForHexWith8Bits(CodeInterface $code): void
     {
         $definedByte = new DefineByte(
-            $bootloader,
+            $code,
             null,
             new Hex(0x29),
         );
@@ -69,10 +69,10 @@ class DefineByteTest extends TestCase
 
 
     #[DataProvider('architectures')]
-    public function testDefineByteForHexWith16Bits(CodeInterface $bootloader): void
+    public function testDefineByteForHexWith16Bits(CodeInterface $code): void
     {
         $definedByte = new DefineByte(
-            $bootloader,
+            $code,
             null,
             new Hex(0xee29, 16),
             VariableType::BITS_16
@@ -86,10 +86,10 @@ class DefineByteTest extends TestCase
 
 
     #[DataProvider('architectures')]
-    public function testDefineByteForHexWith16BitsZeroFilled(CodeInterface $bootloader): void
+    public function testDefineByteForHexWith16BitsZeroFilled(CodeInterface $code): void
     {
         $definedByte = new DefineByte(
-            $bootloader,
+            $code,
             null,
             new Hex(0x29, 16),
             VariableType::BITS_16

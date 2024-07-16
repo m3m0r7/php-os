@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PHPOS\Test\OS;
+namespace BIOS\Bootloader;
 
 use PHPOS\OS\CodeInterface;
 use PHPOS\Test\CreateCode;
@@ -16,9 +16,9 @@ class BootloaderSignatureTest extends TestCase
     use MatchesSnapshots;
 
     #[DataProvider('architectures')]
-    public function testEndOfBootLoader(CodeInterface $bootloader): void
+    public function testEndOfBootLoader(CodeInterface $code): void
     {
-        $result = $bootloader
+        $result = $code
             ->registerService(\PHPOS\Service\BIOS\Bootloader\BootloaderSignature::class)
             ->assemble()
             ->asText();

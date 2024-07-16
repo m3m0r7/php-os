@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PHPOS\Test\OS;
+namespace PHPOS\Test\BIOS\Starndard;
 
 use PHPOS\Exception\VariableNotFoundException;
 use PHPOS\OS\CodeInterface;
@@ -17,23 +17,23 @@ class VariableTest extends TestCase
     use MatchesSnapshots;
 
     #[DataProvider('architectures')]
-    public function testVariable(CodeInterface $bootloader): void
+    public function testVariable(CodeInterface $code): void
     {
-        $variable = $bootloader->architecture()->runtime()
+        $variable = $code->architecture()->runtime()
             ->setVariable('name', 'value');
 
         $this->assertSame('name', $variable->name());
         $this->assertSame('value', $variable->value());
 
-        $data = $bootloader->architecture()->runtime()->findVariable('name');
+        $data = $code->architecture()->runtime()->findVariable('name');
         $this->assertSame('name', $data->name());
         $this->assertSame('value', $data->value());
     }
 
     #[DataProvider('architectures')]
-    public function testVariableDidNotDefined(CodeInterface $bootloader): void
+    public function testVariableDidNotDefined(CodeInterface $code): void
     {
         $this->expectException(VariableNotFoundException::class);
-        $bootloader->architecture()->runtime()->findVariable('name');
+        $code->architecture()->runtime()->findVariable('name');
     }
 }

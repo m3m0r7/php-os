@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PHPOS\Test\OS;
+namespace PHPOS\Test\Kit\Startup;
 
 use PHPOS\OS\CodeInterface;
 use PHPOS\Test\CreateCode;
@@ -16,9 +16,9 @@ class HelloWorldTest extends TestCase
     use MatchesSnapshots;
 
     #[DataProvider('architectures')]
-    public function testHelloWorld(CodeInterface $bootloader): void
+    public function testHelloWorld(CodeInterface $code): void
     {
-        $result = $bootloader
+        $result = $code
             ->registerService(\PHPOS\Service\BIOS\Standard\DefineBitSize::class, \PHPOS\OS\BitType::BIT_16)
             ->registerService(\PHPOS\Service\BIOS\Standard\DefineOrigin::class, \PHPOS\OS\OSInfo::MBR->value)
             ->registerService(\PHPOS\Service\Kit\Startup\HelloWorld::class)
