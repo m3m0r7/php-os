@@ -9,6 +9,7 @@ class ConfigureOption implements ConfigureOptionInterface
     public function __construct(
         protected string $distributionDirectory,
         protected string $osImageFileName,
+        protected CodeInterface $bootloader,
         protected array $codes = [],
         protected string $makeFileName = 'Makefile',
         protected string $compiledExtensionName = 'bin',
@@ -35,6 +36,11 @@ class ConfigureOption implements ConfigureOptionInterface
     public function makeFileName(): string
     {
         return $this->makeFileName;
+    }
+
+    public function bootloader(): CodeInterface
+    {
+        return $this->bootloader;
     }
 
     public function codes(): array

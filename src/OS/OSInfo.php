@@ -9,6 +9,7 @@ enum OSInfo: int
     public const BOOTLOADER_SIZE = 512;
     public const PAGE_SIZE = 512;
     public const ENTRY_POINT = 'main';
+    public const DEFAULT_SECTOR_START = 2;
 
     public const DEFAULT_BOOT_SECTOR = self::BOOT_SECTOR;
 

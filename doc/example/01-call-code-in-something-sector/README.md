@@ -82,8 +82,8 @@ $bundler = new \PHPOS\OS\Bundler\Bundler(
     new \PHPOS\OS\ConfigureOption(
         __DIR__ . '/dist',
         'php-os.img',
+        $bootloader,
         [
-            $bootloader,
             $kernel,
         ],
     ),

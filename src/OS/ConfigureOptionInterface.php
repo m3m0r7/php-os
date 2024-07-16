@@ -12,4 +12,5 @@ interface ConfigureOptionInterface
     public function makeFileName(): string;
     public function codes(): array;
     public function compiledExtensionName(): string;
+    public function bootloader(): CodeInterface;
 }

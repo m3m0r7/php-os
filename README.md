@@ -59,9 +59,7 @@ $bundler = new \PHPOS\OS\Bundler\Bundler(
     new \PHPOS\OS\ConfigureOption(
         __DIR__ . '/dist',
         'php-os.img',
-        [
-            $bootloader,
-        ],
+        $bootloader,
     ),
 );
 
@@ -139,7 +137,7 @@ dw 0xAA55
 
 ### See examples
 
-- [Call a code in something sector](doc/example/01-call-code-in-something-sector/README)
+- [Call a code in something sector](doc/example/01-call-code-in-something-sector/README.md)
 
 ## Test
 

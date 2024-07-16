@@ -7,6 +7,7 @@ namespace PHPOS\OS\Bundler;
 use PHPOS\OS\AssemblerType;
 use PHPOS\OS\CodeInterface;
 use PHPOS\OS\ConfigureOptionInterface;
+use PHPOS\OS\OSInfo;
 use PHPOS\Utility\AutomaticallyGeneratedFileSignature;
 
 class Bundler
@@ -44,8 +45,20 @@ class Bundler
             'w+',
         );
 
+        foreach ($this->configureOption->codes() as $sector => $code) {
+            assert($code instanceof CodeInterface);
+            $code->setSector(
+                OSInfo::DEFAULT_SECTOR_START + $sector,
+            );
+        }
+
+        $codes = [
+            $this->configureOption->bootloader(),
+            ...$this->configureOption->codes(),
+        ];
+
         // Create assembly files
-        foreach ($this->configureOption->codes() as $code) {
+        foreach ($codes as $code) {
             assert($code instanceof CodeInterface);
             $asmHandle = fopen(
                 $asmDirectory . '/' . $code->name() . '.asm',
@@ -64,7 +77,7 @@ class Bundler
         $makeFile .= 'FILE_PATHS=';
 
         $filePaths = [];
-        foreach ($this->configureOption->codes() as $code) {
+        foreach ($codes as $code) {
             assert($code instanceof CodeInterface);
             $fileNames[] = $fileName = $code->name();
 
