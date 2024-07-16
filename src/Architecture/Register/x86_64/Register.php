@@ -14,6 +14,8 @@ use PHPOS\Architecture\Register\RegisterCollection;
 use PHPOS\Architecture\Register\RegisterInterface;
 use PHPOS\Architecture\Register\RegisterType;
 use PHPOS\Architecture\Register\SegmentRegister;
+use PHPOS\Architecture\Register\StackPointerRegister16Bits;
+use PHPOS\Architecture\Register\StackPointerRegister32Bits;
 
 enum Register implements RegisterInterface
 {
@@ -51,8 +53,13 @@ enum Register implements RegisterInterface
     case DIL;
 
     case EBP;
+    case BP;
+
     case ESP;
+    case SP;
+
     case EIP;
+    case IP;
 
     case EFLAGS;
 
@@ -86,7 +93,13 @@ enum Register implements RegisterInterface
             ->set(RegisterType::CODE_SEGMENT, new SegmentRegister(self::CS))
             ->set(RegisterType::DATA_SEGMENT, new SegmentRegister(self::DS))
             ->set(RegisterType::STACK_SEGMENT, new SegmentRegister(self::SS))
-            ->set(RegisterType::EXTRA_SEGMENT, new SegmentRegister(self::ES));
+            ->set(RegisterType::EXTRA_SEGMENT, new SegmentRegister(self::ES))
+            ->set(RegisterType::BASE_POINTER_BITS_16, new StackPointerRegister16Bits(self::BP))
+            ->set(RegisterType::BASE_POINTER_BITS_32, new StackPointerRegister16Bits(self::EBP))
+            ->set(RegisterType::STACK_POINTER_BITS_16, new StackPointerRegister16Bits(self::SP))
+            ->set(RegisterType::STACK_POINTER_BITS_32, new StackPointerRegister16Bits(self::ESP))
+            ->set(RegisterType::INSTRUCTION_POINTER_BITS_16, new StackPointerRegister16Bits(self::IP))
+            ->set(RegisterType::INSTRUCTION_POINTER_BITS_32, new StackPointerRegister16Bits(self::EIP));
     }
 
     public function realName(): string

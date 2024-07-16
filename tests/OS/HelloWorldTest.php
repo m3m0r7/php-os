@@ -24,7 +24,7 @@ class HelloWorldTest extends TestCase
             ->registerService(\PHPOS\Service\Kit\Startup\HelloWorld::class)
             ->registerPostService(\PHPOS\Service\BIOS\Bootloader\BootloaderSignature::class)
             ->assemble()
-            ->saveAsReadable($this->result);
+            ->asText($this->result);
 
         $this->assertMatchesTextSnapshot(
             $this->result->all(),

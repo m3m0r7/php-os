@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace PHPOS\Assembly;
 
-use PHPOS\Assembly\Processor\Readable;
+use PHPOS\Assembly\Processor\Text;
 use PHPOS\Exception\NotImplementedException;
 use PHPOS\OS\CodeInterface;
-use PHPOS\Stream\StreamWriterInterface;
 
 class Assembly implements AssemblyInterface
 {
@@ -15,24 +14,18 @@ class Assembly implements AssemblyInterface
     {
     }
 
-    public function saveAsReadable(): AssemblyInterface
+    public function asText(): string
     {
-        $processor = new Readable(
+        $processor = new Text(
             $this->code,
             $this->services,
             $this->postServices,
         );
 
-        $this->code
-            ->option()
-            ->io()
-            ->dist()
-            ->write($processor->process());
-
-        return $this;
+        return $processor->process();
     }
 
-    public function saveAsBinary(): AssemblyInterface
+    public function asBinary(): string
     {
         throw new NotImplementedException('The bootloader cannot be created');
     }

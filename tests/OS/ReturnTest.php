@@ -21,7 +21,7 @@ class ReturnTest extends TestCase
         $bootloader
             ->registerService(\PHPOS\Service\BIOS\Standard\Return_::class)
             ->assemble()
-            ->saveAsReadable($this->result);
+            ->asText($this->result);
 
         $this->assertMatchesTextSnapshot(
             $this->result->all(),

@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace PHPOS\Service\Kit\Startup;
 
-use PHPOS\Architecture\Register\IndexRegisterInterface;
-use PHPOS\Architecture\Register\RegisterType;
-use PHPOS\Operation\Call;
-use PHPOS\Operation\Mov;
-use PHPOS\Operation\Ret;
+use PHPOS\Operation\Hlt;
 use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\OS\OSInfo;
@@ -32,6 +28,7 @@ class HelloWorld implements ServiceInterface
                 fn (InstructionInterface $instruction) => $instruction
                     ->include(new SetupSegments($this->code))
             )
-            ->include($printStringService);
+            ->include($printStringService)
+            ->append(Hlt::class);
     }
 }

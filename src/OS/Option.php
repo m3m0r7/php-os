@@ -7,7 +7,7 @@ namespace PHPOS\OS;
 class Option implements OptionInterface
 {
     public function __construct(
-        protected IOInterface $io,
+        protected IOInterface $io = new \PHPOS\OS\IO(),
     ) {
 
     }

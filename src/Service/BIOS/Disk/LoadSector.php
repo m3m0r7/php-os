@@ -33,6 +33,9 @@ class LoadSector implements ServiceInterface
         $ac = $registers->get(RegisterType::ACCUMULATOR_BITS_16);
         assert($ac instanceof DataRegisterWithHighAndLowInterface);
 
+        $base = $registers->get(RegisterType::BASE_BITS_16);
+        assert($base instanceof DataRegisterWithHighAndLowInterface);
+
         $counter = $registers->get(RegisterType::COUNTER_BITS_16);
         assert($counter instanceof DataRegisterWithHighAndLowInterface);
 
@@ -67,6 +70,9 @@ class LoadSector implements ServiceInterface
                 $this->label(),
                 fn (InstructionInterface $instruction) =>
                     $instruction
+                        // Load position
+                        ->append(Mov::class, $base->value(), $code->origin())
+
                         // Call BIOS read sector function
                         ->append(Mov::class, $ac->high(), new Hex(BIOS::READ->value))
 

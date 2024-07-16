@@ -7,6 +7,8 @@ namespace PHPOS\Service\BIOS\Standard\Segment;
 use PHPOS\Architecture\Register\DataRegisterWithHighAndLowInterface;
 use PHPOS\Architecture\Register\RegisterType;
 use PHPOS\Architecture\Register\SegmentRegisterInterface;
+use PHPOS\Architecture\Register\StackPointerRegisterInterface;
+use PHPOS\Operation\Cli;
 use PHPOS\Operation\Mov;
 use PHPOS\Operation\Xor_;
 use PHPOS\OS\Instruction;
@@ -34,10 +36,15 @@ class SetupSegments implements ServiceInterface
         $ss = $registers->get(RegisterType::STACK_SEGMENT);
         assert($ss instanceof SegmentRegisterInterface);
 
+        $sp = $registers->get(RegisterType::STACK_POINTER_BITS_16);
+        assert($sp instanceof StackPointerRegisterInterface);
+
         return (new Instruction($this->code))
+            ->append(Cli::class)
             ->append(Xor_::class, $ac->value(), $ac->value())
             ->append(Mov::class, $ds->segment(), $ac->value())
             ->append(Mov::class, $es->segment(), $ac->value())
-            ->append(Mov::class, $ss->segment(), $ac->value());
+            ->append(Mov::class, $ss->segment(), $ac->value())
+            ->append(Mov::class, $sp->pointer(), $this->code->origin());
     }
 }

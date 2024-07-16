@@ -21,7 +21,7 @@ class PrintStringTest extends TestCase
         $bootloader
             ->registerService(\PHPOS\Service\BIOS\IO\PrintString::class)
             ->assemble()
-            ->saveAsReadable($this->result);
+            ->asText($this->result);
 
         $this->assertMatchesTextSnapshot(
             $this->result->all(),

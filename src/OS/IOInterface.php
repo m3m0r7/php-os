@@ -9,7 +9,6 @@ use PHPOS\Stream\StreamWriterInterface;
 
 interface IOInterface
 {
-    public function dist(): StreamWriterInterface;
     public function stdIn(): StreamReaderInterface;
     public function stdOut(): StreamWriterInterface;
     public function stdErr(): StreamWriterInterface;

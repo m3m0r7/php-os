@@ -8,6 +8,6 @@ use PHPOS\Stream\StreamWriterInterface;
 
 interface AssemblyInterface
 {
-    public function saveAsReadable(): AssemblyInterface;
-    public function saveAsBinary(): AssemblyInterface;
+    public function asText();
+    public function asBinary(): string;
 }

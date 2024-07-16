@@ -15,8 +15,7 @@ enum OSInfo: int
     public const DEFAULT_DRIVE = self::HARD_DISK;
 
     case MBR = 0x7C00;
-    case KERNEL = 0x1000;
 
-    case BOOT_SECTOR = 0x00;
+    case BOOT_SECTOR = 0x01;
     case HARD_DISK = 0x80;
 }

@@ -21,7 +21,7 @@ class Code implements CodeInterface
     protected BitType $bitType = BitType::BIT_16;
     protected OSInfo|int $origin = 0;
 
-    public function __construct(public readonly ArchitectureInterface $architecture, protected readonly OptionInterface $option)
+    public function __construct(public readonly ArchitectureInterface $architecture, protected readonly OptionInterface $option = new Option())
     {
         $this->sector = OSInfo::DEFAULT_BOOT_SECTOR
             ->value;

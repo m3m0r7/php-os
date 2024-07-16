@@ -62,7 +62,7 @@ class DefineByteTest extends TestCase
         );
 
         $this->assertSame(
-            "db 0x29\n",
+            "db 0x0029\n",
             $definedByte->process()->assemble()
         );
     }

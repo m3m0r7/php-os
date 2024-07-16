@@ -21,7 +21,7 @@ class BootloaderSignatureTest extends TestCase
         $bootloader
             ->registerService(\PHPOS\Service\BIOS\Bootloader\BootloaderSignature::class)
             ->assemble()
-            ->saveAsReadable($this->result);
+            ->asText($this->result);
 
         $this->assertMatchesTextSnapshot(
             $this->result->all(),
