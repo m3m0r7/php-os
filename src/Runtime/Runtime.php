@@ -16,6 +16,7 @@ use PHPOS\OS\DefineInterface;
 
 class Runtime implements RuntimeInterface
 {
+    protected array $definedReservedBytes = [];
     protected array $definedVariables = [];
     protected array $definedDefinitions = [];
 
@@ -68,6 +69,26 @@ class Runtime implements RuntimeInterface
         $defined = clone $define;
         $this->definedDefinitions[$define->name()] = new KeyValue($define->name(), $define->value());
         return $defined;
+    }
+
+    public function reserveBytes(): array
+    {
+        return $this->definedReservedBytes;
+    }
+
+    public function reserveByte(string $name, int $bytes): KeyValueInterface
+    {
+        return $this->definedReservedBytes[$name] = new KeyValue('resb_' . $name, $bytes);
+    }
+
+    public function findReserveByte(string $name): KeyValueInterface
+    {
+        return $this->definedReservedBytes[$name] ?? throw new VariableNotFoundException(
+            sprintf(
+                'The resb `%s` is not found',
+                $name,
+            ),
+        );
     }
 
     public function setVariable(string $variableName, string $value): KeyValueInterface

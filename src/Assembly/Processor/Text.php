@@ -56,6 +56,17 @@ class Text implements ProcessorInterface
             ))->process()->assemble() . "\n";
         }
 
+        /**
+         * @var KeyValue $value
+         */
+        foreach ($this->code->architecture()->runtime()->reserveBytes() as $value) {
+            $assembly .= sprintf(
+                "%s: resb %d",
+                $value->name(),
+                $value->value(),
+            ) . "\n";
+        }
+
         foreach ($this->postServices as [$service, $parameters]) {
             $service = new $service($this->code, null, ...$parameters);
 
