@@ -20,36 +20,36 @@
 [org 0x0000]
 
 __php_PHPOS_Service_BIOS_System_CallCode:
-    __php_PHPOS_Service_BIOS_Disk_LoadSector:
-      mov bx, 0
-      mov ah, 0x0002
-      mov al, __php_define_x86_64_test_code_sectors
-      mov ch, 0x0000
-      mov cl, __php_define_x86_64_test_code_sector
-      mov dh, __php_define_x86_64_test_code_head
-      mov dl, __php_define_x86_64_test_code_drive
-      int 19
-      jc __php_PHPOS_Service_BIOS_Disk_DiskError
-      jmp __php_PHPOS_Service_BIOS_Disk_LoadSector_finish
+  __php_PHPOS_Service_BIOS_Disk_LoadSector:
+    mov bx, 0
+    mov ah, 0x0002
+    mov al, __php_define_x86_64_test_code_sectors
+    mov ch, 0x0000
+    mov cl, __php_define_x86_64_test_code_sector
+    mov dh, __php_define_x86_64_test_code_head
+    mov dl, __php_define_x86_64_test_code_drive
+    int 19
+    jc __php_PHPOS_Service_BIOS_Disk_DiskError
+    jmp __php_PHPOS_Service_BIOS_Disk_LoadSector_finish
+    ret 
+  __php_PHPOS_Service_BIOS_Disk_DiskError:
+    mov si, __php_var_TG9hZCBkaXNrIGVycm9yIQ__
+    call __php_PHPOS_Service_BIOS_IO_PrintString
+    jmp __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone
+    __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintCharacter:
+      mov ah, 0x000E
+      int 16
       ret 
-      __php_PHPOS_Service_BIOS_Disk_DiskError:
-        mov si, __php_var_TG9hZCBkaXNrIGVycm9yIQ__
-        call __php_PHPOS_Service_BIOS_IO_PrintString
-        jmp __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone
-        __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintCharacter:
-          mov ah, 0x000E
-          int 16
-          ret 
-        __php_PHPOS_Service_BIOS_IO_PrintString:
-          lodsb 
-          or al, al
-          jz __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone
-          call __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintCharacter
-          jmp __php_PHPOS_Service_BIOS_IO_PrintString
-          __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone:
-            ret 
-        hlt 
-    __php_PHPOS_Service_BIOS_Disk_LoadSector_finish:
+    __php_PHPOS_Service_BIOS_IO_PrintString:
+      lodsb 
+      or al, al
+      jz __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone
+      call __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintCharacter
+      jmp __php_PHPOS_Service_BIOS_IO_PrintString
+    __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone:
+      ret 
+    hlt 
+  __php_PHPOS_Service_BIOS_Disk_LoadSector_finish:
   jmp 0x0000
 
 __php_var_TG9hZCBkaXNrIGVycm9yIQ__:

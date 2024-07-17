@@ -9,6 +9,7 @@ use PHPOS\Architecture\Register\IndexRegisterInterface;
 use PHPOS\Architecture\Register\RegisterType;
 use PHPOS\Operation\Int_;
 use PHPOS\Operation\Mov;
+use PHPOS\Operation\Sub;
 use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
@@ -29,7 +30,7 @@ class LoadVESAVideoAddress implements ServiceInterface
         assert($ac instanceof DataRegisterInterface);
 
         $base = $registers->get(RegisterType::BASE_BITS_32);
-        assert($ac instanceof DataRegisterInterface);
+        assert($base instanceof DataRegisterInterface);
 
         $di = $registers->get(RegisterType::DESTINATION_INDEX_BITS_32);
         assert($di instanceof IndexRegisterInterface);
@@ -45,6 +46,7 @@ class LoadVESAVideoAddress implements ServiceInterface
                         $resb->name() . ' + ' . VESA::PHYS_BASE_PTR_ADD,
                     ))
                     ->append(Mov::class, $di->index(), $ac->value())
+                    ->append(Sub::class, $di->index(), VESA::VIDEO_1024x768x32bpp_WIDTH)
             );
     }
 }

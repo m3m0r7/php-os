@@ -90,9 +90,9 @@ class Bundler
         foreach ($fileNames as $basedFileName) {
             $makeFile .= "$(DIST_PATH)/{$basedFileName}.$(EXTENSION_NAME): $(ASM_PATH)/{$basedFileName}.asm\n";
             $makeFile .= "\t" . $this->assembleCommand(
-                    "$(ASM_PATH)/{$basedFileName}.asm",
-                    "$(DIST_PATH)/{$basedFileName}.$(EXTENSION_NAME)",
-                );
+                "$(ASM_PATH)/{$basedFileName}.asm",
+                "$(DIST_PATH)/{$basedFileName}.$(EXTENSION_NAME)",
+            );
             $makeFile .= "\n";
         }
 

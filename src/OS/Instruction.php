@@ -14,42 +14,43 @@ class Instruction implements InstructionInterface, \IteratorAggregate
     protected const CALLEE = 0;
     protected const DESTINATION = 1;
     protected const SOURCES = 2;
-    protected const INDENT_SIZE = 3;
+    protected const INDENT = 3;
 
     protected array $instructions = [];
 
-    protected int $indentSize = 0;
-
     protected array $includedServices = [];
 
-    public function __construct(public readonly CodeInterface $bootloader)
+    public function __construct(public readonly CodeInterface $code, protected int $indentSize = 0)
     {
     }
 
     public function section(string $name, callable $callback = null): InstructionInterface
     {
-        $instruction = new self($this->bootloader);
-        $instruction = $instruction->merge($this);
+        $new = new self(
+            $this->code,
+            0,
+        );
+        $this->instructions[] = ["section {$name}", null, null, 2];
+        $this->instructions = [
+            ...$this->instructions,
+            ...($callback ? $callback($new) : []),
+        ];
 
-        $instruction->instructions[] = ["section {$name}", null, null, 0];
-
-        // Forcibly to 2 indents
-        $instruction->indentSize = 2;
-
-        return $callback ? $callback($instruction) : $instruction;
+        return $this;
     }
 
     public function label(string $name, callable $callback = null): InstructionInterface
     {
-        $instruction = new self($this->bootloader);
-        $instruction->indentSize = $this->indentSize;
-        $instruction = $instruction->merge($this);
-
-        $instruction->instructions[] = ["{$name}:", null, null, $this->indentSize];
-
-        $instruction->indentSize += 2;
-
-        return $callback ? $callback($instruction) : $instruction;
+        $new = new self(
+            $this->code,
+            $this->indentSize + 2,
+        );
+        $this->instructions[] = ["{$name}:", null, null, $this->indentSize];
+        $this->instructions = [
+            ...$this->instructions,
+            ...($callback ? $callback($new) : []),
+        ];
+        return $this;
     }
 
     public function include(ServiceInterface $service): self
@@ -58,23 +59,22 @@ class Instruction implements InstructionInterface, \IteratorAggregate
             return $this;
         }
         $this->includedServices[] = $service->label();
-        return $this->merge($service->process());
+        foreach ($service->process()->instructions as $record) {
+            $record[self::INDENT] += $this->indentSize;
+            $this->instructions[] = $record;
+        }
+        return $this;
     }
 
-    public function merge(InstructionInterface $instruction): self
+    public function merge(InstructionInterface ...$instructions): self
     {
-        $new = new self($this->bootloader);
-        $new->indentSize = $this->indentSize;
-
-        foreach ($this->instructions as $record) {
-            $new->instructions[] = $record;
-        }
-        foreach ($instruction->valueOf() as $record) {
-            $record[self::INDENT_SIZE] = $record[self::INDENT_SIZE] + $this->indentSize;
-            $new->instructions[] = $record;
+        foreach ($instructions as $instruction) {
+            foreach ($instruction->valueOf() as $record) {
+                $this->instructions[] = $record;
+            }
         }
 
-        return $new;
+        return $this;
     }
 
     public function append(string|callable $operation, mixed $destination = null, mixed ...$sources): InstructionInterface
@@ -82,10 +82,10 @@ class Instruction implements InstructionInterface, \IteratorAggregate
         $this->instructions[] = [
             self::CALLEE => is_callable($operation)
                 ? $operation
-                : new $operation($this->bootloader->architecture()),
+                : new $operation($this->code->architecture()),
             self::DESTINATION => new Destination($destination),
             self::SOURCES => array_map(fn ($source) => new Source($source), $sources),
-            self::INDENT_SIZE => $this->indentSize,
+            self::INDENT => $this->indentSize,
         ];
 
         return $this;

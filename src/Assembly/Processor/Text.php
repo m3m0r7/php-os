@@ -28,7 +28,7 @@ class Text implements ProcessorInterface
             $service = new $service($this->code, null, ...$parameters);
 
             assert($service instanceof ServiceInterface);
-            $assembly .= $service->process()->assemble() . "\n";
+            $assembly .= $v = $service->process()->assemble() . "\n";
         }
 
         $definitions = '';

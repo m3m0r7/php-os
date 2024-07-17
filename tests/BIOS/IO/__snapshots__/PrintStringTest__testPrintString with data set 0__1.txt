@@ -28,8 +28,8 @@ __php_PHPOS_Service_BIOS_IO_PrintString:
   jz __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone
   call __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintCharacter
   jmp __php_PHPOS_Service_BIOS_IO_PrintString
-  __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone:
-    ret 
+__php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone:
+  ret 
 
 __php_var_:
   db "", 0

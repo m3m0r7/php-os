@@ -26,7 +26,7 @@ class SetVESABIOSExtension implements ServiceInterface
         assert($ac instanceof DataRegisterInterface);
 
         $base = $registers->get(RegisterType::BASE_BITS_32);
-        assert($ac instanceof DataRegisterInterface);
+        assert($base instanceof DataRegisterInterface);
 
         return (new Instruction($this->code))
             ->label(
