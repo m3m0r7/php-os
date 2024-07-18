@@ -25,6 +25,7 @@ class DefineByteTest extends TestCase
         $definedByte = new DefineByte(
             $code,
             null,
+            VariableType::BITS_8,
             new Text('test'),
         );
 
@@ -41,8 +42,8 @@ class DefineByteTest extends TestCase
         $definedByte = new DefineByte(
             $code,
             null,
-            new Text('test'),
-            VariableType::BITS_16
+            VariableType::BITS_16,
+            new Text('test')
         );
 
         $this->assertSame(
@@ -58,6 +59,7 @@ class DefineByteTest extends TestCase
         $definedByte = new DefineByte(
             $code,
             null,
+            VariableType::BITS_8,
             new Hex(0x29),
         );
 
@@ -74,8 +76,8 @@ class DefineByteTest extends TestCase
         $definedByte = new DefineByte(
             $code,
             null,
-            new Hex(0xee29, 16),
-            VariableType::BITS_16
+            VariableType::BITS_16,
+            new Hex(0xee29, 16)
         );
 
         $this->assertSame(
@@ -91,8 +93,8 @@ class DefineByteTest extends TestCase
         $definedByte = new DefineByte(
             $code,
             null,
-            new Hex(0x29, 16),
-            VariableType::BITS_16
+            VariableType::BITS_16,
+            new Hex(0x29, 16)
         );
 
         $this->assertSame(

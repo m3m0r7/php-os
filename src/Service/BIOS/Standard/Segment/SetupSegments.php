@@ -10,6 +10,7 @@ use PHPOS\Architecture\Register\SegmentRegisterInterface;
 use PHPOS\Architecture\Register\StackPointerRegisterInterface;
 use PHPOS\Operation\Cli;
 use PHPOS\Operation\Mov;
+use PHPOS\Operation\Sti;
 use PHPOS\Operation\Xor_;
 use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
@@ -49,6 +50,7 @@ class SetupSegments implements ServiceInterface
             ->append(Mov::class, $ds->segment(), $ac->value())
             ->append(Mov::class, $es->segment(), $ac->value())
             ->append(Mov::class, $ss->segment(), $ac->value())
-            ->append(Mov::class, $sp->pointer(), $this->code->origin());
+            ->append(Mov::class, $sp->pointer(), $this->code->origin())
+            ->append(Sti::class);
     }
 }

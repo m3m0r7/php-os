@@ -91,7 +91,7 @@ class Runtime implements RuntimeInterface
         );
     }
 
-    public function setVariable(string $variableName, string $value): KeyValueInterface
+    public function setVariable(string $variableName, string|array $value): KeyValueInterface
     {
         return $this->definedVariables[$variableName] = new KeyValue($variableName, $value);
     }

@@ -22,10 +22,10 @@ class DefineByte implements ServiceInterface
         $variables = $this->code->architecture()->runtime()->variables();
 
         /**
-         * @var string|Hex|int $value
          * @var ?VariableType $variableType
+         * @var string|Hex|int $value
          */
-        [$value, $variableType] = $this->parameters + [null, null];
+        [$variableType, $value] = $this->parameters + [null, null];
 
         $db = $variables->get($variableType ?? VariableType::BITS_8);
 

@@ -27,6 +27,7 @@ main:
   mov es, ax
   mov ss, ax
   mov sp, 0
+  sti 
 mov si, __php_var_SGVsbG8gV29ybGQh
 call __php_PHPOS_Service_BIOS_IO_PrintString
 jmp __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone

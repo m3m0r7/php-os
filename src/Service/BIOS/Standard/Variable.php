@@ -32,10 +32,37 @@ class Variable implements ServiceInterface
 
         assert($variable instanceof KeyValueInterface);
 
+        if (is_array($variable->value())) {
+            return (new Instruction($this->code))
+                ->label(
+                    $variable->name(),
+                    function (InstructionInterface $instruction) use ($variable, $db) {
+                        foreach ($variable->value() as $value) {
+                            $instruction = $instruction
+                                ->append(
+                                    fn (DestinationInterface $destination, SourceInterface ...$sources) => $this
+                                        ->code
+                                        ->architecture()
+                                        ->runtime()
+                                        ->callRaw(
+                                            sprintf(
+                                                <<< __ASM__
+                                                %s %s
+                                                __ASM__,
+                                                $db->realName(),
+                                                implode(', ', $value),
+                                            ),
+                                        ),
+                                );
+                        }
+                        return $instruction;
+                    },
+                );
+        }
+
         $destination = is_string($variable->value()) || $variable->value() instanceof \Stringable
             ? new Text((string) $variable->value())
             : $variable;
-
 
         $sources = [];
         if ($destination instanceof Text) {

@@ -8,9 +8,11 @@ use PHPOS\Architecture\Support\Hex;
 
 class KeyValue implements KeyValueInterface
 {
-    public function __construct(protected string $name, protected string|Hex|int|null $value)
+    public function __construct(protected string $name, protected string|Hex|int|array|null $value)
     {
-
+        if (is_array($this->value)) {
+            // TODO: validating value is a matrix array
+        }
     }
 
     public function name(): string
@@ -18,7 +20,7 @@ class KeyValue implements KeyValueInterface
         return $this->name;
     }
 
-    public function value(): string|Hex|int|null
+    public function value(): string|Hex|int|array|null
     {
         return $this->value;
     }
@@ -28,6 +30,9 @@ class KeyValue implements KeyValueInterface
         // Return forcibly an empty if value is null
         if ($this->value === null) {
             return '';
+        }
+        if (is_array($this->value)) {
+            return print_r($this->value, true);
         }
         return $this->value;
     }

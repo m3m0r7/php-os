@@ -22,6 +22,10 @@ class SetVESABIOSExtensionInformation implements ServiceInterface
 
     public function process(): InstructionInterface
     {
+        [$resolution] = $this->parameters + [VESA::VIDEO_640x480x32bpp];
+
+        assert($resolution instanceof VESA);
+
         $registers = $this->code->architecture()->runtime()->registers();
 
         $ac = $registers->get(RegisterType::ACCUMULATOR_BITS_32);
@@ -45,7 +49,7 @@ class SetVESABIOSExtensionInformation implements ServiceInterface
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction
                     ->append(Mov::class, $ac->value(), VESA::GET_INFO->value)
-                    ->append(Mov::class, $counter->value(), VESA::VIDEO_1024x768x32bpp | VESA::GRAPHIC_MODE)
+                    ->append(Mov::class, $counter->value(), $resolution->value | VESA::GRAPHIC_MODE)
                     ->append(Mov::class, $di->index(), $resb->name())
                     ->append(Int_::class, BIOS::VIDEO_INTERRUPT->value)
             );

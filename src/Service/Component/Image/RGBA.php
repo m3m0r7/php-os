@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PHPOS\Service\Component\VESA;
+namespace PHPOS\Service\Component\Image;
 
-use PHPOS\OS\CodeInterface;
+use PHPOS\Service\Component\VESA\VideoBitType;
 
 class RGBA implements \Stringable
 {
@@ -12,7 +12,7 @@ class RGBA implements \Stringable
     {
     }
 
-    public function as24BitHex(): string
+    public function as24BitsHex(): string
     {
         return sprintf(
             '0x%02X%02X%02X',
@@ -20,6 +20,22 @@ class RGBA implements \Stringable
             $this->g,
             $this->r,
         );
+    }
+
+    public function asHexByVideoType(VideoBitType $bitType): string
+    {
+        return match ($bitType) {
+            VideoBitType::BITS_24 => $this->as24BitsHex(),
+        };
+    }
+
+    public function as24Bits(): array
+    {
+        return [
+            $this->b,
+            $this->g,
+            $this->r,
+        ];
     }
 
     public function __toString(): string

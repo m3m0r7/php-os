@@ -11,20 +11,26 @@ class Variable
 {
     protected KeyValueInterface $variable;
 
-    public function __construct(protected CodeInterface $code, string $string)
+    public function __construct(protected CodeInterface $code, string|array $value, string $name = null)
     {
         $this->variable = $this->code
             ->architecture()
             ->runtime()
             ->setVariable(
-                sprintf($this->code->option()->prefix() . 'var_%s', Formatter::removeSign(base64_encode($string))),
-                $string,
+                sprintf($this->code->option()->prefix() . 'var_%s', Formatter::removeSign($name ?? base64_encode($value))),
+                $value,
             );
     }
 
-    public static function createBy(CodeInterface $code, string $string): KeyValueInterface
+    public static function createBy(CodeInterface $code, string|array $value): KeyValueInterface
     {
-        return (new self($code, $string))
+        return (new self($code, $value))
+            ->variable;
+    }
+
+    public static function createWithNameBy(CodeInterface $code, string $name, string|array $value): KeyValueInterface
+    {
+        return (new self($code, $value, $name))
             ->variable;
     }
 }

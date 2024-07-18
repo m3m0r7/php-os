@@ -26,6 +26,10 @@ trait GeneralOperand
         if ($this->valueOf instanceof ServiceInterface) {
             return $this->valueOf->label();
         }
+        // NOTE: A float value is forcibly converted
+        if (is_float($this->valueOf)) {
+            $this->valueOf = (int) $this->valueOf;
+        }
         if (is_int($this->valueOf)) {
             return "{$this->valueOf}";
         }
