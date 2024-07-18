@@ -81,7 +81,9 @@ $ qemu-system-x86_64 -drive file=./dist/build/php-os.img,format=raw
 
 5. Show figure as following if you successfully to run the QEMU.
 
-<img src="./doc/demo.png" width="100%">
+<p align="center">
+  <img src="./doc/demo.png">
+</p>
 
 
 The quick start example will generate an assembly file as following:
@@ -243,7 +245,9 @@ $bundler = new \PHPOS\OS\Bundler\Bundler(
 $bundler->distribute();
 ```
 
-<img src="./doc/demo2.png" width="100%">
+<p align="center">
+  <img src="./doc/demo2.png" >
+</p>
 
 
 ### See examples

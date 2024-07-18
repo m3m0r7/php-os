@@ -219,4 +219,6 @@ times 32768-($-$$) db 0
 
 ### Screenshot
 
-<img src="./image.png" width="100%">
+<p align="center">
+  <img src="./image.png">
+</p>
