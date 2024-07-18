@@ -243,7 +243,7 @@ $bundler = new \PHPOS\OS\Bundler\Bundler(
 $bundler->distribute();
 ```
 
-<img src="./doc/demo2.png">
+<img src="./doc/demo2.png" width="100%">
 
 
 ### See examples
