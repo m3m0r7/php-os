@@ -137,7 +137,7 @@ dw 0xAA55
 
 ### Render an image
 
-```
+```php
 <?php
 
 use PHPOS\OS\CodeInfo;
@@ -241,7 +241,6 @@ $bundler = new \PHPOS\OS\Bundler\Bundler(
 
 // Distribute Makefile and assembly into `dist` directory by the ConfigureOption
 $bundler->distribute();
-
 ```
 
 <img src="./doc/demo2.png">
