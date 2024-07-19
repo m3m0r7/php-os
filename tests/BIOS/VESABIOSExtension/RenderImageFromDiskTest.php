@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace PHPOS\Test\BIOS\VESABIOSExtension;
+namespace BIOS\VESABIOSExtension;
 
+use PHPOS\OS\CodeInfo;
 use PHPOS\OS\CodeInterface;
 use PHPOS\Service\BIOS\Standard\Segment\SetupSegments;
 use PHPOS\Service\BIOS\VESABIOSExtension\LoadVESAVideoAddress;
-use PHPOS\Service\BIOS\VESABIOSExtension\Renderer\RenderImage;
+use PHPOS\Service\BIOS\VESABIOSExtension\Renderer\RenderImageFromInline;
 use PHPOS\Service\BIOS\VESABIOSExtension\SetVESABIOSExtension;
 use PHPOS\Service\BIOS\VESABIOSExtension\SetVESABIOSExtensionInformation;
 use PHPOS\Test\CreateCode;
@@ -15,15 +16,25 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
 
-class RenderImageTest extends TestCase
+class RenderImageFromDiskTest extends TestCase
 {
     use CreateCode;
     use MatchesSnapshots;
 
     #[DataProvider('architectures')]
-    public function testRenderImage(CodeInterface $code): void
+    public function testRenderImageFromDisk(CodeInterface $code): void
     {
-        $image = new \PHPOS\Service\Component\Image\Image(__DIR__ . '/../../../doc/logo.png');
+        $logo = new \PHPOS\Service\Component\Image\Image(__DIR__ . '/../../../doc/logo.png');
+
+        $image = new \PHPOS\OS\ImageCode(
+            $logo,
+            clone $code->architecture(),
+        );
+
+        $image
+            ->setBits(\PHPOS\OS\BitType::BIT_16)
+            ->setOrigin(0x3000)
+            ->setSectors((int) floor(CodeInfo::CODE_BLOCK_SIZE_BITS_16 / \PHPOS\OS\OSInfo::PAGE_SIZE));
 
         $result = $code
             ->registerService(SetupSegments::class)
@@ -38,7 +49,7 @@ class RenderImageTest extends TestCase
                 \PHPOS\Service\Component\VESA\AlignType::CENTER_CENTER,
             )
 
-            ->registerService(RenderImage::class, $image)
+            ->registerService(\PHPOS\Service\BIOS\VESABIOSExtension\Renderer\RenderImageFromDisk::class, $image)
             ->assemble()
             ->asText();
 

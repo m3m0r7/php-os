@@ -17,8 +17,6 @@ use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\VESABIOSExtension\VESA;
 use PHPOS\Service\Component\Address\Indirect;
-use PHPOS\Service\Component\Image\Image;
-use PHPOS\Service\Component\Variable;
 use PHPOS\Service\Component\VESA\VideoBitType;
 use PHPOS\Service\ServiceInterface;
 
@@ -28,13 +26,15 @@ class RenderImage implements ServiceInterface
 
     public function process(): InstructionInterface
     {
-        [$image, $vesa] = $this->parameters + [
+        [$width, $height, $vesa] = $this->parameters + [
+            null,
             null,
             VESA::VIDEO_640x480x32bpp,
         ];
 
+        assert(is_int($width));
+        assert(is_int($height));
         assert($vesa instanceof VESA);
-        assert($image instanceof Image);
 
         $registers = $this->code->architecture()->runtime()->registers();
 
@@ -56,21 +56,14 @@ class RenderImage implements ServiceInterface
         [$XResolution, $YResolution, $bitType] = $vesa->resolutions();
         assert($bitType instanceof VideoBitType);
 
-        $nextLineCursor = ($bitType->value / 8) * ($XResolution - $image->width());
-
-        $variable = Variable::createWithNameBy(
-            $this->code,
-            $this->label() . '_image',
-            array_chunk($image->as8BitsRGBAList(), ($bitType->value / 8) * 16),
-        );
+        $nextLineCursor = ($bitType->value / 8) * ($XResolution - $width);
 
         return (new Instruction($this->code))
-            ->append(Mov::class, $si->index(), $variable->name())
             ->include(new Renderer(
                 $this->code,
                 null,
-                $image->width(),
-                $image->height(),
+                $width,
+                $height,
                 $vesa,
                 fn (InstructionInterface $instruction) => $instruction
                     ->include(new RenderPixel(

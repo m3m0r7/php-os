@@ -21,7 +21,7 @@ class Code implements CodeInterface
     protected OSInfo|int $origin = 0;
     protected ?string $name = '';
 
-    public function __construct(public readonly ArchitectureInterface $architecture, protected readonly OptionInterface $option = new Option())
+    public function __construct(protected ArchitectureInterface $architecture, protected OptionInterface $option = new Option())
     {
         $this->sector = OSInfo::DEFAULT_BOOT_SECTOR
             ->value;
@@ -156,12 +156,12 @@ class Code implements CodeInterface
         );
     }
 
-    private function createName(string $name): string
+    protected function createName(string $name): string
     {
         return $this->option->prefix() . 'define_' . $this->createCodeName() . '_' . $name;
     }
 
-    private function createCodeName(): string
+    protected function createCodeName(): string
     {
         return $this->name ?: 'code_' . spl_object_hash($this);
     }

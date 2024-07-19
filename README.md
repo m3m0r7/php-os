@@ -176,7 +176,7 @@ $kernel
     ->setOrigin(0x1000)
 
     // Set compiled kernel size (floor(filesize / 512))
-    ->setSectors(floor(CodeInfo::CODE_BLOCK_SIZE_BITS_16 / \PHPOS\OS\OSInfo::PAGE_SIZE))
+    ->setSectors((int) floor(CodeInfo::CODE_BLOCK_SIZE_BITS_16 / \PHPOS\OS\OSInfo::PAGE_SIZE))
 
     // Load VESA BIOS Extension
     ->registerService(\PHPOS\Service\BIOS\Standard\Segment\SetupSegments::class)
@@ -242,7 +242,7 @@ $bundler->distribute();
 </p>
 
 
-#### Render an image
+#### Render an image from inline
 ```php
 <?php
 
@@ -295,7 +295,7 @@ $kernel
 
     // Render an image
     ->registerService(
-        \PHPOS\Service\BIOS\VESABIOSExtension\Renderer\RenderImage::class,
+        \PHPOS\Service\BIOS\VESABIOSExtension\Renderer\RenderImageFromInline::class,
         $image,
     )
 
@@ -358,6 +358,7 @@ $bundler->distribute();
 
 - [Call a code in something sector](doc/example/01-call-code-in-something-sector/README.md)
 - [Render a square using VESA](doc/example/02-render-a-square-using-vesa/README.md)
+- [Render an image from disk using VESA](doc/example/03-render-an-image-from-disk-using-vesa/README.md)
 
 ## Test
 

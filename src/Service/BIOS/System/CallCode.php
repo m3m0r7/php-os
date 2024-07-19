@@ -24,7 +24,7 @@ class CallCode implements ServiceInterface
 
         $loadSector = new LoadSector(
             $this->code,
-            null,
+            $this,
             $code,
         );
 
