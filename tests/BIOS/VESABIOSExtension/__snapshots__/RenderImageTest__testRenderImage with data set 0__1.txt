@@ -28,6 +28,27 @@ __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension:
   mov eax, 20226
   mov ebx, 16658
   int 16
+  __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError:
+    cmp eax, 79
+    je __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_success
+    mov esi, __php_var_Q291bGQgbm90IHNldCBWRVNBIG1vZGUh
+    call __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString
+    jmp __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone
+    __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintCharacter:
+      mov ah, 14
+      mov ebx, 15
+      int 16
+      ret 
+    __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString:
+      lodsb 
+      or al, al
+      jz __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone
+      call __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintCharacter
+      jmp __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString
+    __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone:
+      ret 
+    hlt 
+    __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_success:
 
 __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionInformation:
   mov eax, 20225
@@ -63,6 +84,9 @@ __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner:
   pop ecx
   add edi, 1500
 loop __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer
+
+__php_var_Q291bGQgbm90IHNldCBWRVNBIG1vZGUh:
+  db "Could not set VESA mode!", 0
 
 __php_var___php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImage_image:
   db 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163

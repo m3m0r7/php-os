@@ -9,7 +9,7 @@ use PHPOS\OS\CodeInterface;
 use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
-use PHPOS\Service\BIOS\IO\PrintCharacter;
+use PHPOS\Service\BIOS\IO\PrintConstantString\PrintCharacter;
 use PHPOS\Service\ServiceInterface;
 use PHPOS\Test\CreateCode;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -55,12 +55,12 @@ class LabelTest extends TestCase
     {
         $printCharacter = new PrintCharacter($code, null);
         $this->assertSame(
-            "__php_PHPOS_Service_BIOS_IO_PrintCharacter",
+            "__php_PHPOS_Service_BIOS_IO_PrintConstantString_PrintCharacter",
             $printCharacter->label(),
         );
 
         $this->assertSame(
-            "__php_PHPOS_Service_BIOS_IO_PrintCharacter_PHPOS_Service_BIOS_IO_PrintCharacter",
+            "__php_PHPOS_Service_BIOS_IO_PrintConstantString_PrintCharacter_PHPOS_Service_BIOS_IO_PrintConstantString_PrintCharacter",
             (new PrintCharacter($code, $printCharacter))->label(),
         );
     }

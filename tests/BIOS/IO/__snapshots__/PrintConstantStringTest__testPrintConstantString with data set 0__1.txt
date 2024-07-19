@@ -15,20 +15,7 @@
 
 [org 0x0000]
 
-[bits 16]
-
-[org 0x7c00]
-
-main:
-  cli 
-  xor ax, ax
-  xor bx, bx
-  mov ds, ax
-  mov es, ax
-  mov ss, ax
-  mov sp, 0
-  sti 
-mov esi, __php_var_SGVsbG8gV29ybGQh
+mov esi, __php_var_
 call __php_PHPOS_Service_BIOS_IO_PrintConstantString
 jmp __php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone
 __php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintCharacter:
@@ -44,11 +31,7 @@ __php_PHPOS_Service_BIOS_IO_PrintConstantString:
   jmp __php_PHPOS_Service_BIOS_IO_PrintConstantString
 __php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone:
   ret 
-hlt 
 
-__php_var_SGVsbG8gV29ybGQh:
-  db "Hello World!", 0
-
-times 510-($-$$) db 0
-dw 0xAA55
+__php_var_:
+  db "", 0
 

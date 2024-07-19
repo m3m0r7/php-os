@@ -60,23 +60,27 @@ __php_PHPOS_Service_BIOS_VESABIOSExtension_LoadVESAVideoAddress:
   mov eax, [resb_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionInformation + 40]
   mov edi, eax
 
-add edi, 365610
-
-__php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer:
-  mov ecx, 100
-__php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer:
-  push ecx
-  mov ecx, 100
-__php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner:
-  __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner_code:
-    mov dword [edi], 0xFFFFFF
-    add edi, 3
-  loop __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner
-  pop ecx
-  add edi, 1620
-loop __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer
+mov esi, __php_var_SGVsbG8gV29ybGQh
+call __php_PHPOS_Service_BIOS_IO_PrintConstantString
+jmp __php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone
+__php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintCharacter:
+  mov ah, 14
+  mov ebx, 15
+  int 16
+  ret 
+__php_PHPOS_Service_BIOS_IO_PrintConstantString:
+  lodsb 
+  or al, al
+  jz __php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone
+  call __php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintCharacter
+  jmp __php_PHPOS_Service_BIOS_IO_PrintConstantString
+__php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone:
+  ret 
 
 __php_var_Q291bGQgbm90IHNldCBWRVNBIG1vZGUh:
   db "Could not set VESA mode!", 0
+
+__php_var_SGVsbG8gV29ybGQh:
+  db "Hello World!", 0
 
 resb_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionInformation: resb 256

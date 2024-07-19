@@ -63,7 +63,7 @@ class LoadSector implements ServiceInterface
             ->runtime()
             ->define($code->drive());
 
-        $diskError = new DiskError($this->code);
+        $diskError = new DiskError($this->code, $this);
 
         $finishLabel = $this->label() . '_finish';
 

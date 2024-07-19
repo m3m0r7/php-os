@@ -2,46 +2,47 @@
 
 declare(strict_types=1);
 
-namespace PHPOS\Service\BIOS\VESABIOSExtension;
+namespace PHPOS\Service\BIOS\IO\PrintConstantString;
 
 use PHPOS\Architecture\Register\DataRegisterInterface;
+use PHPOS\Architecture\Register\DataRegisterWithHighAndLowInterface;
 use PHPOS\Architecture\Register\RegisterType;
 use PHPOS\Operation\Int_;
 use PHPOS\Operation\Mov;
+use PHPOS\Operation\Ret;
 use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\BIOS;
+use PHPOS\Service\Component\Color256Set;
 use PHPOS\Service\ServiceInterface;
 
-class SetVESABIOSExtension implements ServiceInterface
+class PrintCharacter implements ServiceInterface
 {
     use BaseService;
 
     public function process(): InstructionInterface
     {
-        [$resolution] = $this->parameters + [VESA::VIDEO_640x480x32bpp];
-
-        assert($resolution instanceof VESA);
-
         $registers = $this->code->architecture()->runtime()->registers();
 
-        $ac = $registers->get(RegisterType::ACCUMULATOR_BITS_32);
-        assert($ac instanceof DataRegisterInterface);
+        [$color256Set] = $this->parameters;
+        assert($color256Set instanceof Color256Set);
+
+        $ac = $registers->get(RegisterType::ACCUMULATOR_BITS_16);
+        assert($ac instanceof DataRegisterWithHighAndLowInterface);
 
         $base = $registers->get(RegisterType::BASE_BITS_32);
         assert($base instanceof DataRegisterInterface);
 
-        $error = new SetVESABIOSExtensionError($this->code, $this);
-
         return (new Instruction($this->code))
             ->label(
                 $this->label(),
-                fn (InstructionInterface $instruction) => $instruction
-                    ->append(Mov::class, $ac->value(), VESA::SET_MODE->value)
-                    ->append(Mov::class, $base->value(), $resolution->value | VESA::GRAPHIC_MODE)
+                fn (InstructionInterface $instruction) =>
+                $instruction
+                    ->append(Mov::class, $ac->high(), 0x0E)
+                    ->append(Mov::class, $base->value(), $color256Set->value)
                     ->append(Int_::class, BIOS::VIDEO_INTERRUPT->value)
-                    ->include($error)
+                    ->append(Ret::class)
             );
     }
 }

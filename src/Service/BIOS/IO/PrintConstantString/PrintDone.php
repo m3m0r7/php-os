@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace PHPOS\Service\BIOS\IO;
+namespace PHPOS\Service\BIOS\IO\PrintConstantString;
 
-use PHPOS\Operation\Cli;
 use PHPOS\Operation\Ret;
 use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;

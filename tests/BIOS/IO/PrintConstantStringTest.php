@@ -10,16 +10,16 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
 
-class PrintStringTest extends TestCase
+class PrintConstantStringTest extends TestCase
 {
     use CreateCode;
     use MatchesSnapshots;
 
     #[DataProvider('architectures')]
-    public function testPrintString(CodeInterface $code): void
+    public function testPrintConstantString(CodeInterface $code): void
     {
         $result = $code
-            ->registerService(\PHPOS\Service\BIOS\IO\PrintString::class)
+            ->registerService(\PHPOS\Service\BIOS\IO\PrintConstantString::class)
             ->assemble()
             ->asText();
 

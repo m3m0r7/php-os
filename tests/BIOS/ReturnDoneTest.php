@@ -19,7 +19,7 @@ class ReturnDoneTest extends TestCase
     public function testReturnDone(CodeInterface $code): void
     {
         $result = $code
-            ->registerService(\PHPOS\Service\BIOS\IO\PrintDone::class)
+            ->registerService(\PHPOS\Service\BIOS\IO\PrintConstantString\PrintDone::class)
             ->assemble()
             ->asText();
 

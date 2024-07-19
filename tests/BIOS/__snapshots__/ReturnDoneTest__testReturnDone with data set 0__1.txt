@@ -15,6 +15,6 @@
 
 [org 0x0000]
 
-__php_PHPOS_Service_BIOS_IO_PrintDone:
+__php_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone:
   ret 
 

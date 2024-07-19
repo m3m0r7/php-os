@@ -113,22 +113,24 @@ main:
   mov es, ax
   mov ss, ax
   mov sp, 31744
-  mov si, __php_var_SGVsbG8gV29ybGQh
-  call __php_PHPOS_Service_BIOS_IO_PrintString
-  jmp __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone
-  __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintCharacter:
-    mov ah, 0x000E
-    int 16
-    ret
-  __php_PHPOS_Service_BIOS_IO_PrintString:
-    lodsb
-    or al, al
-    jz __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone
-    call __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintCharacter
-    jmp __php_PHPOS_Service_BIOS_IO_PrintString
-    __php_PHPOS_Service_BIOS_IO_PrintString_PHPOS_Service_BIOS_IO_PrintDone:
-      ret
-  hlt
+  sti
+mov esi, __php_var_SGVsbG8gV29ybGQh
+call __php_PHPOS_Service_BIOS_IO_PrintConstantString
+jmp __php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone
+__php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintCharacter:
+  mov ah, 14
+  mov ebx, 15
+  int 16
+  ret
+__php_PHPOS_Service_BIOS_IO_PrintConstantString:
+  lodsb
+  or al, al
+  jz __php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone
+  call __php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintCharacter
+  jmp __php_PHPOS_Service_BIOS_IO_PrintConstantString
+__php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone:
+  ret
+hlt
 
 __php_var_SGVsbG8gV29ybGQh:
   db "Hello World!", 0
@@ -137,8 +139,110 @@ times 510-($-$$) db 0
 dw 0xAA55
 ```
 
-### Render an image
+### Use VESA BIOS Extension
 
+#### Render a text
+```php
+<?php
+
+use PHPOS\OS\CodeInfo;
+
+require __DIR__ . '/vendor/autoload.php';
+
+//
+// Create kernel -----------------------------------------------------------------------------
+//
+
+$kernel = new \PHPOS\OS\Code(
+    new \PHPOS\Architecture\Architecture(
+        // Use x86_64 architecture
+        \PHPOS\Architecture\ArchitectureType::x86_64,
+    ),
+);
+
+$image = new \PHPOS\Service\Component\Image\Image(
+    // NOTE: Specify if you want to render an image path
+    //       Only available the file size belows 4KB.
+    __DIR__ . '/doc/logo.png',
+);
+$kernel
+    // Set code name
+    ->setName('kernel')
+
+    // Set 16 bit real mode
+    ->setBits(\PHPOS\OS\BitType::BIT_16)
+
+    // Set kernel origin
+    ->setOrigin(0x1000)
+
+    // Set compiled kernel size (floor(filesize / 512))
+    ->setSectors(floor(CodeInfo::CODE_BLOCK_SIZE_BITS_16 / \PHPOS\OS\OSInfo::PAGE_SIZE))
+
+    // Load VESA BIOS Extension
+    ->registerService(\PHPOS\Service\BIOS\Standard\Segment\SetupSegments::class)
+    ->registerService(\PHPOS\Service\BIOS\VESABIOSExtension\SetVESABIOSExtension::class)
+    ->registerService(\PHPOS\Service\BIOS\VESABIOSExtension\SetVESABIOSExtensionInformation::class)
+    ->registerService(\PHPOS\Service\BIOS\VESABIOSExtension\LoadVESAVideoAddress::class)
+
+    // Print "Hello World!" into VESA
+    ->registerService(\PHPOS\Service\BIOS\IO\PrintConstantString::class, 'Hello World!')
+
+    // Write code signature
+    ->registerPostService(\PHPOS\Service\BIOS\Disk\CodeSignature::class);
+
+//
+// Create bootloader --------------------------------------------------------------------------
+//
+
+$bootloader = new \PHPOS\OS\Code(
+    new \PHPOS\Architecture\Architecture(
+        // Use x86_64 architecture
+        \PHPOS\Architecture\ArchitectureType::x86_64,
+    ),
+);
+
+// Initialize bootloader
+$bootloader
+    // Set code name
+    ->setName('bootloader')
+
+    // Set 16 bit real mode
+    ->setBits(\PHPOS\OS\BitType::BIT_16)
+
+    // Set bootloader origin
+    ->setOrigin(\PHPOS\OS\OSInfo::MBR)
+
+    // Setup segments (initialize registers for assembly)
+    ->registerService(\PHPOS\Service\BIOS\Standard\Segment\SetupSegments::class)
+
+    // Add loading something sector codes
+    ->registerService(\PHPOS\Service\BIOS\System\CallCode::class, $kernel)
+
+    // Add bootloader signature
+    ->registerPostService(\PHPOS\Service\BIOS\Bootloader\BootloaderSignature::class);
+
+// Bundle each codes into an OS image
+$bundler = new \PHPOS\OS\Bundler\Bundler(
+    new \PHPOS\OS\ConfigureOption(
+        __DIR__ . '/dist',
+        'php-os.img',
+        $bootloader,
+        [
+            $kernel,
+        ],
+    ),
+);
+
+// Distribute Makefile and assembly into `dist` directory by the ConfigureOption
+$bundler->distribute();
+```
+
+<p align="center">
+  <img src="doc/demo2.png" >
+</p>
+
+
+#### Render an image
 ```php
 <?php
 
@@ -246,7 +350,7 @@ $bundler->distribute();
 ```
 
 <p align="center">
-  <img src="./doc/demo2.png" >
+  <img src="doc/demo3.png" >
 </p>
 
 

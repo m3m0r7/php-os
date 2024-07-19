@@ -16,10 +16,13 @@ use PHPOS\Operation\Or_;
 use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
+use PHPOS\Service\BIOS\IO\PrintConstantString\PrintCharacter;
+use PHPOS\Service\BIOS\IO\PrintConstantString\PrintDone;
+use PHPOS\Service\Component\Color256Set;
 use PHPOS\Service\Component\Variable;
 use PHPOS\Service\ServiceInterface;
 
-class PrintString implements ServiceInterface
+class PrintConstantString implements ServiceInterface
 {
     use BaseService;
 
@@ -29,9 +32,10 @@ class PrintString implements ServiceInterface
 
         /**
          * @var string $string
+         * @var Color256Set $textColor
          * @var RegisterType $loadIndexFrom
          */
-        [$string, $loadIndexFrom] = $this->parameters + ['', RegisterType::SOURCE_INDEX_BITS_16];
+        [$string, $textColor, $loadIndexFrom] = $this->parameters + ['', Color256Set::WHITE, RegisterType::SOURCE_INDEX_BITS_32];
 
         assert(is_string($string));
         assert($loadIndexFrom instanceof RegisterType);
@@ -43,7 +47,7 @@ class PrintString implements ServiceInterface
         assert($ac instanceof DataRegisterWithHighAndLowInterface);
 
         $printDone = new PrintDone($this->code, $this);
-        $printCharacter = new PrintCharacter($this->code, $this, $ac->high());
+        $printCharacter = new PrintCharacter($this->code, $this, $textColor);
 
         return (new Instruction($this->code))
             ->append(
