@@ -1,0 +1,279 @@
+# Enable A20 line and transit to 32-bit mode
+
+Usually, the bootloader starts executing programs from a layer called 16-bit real mode, which allows the use of BIOS interrupts. However, in this mode, the accessible memory area and computational capability remain similar to those of a 16-bit machine. To utilize more computational resources and the corresponding memory access, it is necessary to enable the A20 line and transition to 32-bit mode. Particularly for providing graphical functionalities, more computational resources are required.
+By enabling the A20 line, the accessible memory area extends beyond 1MB, and transitioning to 32-bit mode offers enhanced computational capabilities. Note that enabling 32-bit mode requires activating protection mode, which disables the use of BIOS interrupts. In this example, BIOS interrupt handling tasks are completed before transitioning to 32-bit mode, and after the transition, an image is rendered in the center of the screen.
+
+```php
+<?php
+
+use PHPOS\OS\CodeInfo;
+
+require __DIR__ . '/vendor/autoload.php';
+
+$image = new \PHPOS\Service\Component\Image\Image(
+    // NOTE: Specify if you want to render an image path
+    //       Only available the file size belows 4KB.
+    __DIR__ . '/doc/logo.png',
+);
+
+//
+// Create kernel -----------------------------------------------------------------------------
+//
+
+$kernel = new \PHPOS\OS\Code(
+    new \PHPOS\Architecture\Architecture(
+        // Use x86_64 architecture
+        \PHPOS\Architecture\ArchitectureType::x86_64,
+    ),
+);
+
+$kernel
+    // Set code name
+    ->setName('kernel')
+
+    // Set 16 bit real mode
+    ->setBits(\PHPOS\OS\BitType::BIT_16)
+
+    // Set kernel origin
+    ->setOrigin(0x1000)
+
+    // Set compiled kernel size (floor(filesize / 512))
+    ->setSectors(floor(CodeInfo::CODE_BLOCK_SIZE_BITS_16 / \PHPOS\OS\OSInfo::PAGE_SIZE))
+
+    // Enable A20 line
+    ->registerService(\PHPOS\Service\BIOS\EnableA20Line::class)
+
+    ->registerService(\PHPOS\Service\BIOS\Standard\Segment\SetupSegments::class)
+    ->registerService(\PHPOS\Service\BIOS\VESABIOSExtension\SetVESABIOSExtension::class)
+    ->registerService(\PHPOS\Service\BIOS\VESABIOSExtension\SetVESABIOSExtensionInformation::class)
+
+    // Transit to 32-bit mode
+    ->registerService(\PHPOS\Service\BIOS\Transit32BitMode::class)
+
+    // Load video address after transited to 32-bit mode
+    ->registerService(\PHPOS\Service\BIOS\VESABIOSExtension\LoadVESAVideoAddress::class)
+
+    // Set render position
+    ->registerService(
+        \PHPOS\Service\BIOS\VESABIOSExtension\Renderer\SetRenderPosition::class,
+        $image->width(),
+        $image->height(),
+        \PHPOS\Service\Component\VESA\AlignType::CENTER_CENTER,
+    )
+
+    // Render an image
+    ->registerService(
+        \PHPOS\Service\BIOS\VESABIOSExtension\Renderer\RenderImageFromInline::class,
+        $image,
+    )
+
+
+    ->registerService(\PHPOS\Service\BIOS\System\Halt::class)
+
+    ->registerPostService(\PHPOS\Service\BIOS\GlobalDescriptorTable::class)
+
+    // Write code signature
+    ->registerPostService(\PHPOS\Service\BIOS\Disk\CodeSignature::class);
+
+//
+// Create bootloader --------------------------------------------------------------------------
+//
+
+$bootloader = new \PHPOS\OS\Code(
+    new \PHPOS\Architecture\Architecture(
+        // Use x86_64 architecture
+        \PHPOS\Architecture\ArchitectureType::x86_64,
+    ),
+);
+
+// Initialize bootloader
+$bootloader
+    // Set code name
+    ->setName('bootloader')
+
+    // Set 16 bit real mode
+    ->setBits(\PHPOS\OS\BitType::BIT_16)
+
+    // Set bootloader origin
+    ->setOrigin(\PHPOS\OS\OSInfo::MBR)
+
+    // Setup segments (initialize registers for assembly)
+    ->registerService(\PHPOS\Service\BIOS\Standard\Segment\SetupSegments::class)
+
+    // Add loading something sector codes
+    ->registerService(\PHPOS\Service\BIOS\System\CallCode::class, $kernel)
+
+    // Add bootloader signature
+    ->registerPostService(\PHPOS\Service\BIOS\Bootloader\BootloaderSignature::class);
+
+// Bundle each codes into an OS image
+$bundler = new \PHPOS\OS\Bundler\Bundler(
+    new \PHPOS\OS\ConfigureOption(
+        __DIR__ . '/dist',
+        'php-os.img',
+        $bootloader,
+        [
+            $kernel,
+        ],
+    ),
+);
+
+// Distribute Makefile and assembly into `dist` directory by the ConfigureOption
+$bundler->distribute();
+
+```
+
+
+## Generated `bootloader.asm`
+
+- See: [Call code in something sector](../01-call-code-in-something-sector/README.md)
+
+
+## Generated `kernel.asm`
+
+```asm
+;
+;   _______  ____  ____  _______            ___     ______
+;  |_   __ \|_   ||   _||_   __ \         .'   `. .' ____ \
+;    | |__) | | |__| |    | |__) |______ /  .-.  \| (___ \_|
+;    |  ___/  |  __  |    |  ___/|______|| |   | | _.____`.
+;   _| |_    _| |  | |_  _| |_           \  `-'  /| \____) |
+;  |_____|  |____||____||_____|           `.___.'  \______.'
+;
+; Notice: This file is automatically generated by PHP-OS.
+;         Do not edit this file. We cannot be held responsible if this is edited and overwritten again.
+;
+
+
+[bits 16]
+
+[org 0x1000]
+
+cli
+in al, 146
+or al, 2
+out 146, al
+
+cli
+xor ax, ax
+xor bx, bx
+mov ds, ax
+mov es, ax
+mov ss, ax
+mov sp, 4096
+sti
+
+__php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension:
+  mov eax, 20226
+  mov ebx, 16658
+  int 16
+  __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError:
+    cmp eax, 79
+    je __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_success
+    mov esi, __php_var_Q291bGQgbm90IHNldCBWRVNBIG1vZGUh
+    call __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString
+    jmp __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone
+    __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintCharacter:
+      mov ah, 14
+      mov ebx, 15
+      int 16
+      ret
+    __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString:
+      lodsb
+      or al, al
+      jz __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone
+      call __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintCharacter
+      jmp __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString
+    __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone:
+      ret
+    hlt
+    __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_success:
+
+__php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionInformation:
+  mov eax, 20225
+  mov ecx, 16658
+  mov edi, resb_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionInformation
+  int 16
+
+__php_PHPOS_Service_BIOS_Transit32BitMode:
+  lgdt [__php_PHPOS_Service_BIOS_GlobalDescriptorTable]
+  mov eax, cr0
+  or eax, 1
+  mov cr0, eax
+  cli
+  jmp 0x0008:__php_PHPOS_Service_BIOS_Transit32BitMode_32bits_mode
+[bits 32]
+__php_PHPOS_Service_BIOS_Transit32BitMode_32bits_mode:
+  cli
+  mov ax, 16
+  mov bx, 16
+  mov ds, ax
+  mov es, ax
+  mov ss, ax
+  mov sp, 4096
+
+__php_PHPOS_Service_BIOS_VESABIOSExtension_LoadVESAVideoAddress:
+  mov eax, [resb_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionInformation + 40]
+  mov edi, eax
+
+add edi, 407790
+
+mov esi, __php_var___php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline_image
+__php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer:
+  mov ecx, 56
+__php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer:
+  push ecx
+  mov ecx, 140
+__php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner:
+  __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner_code:
+    __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderPixel:
+      push ecx
+      mov ecx, 3
+      __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderPixel_code:
+        __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImage_copy_pixel_from_destination:
+          lodsb
+          mov [edi], al
+          inc edi
+          loop __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImage_copy_pixel_from_destination
+      pop ecx
+  loop __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner
+  pop ecx
+  add edi, 1500
+loop __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer
+
+hlt
+
+__php_var_Q291bGQgbm90IHNldCBWRVNBIG1vZGUh:
+  db "Could not set VESA mode!", 0
+
+__php_var___php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline_image:
+  db 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163
+  db 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163
+  ; ... omitted
+
+resb_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionInformation: resb 256
+__php_PHPOS_Service_BIOS_GlobalDescriptorTable_null:
+  dq 0x0000000000000000
+__php_PHPOS_Service_BIOS_GlobalDescriptorTable_code:
+  dw 0xFFFF
+dw 0x0000
+db 0x00
+db 154
+db 207
+db 0x00
+__php_PHPOS_Service_BIOS_GlobalDescriptorTable_data:
+  dw 0xFFFF
+dw 0x0000
+db 0x00
+db 146
+db 207
+db 0x00
+__php_PHPOS_Service_BIOS_GlobalDescriptorTable_end:
+__php_PHPOS_Service_BIOS_GlobalDescriptorTable:
+  dw __php_PHPOS_Service_BIOS_GlobalDescriptorTable_end - __php_PHPOS_Service_BIOS_GlobalDescriptorTable_null - 1
+dd __php_PHPOS_Service_BIOS_GlobalDescriptorTable_null
+
+times 32768-($-$$) db 0
+
+
+```

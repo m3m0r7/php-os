@@ -19,7 +19,7 @@ use PHPOS\Service\Component\Address\Indirect;
 use PHPOS\Service\Component\Address\SegmentBased;
 use PHPOS\Service\ServiceInterface;
 
-class Switch32BitMode implements ServiceInterface
+class Transit32BitMode implements ServiceInterface
 {
     use BaseService;
 

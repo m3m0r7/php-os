@@ -359,6 +359,7 @@ $bundler->distribute();
 - [Call a code in something sector](doc/example/01-call-code-in-something-sector/README.md)
 - [Render a square using VESA](doc/example/02-render-a-square-using-vesa/README.md)
 - [Render an image from disk using VESA](doc/example/03-render-an-image-from-disk-using-vesa/README.md)
+- [Enable A20 line and Transit to 32-bit mode](doc/example/04-enable-a20-line-and-transit-to-32bit-mode/README.md)
 
 ## Test
 

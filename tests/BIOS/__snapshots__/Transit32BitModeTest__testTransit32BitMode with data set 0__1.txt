@@ -15,15 +15,29 @@
 
 [org 0x0000]
 
-__php_PHPOS_Service_BIOS_Switch32BitMode:
+cli 
+in al, 146
+or al, 2
+out 146, al
+
+cli 
+xor ax, ax
+xor bx, bx
+mov ds, ax
+mov es, ax
+mov ss, ax
+mov sp, 0
+sti 
+
+__php_PHPOS_Service_BIOS_Transit32BitMode:
   lgdt [__php_PHPOS_Service_BIOS_GlobalDescriptorTable]
   mov eax, cr0
   or eax, 1
   mov cr0, eax
   cli 
-  jmp 0x0008:__php_PHPOS_Service_BIOS_Switch32BitMode_32bits_mode
+  jmp 0x0008:__php_PHPOS_Service_BIOS_Transit32BitMode_32bits_mode
 [bits 32]
-__php_PHPOS_Service_BIOS_Switch32BitMode_32bits_mode:
+__php_PHPOS_Service_BIOS_Transit32BitMode_32bits_mode:
   cli 
   mov ax, 16
   mov bx, 16
