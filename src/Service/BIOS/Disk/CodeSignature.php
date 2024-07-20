@@ -23,7 +23,7 @@ class CodeSignature implements ServiceInterface
                 null,
                 sprintf(
                     '%s-($-$$)',
-                    (string) CodeInfo::CODE_BLOCK_SIZE_BITS_16,
+                    (string) (((int) $this->code->sectors()->value()) * \PHPOS\OS\OSInfo::PAGE_SIZE),
                 ),
                 '0',
             ));

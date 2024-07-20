@@ -41,4 +41,10 @@ enum RegisterType
     case DATA_SEGMENT;
     case EXTRA_SEGMENT;
     case STACK_SEGMENT;
+
+    case CONTROL_REGISTER_0;
+    case CONTROL_REGISTER_1;
+    case CONTROL_REGISTER_2;
+    case CONTROL_REGISTER_3;
+    case CONTROL_REGISTER_4;
 }

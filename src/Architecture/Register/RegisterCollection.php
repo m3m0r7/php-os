@@ -17,7 +17,7 @@ class RegisterCollection extends Collection
         return $this;
     }
 
-    public function get(RegisterType $registerType): DataRegisterInterface|SegmentRegisterInterface|IndexRegisterInterface|StackPointerRegisterInterface
+    public function get(RegisterType $registerType): DataRegisterInterface|SegmentRegisterInterface|IndexRegisterInterface|StackPointerRegisterInterface|ControlRegisterInterface
     {
         return $this->items[$registerType->name] ?? throw new PHPOSException(sprintf('The PHP-OS was not registered %s', $registerType->name));
     }

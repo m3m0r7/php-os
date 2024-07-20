@@ -12,6 +12,7 @@ use PHPOS\Operation\Cli;
 use PHPOS\Operation\Mov;
 use PHPOS\Operation\Sti;
 use PHPOS\Operation\Xor_;
+use PHPOS\OS\BitType;
 use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
@@ -23,6 +24,10 @@ class SetupSegments implements ServiceInterface
 
     public function process(): InstructionInterface
     {
+        [$dataSegmentSelector, $withSetAndClearInterrupt] = $this->parameters + [null, true];
+        assert($dataSegmentSelector === null || is_int($dataSegmentSelector));
+        assert(is_bool($withSetAndClearInterrupt));
+
         $registers = $this->code->architecture()->runtime()->registers();
 
         $ac = $registers->get(RegisterType::ACCUMULATOR_BITS_16);
@@ -43,14 +48,33 @@ class SetupSegments implements ServiceInterface
         $sp = $registers->get(RegisterType::STACK_POINTER_BITS_16);
         assert($sp instanceof StackPointerRegisterInterface);
 
-        return (new Instruction($this->code))
-            ->append(Cli::class)
-            ->append(Xor_::class, $ac->value(), $ac->value())
-            ->append(Xor_::class, $base->value(), $base->value())
+
+        $instruction = new Instruction($this->code);
+        if ($withSetAndClearInterrupt) {
+            $instruction = $instruction->append(Cli::class);
+        }
+
+        if ($dataSegmentSelector !== null) {
+            $instruction = $instruction
+                ->append(Mov::class, $ac->value(), $dataSegmentSelector)
+                ->append(Mov::class, $base->value(), $dataSegmentSelector);
+        } else {
+            $instruction = $instruction
+                ->append(Xor_::class, $ac->value(), $ac->value())
+                ->append(Xor_::class, $base->value(), $base->value());
+        }
+
+        $instruction = $instruction
             ->append(Mov::class, $ds->segment(), $ac->value())
             ->append(Mov::class, $es->segment(), $ac->value())
             ->append(Mov::class, $ss->segment(), $ac->value())
-            ->append(Mov::class, $sp->pointer(), $this->code->origin())
-            ->append(Sti::class);
+            ->append(Mov::class, $sp->pointer(), $this->code->origin());
+
+        if ($withSetAndClearInterrupt) {
+            $instruction = $instruction
+                ->append(Sti::class);
+        }
+
+        return $instruction;
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PHPOS\Architecture\Register\x86_64;
 
+use PHPOS\Architecture\Register\ControlRegister;
 use PHPOS\Architecture\Register\DataRegister16Bits;
 use PHPOS\Architecture\Register\DataRegister32Bits;
 use PHPOS\Architecture\Register\DataRegister64Bits;
@@ -15,7 +16,6 @@ use PHPOS\Architecture\Register\RegisterInterface;
 use PHPOS\Architecture\Register\RegisterType;
 use PHPOS\Architecture\Register\SegmentRegister;
 use PHPOS\Architecture\Register\StackPointerRegister16Bits;
-use PHPOS\Architecture\Register\StackPointerRegister32Bits;
 
 enum Register implements RegisterInterface
 {
@@ -70,6 +70,12 @@ enum Register implements RegisterInterface
     case FS;
     case GS;
 
+    case CR0;
+    case CR1;
+    case CR2;
+    case CR3;
+    case CR4;
+
     public static function registers(): RegisterCollection
     {
         return (new RegisterCollection())
@@ -99,7 +105,12 @@ enum Register implements RegisterInterface
             ->set(RegisterType::STACK_POINTER_BITS_16, new StackPointerRegister16Bits(self::SP))
             ->set(RegisterType::STACK_POINTER_BITS_32, new StackPointerRegister16Bits(self::ESP))
             ->set(RegisterType::INSTRUCTION_POINTER_BITS_16, new StackPointerRegister16Bits(self::IP))
-            ->set(RegisterType::INSTRUCTION_POINTER_BITS_32, new StackPointerRegister16Bits(self::EIP));
+            ->set(RegisterType::INSTRUCTION_POINTER_BITS_32, new StackPointerRegister16Bits(self::EIP))
+            ->set(RegisterType::CONTROL_REGISTER_0, new ControlRegister(self::CR0))
+            ->set(RegisterType::CONTROL_REGISTER_1, new ControlRegister(self::CR1))
+            ->set(RegisterType::CONTROL_REGISTER_2, new ControlRegister(self::CR2))
+            ->set(RegisterType::CONTROL_REGISTER_3, new ControlRegister(self::CR3))
+            ->set(RegisterType::CONTROL_REGISTER_4, new ControlRegister(self::CR4));
     }
 
     public function realName(): string
