@@ -1,7 +1,13 @@
 # Enable A20 line and transit to 32-bit mode
 
-Usually, the bootloader starts executing programs from a layer called 16-bit real mode, which allows the use of BIOS interrupts. However, in this mode, the accessible memory area and computational capability remain similar to those of a 16-bit machine. To utilize more computational resources and the corresponding memory access, it is necessary to enable the A20 line and transition to 32-bit mode. Particularly for providing graphical functionalities, more computational resources are required.
-By enabling the A20 line, the accessible memory area extends beyond 1MB, and transitioning to 32-bit mode offers enhanced computational capabilities. Note that enabling 32-bit mode requires activating protection mode, which disables the use of BIOS interrupts. In this example, BIOS interrupt handling tasks are completed before transitioning to 32-bit mode, and after the transition, an image is rendered in the center of the screen.
+Usually, the bootloader starts executing programs from a layer called 16-bit real mode, which allows the use of BIOS interrupts.
+However, in this mode, the accessible memory area and computational capability remain similar to those of a 16-bit machine.
+To utilize more computational resources and the corresponding memory access, it is necessary to enable the A20 line and transition to 32-bit mode.
+Particularly for providing graphical functionalities, more computational resources are required.
+
+By enabling the A20 line, the accessible memory area extends beyond 1MB, and transitioning to 32-bit mode offers enhanced computational capabilities.
+Note that enabling 32-bit mode requires activating protection mode, which disables the use of BIOS interrupts.
+In this example, BIOS interrupt handling tasks are completed before transitioning to 32-bit mode, and after the transition, an image is rendered in the center of the screen.
 
 ```php
 <?php
