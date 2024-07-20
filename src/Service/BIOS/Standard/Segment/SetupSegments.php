@@ -24,9 +24,9 @@ class SetupSegments implements ServiceInterface
 
     public function process(): InstructionInterface
     {
-        [$dataSegmentSelector, $withSetAndClearInterrupt] = $this->parameters + [null, true];
+        [$dataSegmentSelector, $withSetInterrupt] = $this->parameters + [null, true];
         assert($dataSegmentSelector === null || is_int($dataSegmentSelector));
-        assert(is_bool($withSetAndClearInterrupt));
+        assert(is_bool($withSetInterrupt));
 
         $registers = $this->code->architecture()->runtime()->registers();
 
@@ -50,9 +50,8 @@ class SetupSegments implements ServiceInterface
 
 
         $instruction = new Instruction($this->code);
-        if ($withSetAndClearInterrupt) {
-            $instruction = $instruction->append(Cli::class);
-        }
+
+        $instruction = $instruction->append(Cli::class);
 
         if ($dataSegmentSelector !== null) {
             $instruction = $instruction
@@ -70,7 +69,7 @@ class SetupSegments implements ServiceInterface
             ->append(Mov::class, $ss->segment(), $ac->value())
             ->append(Mov::class, $sp->pointer(), $this->code->origin());
 
-        if ($withSetAndClearInterrupt) {
+        if ($withSetInterrupt) {
             $instruction = $instruction
                 ->append(Sti::class);
         }

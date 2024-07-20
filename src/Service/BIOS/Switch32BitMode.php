@@ -25,9 +25,6 @@ class Switch32BitMode implements ServiceInterface
 
     public function process(): InstructionInterface
     {
-        [$code] = $this->parameters + [null];
-        assert($code instanceof CodeInterface);
-
         $toBe32BitsLabel = $this->label() . '_32bits_mode';
 
         $GDT = new GlobalDescriptorTable($this->code);
@@ -39,7 +36,7 @@ class Switch32BitMode implements ServiceInterface
             // Set starting data segment when initializing
             BIOS::GDT_ENABLED_DATA_SEGMENT,
 
-            // NOTE: Disable clearing BIOS interrupt
+            // NOTE: Disable setting BIOS interrupt
             false,
         );
 
