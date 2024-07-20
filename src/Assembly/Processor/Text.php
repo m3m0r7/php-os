@@ -60,11 +60,33 @@ class Text implements ProcessorInterface
          * @var KeyValue $value
          */
         foreach ($this->code->architecture()->runtime()->reserveBytes() as $value) {
+            if (!$value->option()->isExtern()) {
+                $assembly .= sprintf(
+                    "%s: resb %d\n",
+                    $value->name(),
+                    $value->value(),
+                );
+            }
+            if ($value->option()->isGlobal()) {
+                $assembly .= sprintf(
+                    "global %s\n",
+                    $value->name(),
+                );
+            }
+        }
+
+        /**
+         * @var KeyValue $value
+         */
+        foreach ($this->code->architecture()->runtime()->reserveBytes() as $value) {
+            if (!$value->option()->isExtern()) {
+                continue;
+            }
+
             $assembly .= sprintf(
-                "%s: resb %d",
+                "extern %s\n",
                 $value->name(),
-                $value->value(),
-            ) . "\n";
+            );
         }
 
         foreach ($this->postServices as [$service, $parameters]) {

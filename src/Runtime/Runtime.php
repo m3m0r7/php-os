@@ -17,6 +17,7 @@ use PHPOS\OS\DefineInterface;
 class Runtime implements RuntimeInterface
 {
     protected array $definedReservedBytes = [];
+    protected array $definedReservedBytesFromExtern = [];
     protected array $definedVariables = [];
     protected array $definedDefinitions = [];
 
@@ -76,9 +77,9 @@ class Runtime implements RuntimeInterface
         return $this->definedReservedBytes;
     }
 
-    public function reserveByte(string $name, int $bytes): KeyValueInterface
+    public function reserveByte(string $name, int $bytes, KeyValueOptionInterface $keyValueOption): KeyValueInterface
     {
-        return $this->definedReservedBytes[$name] = new KeyValue('resb_' . $name, $bytes);
+        return $this->definedReservedBytes[$name] = new KeyValue('resb_' . $name, $bytes, $keyValueOption);
     }
 
     public function findReserveByte(string $name): KeyValueInterface

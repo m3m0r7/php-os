@@ -11,6 +11,7 @@ use PHPOS\Operation\Int_;
 use PHPOS\Operation\Mov;
 use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
+use PHPOS\Runtime\KeyValueOption;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\BIOS;
 use PHPOS\Service\Component\Formatter;
@@ -41,8 +42,9 @@ class SetVESABIOSExtensionInformation implements ServiceInterface
         assert($di instanceof IndexRegisterInterface);
 
         $resb = $this->code->architecture()->runtime()
-            ->reserveByte(Formatter::removeSign(static::class), 256);
-
+            ->reserveByte(Formatter::removeSign(static::class), 256, new KeyValueOption(
+                isGlobal: true,
+            ));
 
         return (new Instruction($this->code))
             ->label(

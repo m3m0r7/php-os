@@ -8,7 +8,7 @@ use PHPOS\Architecture\Support\Hex;
 
 class KeyValue implements KeyValueInterface
 {
-    public function __construct(protected string $name, protected string|Hex|int|array|null $value)
+    public function __construct(protected string $name, protected string|Hex|int|array|null $value, protected KeyValueOptionInterface $keyValueOption = new KeyValueOption())
     {
         if (is_array($this->value)) {
             // TODO: validating value is a matrix array
@@ -35,5 +35,10 @@ class KeyValue implements KeyValueInterface
             return print_r($this->value, true);
         }
         return $this->value;
+    }
+
+    public function option(): KeyValueOptionInterface
+    {
+        return $this->keyValueOption;
     }
 }

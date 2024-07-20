@@ -10,4 +10,5 @@ interface KeyValueInterface extends \Stringable
 {
     public function name(): string;
     public function value(): string|Hex|int|array|null;
+    public function option(): KeyValueOptionInterface;
 }
