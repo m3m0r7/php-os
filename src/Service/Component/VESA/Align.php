@@ -33,17 +33,19 @@ class Align
     {
         [$x, $y] = $this->calculateAlignmentPos($destinationWidth, $destinationHeight, $sourceWidth, $sourceHeight);
 
-        return (int) ceil((
-            // X
-            $imageBitType->value / 8) * $moveX +
-            ($imageBitType->value / 8) * $x +
+        return (int) ceil(
+            (
+                // X
+                $imageBitType->value / 8
+            ) * $moveX +
+                ($imageBitType->value / 8) * $x +
 
-            // Y
-            ($imageBitType->value / 8) * $destinationWidth * $moveY +
-            ($imageBitType->value / 8) * $destinationWidth * $y +
+                // Y
+                ($imageBitType->value / 8) * $destinationWidth * $moveY +
+                ($imageBitType->value / 8) * $destinationWidth * $y +
 
-            // Nothing to do
-            0
+                // Nothing to do
+                0
         );
     }
 }

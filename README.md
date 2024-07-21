@@ -18,6 +18,13 @@ Moreover, this is very ultra hyper maximum experimental implementation.
 In currently status, this project only implements  **Intel x86_64** architecture.
 But you can try this architecture with using QEMU on aarch (macOS M1, M2).
 
+## Screenshot
+
+<p align="center">
+  <img src="./doc/demo3.png">
+</p>
+
+
 ## Quick Start
 
 1. Install PHP-OS via composer.

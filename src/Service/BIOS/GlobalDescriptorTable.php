@@ -43,7 +43,6 @@ class GlobalDescriptorTable implements ServiceInterface
                                     __ASM__
                                 ),
                             )
-
                     )
             )
             ->label(
@@ -66,7 +65,6 @@ class GlobalDescriptorTable implements ServiceInterface
                                     __ASM__
                                 ),
                             )
-
                     )
             )
             ->label(
@@ -89,7 +87,6 @@ class GlobalDescriptorTable implements ServiceInterface
                                     __ASM__
                                 ),
                             )
-
                     )
             )
             ->label(
@@ -111,7 +108,6 @@ class GlobalDescriptorTable implements ServiceInterface
                                     __ASM__
                                 ),
                             )
-
                     )
             );
     }

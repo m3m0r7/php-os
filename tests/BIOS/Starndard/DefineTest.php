@@ -34,8 +34,7 @@ class DefineTest extends TestCase
     #[DataProvider('architectures')]
     public function testDefinitionInAssembly(CodeInterface $code): void
     {
-        $service = new class($code) implements ServiceInterface {
-
+        $service = new class ($code) implements ServiceInterface {
             use BaseService;
 
             public function process(): InstructionInterface

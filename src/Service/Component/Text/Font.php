@@ -29,13 +29,10 @@ class Font implements FontInterface
 
         ['textWidth' => $textWidth, 'textHeight' => $textHeight, 'descender' => $descender, 'ascender' => $ascender] = $metrics = $this->imagick->queryFontMetrics($draw, $text);
 
-        /* 画像を作成します */
         $this->imagick->newImage((int) $textWidth, (int) $textHeight, $backgroundColor);
 
-        /* テキストの作成 */
-        $this->imagick->annotateImage($draw, 0, (int) ((((int) $textHeight) + $ascender + $descender) / 2),  0, $text);
+        $this->imagick->annotateImage($draw, 0, (int) ((((int) $textHeight) + $ascender + $descender) / 2), 0, $text);
 
-        /* 画像形式の設定 */
         $this->imagick->setImageFormat('png');
 
         $this->XResolution = (int) $this->imagick->getImageWidth();
