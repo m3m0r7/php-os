@@ -24,14 +24,12 @@ class RenderSquare implements ServiceInterface
 
     public function process(): InstructionInterface
     {
-        [$width, $height, $color, $vesa] = $this->parameters + [
+        [$width, $height, $color] = $this->parameters + [
             null,
             null,
             new RGBA(0xff, 0xff, 0xff),
-            VESA::VIDEO_640x480x32bpp,
         ];
 
-        assert($vesa instanceof VESA);
         assert($color instanceof RGBA);
 
         $registers = $this->code->architecture()->runtime()->registers();
@@ -42,21 +40,29 @@ class RenderSquare implements ServiceInterface
         $di = $registers->get(RegisterType::DESTINATION_INDEX_BITS_32);
         assert($di instanceof IndexRegisterInterface);
 
-        [$XResolution, $YResolution, $bitType] = $vesa->resolutions();
+        [$XResolution, $YResolution, $bitType] = $this->code
+            ->architecture()
+            ->runtime()
+            ->style()
+            ->screen()
+            ->resolutions();
         assert($bitType instanceof VideoBitType);
 
         $nextLineCursor = ($bitType->value / 8) * ($XResolution - $width);
 
         return (new Instruction($this->code))
-            ->include(new Renderer(
-                $this->code,
-                null,
-                $width,
-                $height,
-                $vesa,
-                fn (InstructionInterface $instruction) => $instruction
-                    ->append(Mov::class, new DoubleWord($di->index()), $color->asHexByVideoType($bitType))
-                    ->append(Add::class, $di->index(), $bitType->value / 8),
+            ->label(
+                $this->label(),
+            fn (InstructionInterface $instruction) => $instruction
+                ->include(new Renderer(
+                    $this->code,
+                    $this,
+                    $width,
+                    $height,
+                    fn (InstructionInterface $instruction) => $instruction
+                        ->append(Mov::class, new DoubleWord($di->index()), $color->asHexByVideoType($bitType))
+                        ->append(Add::class, $di->index(), $bitType->value / 8),
+                    )
                 )
             );
     }

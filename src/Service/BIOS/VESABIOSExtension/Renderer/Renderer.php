@@ -26,15 +26,12 @@ class Renderer implements ServiceInterface
 
     public function process(): InstructionInterface
     {
-        [$width, $height, $vesa, $innerInstruction] = $this->parameters + [
+        [$width, $height, $innerInstruction] = $this->parameters + [
             null,
             null,
-            null,
-            VESA::VIDEO_640x480x32bpp,
             null,
         ];
 
-        assert($vesa instanceof VESA);
         assert(is_int($width));
         assert(is_int($height));
         assert(is_callable($innerInstruction));
@@ -56,7 +53,12 @@ class Renderer implements ServiceInterface
         $si = $registers->get(RegisterType::SOURCE_INDEX_BITS_32);
         assert($si instanceof IndexRegisterInterface);
 
-        [$XResolution, $YResolution, $bitType] = $vesa->resolutions();
+        [$XResolution, $YResolution, $bitType] = $this->code
+            ->architecture()
+            ->runtime()
+            ->style()
+            ->screen()
+            ->resolutions();
         assert($bitType instanceof VideoBitType);
 
         $nextLineCursor = ($bitType->value / 8) * ($XResolution - $width);

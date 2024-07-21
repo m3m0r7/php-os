@@ -22,24 +22,31 @@ class SetRenderPosition implements ServiceInterface
 
     public function process(): InstructionInterface
     {
-        [$width, $height, $alignType, $vesa] = $this->parameters + [
+        [$width, $height, $alignType, $x, $y] = $this->parameters + [
             null,
             null,
             null,
-            VESA::VIDEO_640x480x32bpp,
+            0,
+            0,
         ];
 
         assert(is_int($width));
         assert(is_int($height));
         assert($alignType instanceof AlignType);
-        assert($vesa instanceof VESA);
+        assert(is_int($x));
+        assert(is_int($y));
 
         $registers = $this->code->architecture()->runtime()->registers();
 
         $di = $registers->get(RegisterType::DESTINATION_INDEX_BITS_32);
         assert($di instanceof IndexRegisterInterface);
 
-        [$XResolution, $YResolution, $bitType] = $vesa->resolutions();
+        [$XResolution, $YResolution, $bitType] = $this->code
+            ->architecture()
+            ->runtime()
+            ->style()
+            ->screen()
+            ->resolutions();
         assert($bitType instanceof VideoBitType);
 
         $pos = (new Align($alignType))
@@ -49,6 +56,8 @@ class SetRenderPosition implements ServiceInterface
                 $YResolution,
                 $width,
                 $height,
+                $x,
+                $y,
             );
 
         return (new Instruction($this->code))

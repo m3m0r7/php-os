@@ -12,13 +12,25 @@ class RGBA implements \Stringable
     {
     }
 
+    public static function fromColorCode(int $colorCode): self
+    {
+        $r = ($colorCode >> 16) & 0xff;
+        $g = ($colorCode >> 8) & 0xff;
+        $b = $colorCode & 0xff;
+        return new RGBA(
+            $r,
+            $g,
+            $b,
+        );
+    }
+
     public function as24BitsHex(): string
     {
         return sprintf(
             '0x%02X%02X%02X',
-            $this->b,
-            $this->g,
             $this->r,
+            $this->g,
+            $this->b,
         );
     }
 
@@ -32,9 +44,9 @@ class RGBA implements \Stringable
     public function as24Bits(): array
     {
         return [
-            $this->b,
-            $this->g,
             $this->r,
+            $this->g,
+            $this->b,
         ];
     }
 
@@ -46,6 +58,16 @@ class RGBA implements \Stringable
             $this->g,
             $this->b,
             $this->a,
+        );
+    }
+
+    public function asColorCode(): string
+    {
+        return sprintf(
+            '#%02X%02X%02X',
+            $this->r,
+            $this->g,
+            $this->b,
         );
     }
 }

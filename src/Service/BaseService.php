@@ -10,14 +10,31 @@ use PHPOS\Service\Component\Formatter;
 trait BaseService
 {
     protected array $parameters = [];
+    protected ?string $label = null;
+    protected ?string $labelSuffix = null;
 
     public function __construct(protected CodeInterface $code, protected ?ServiceInterface $parent = null, ...$parameters)
     {
         $this->parameters = $parameters;
     }
 
+    public function setLabel(string $label): self
+    {
+        $this->label = $label;
+        return $this;
+    }
+
+    public function setLabelSuffix(string $suffix): self
+    {
+        $this->labelSuffix = $suffix;
+        return $this;
+    }
+
     public function label(): string
     {
+        if ($this->label) {
+            return $this->label;
+        }
         $reflection = new \ReflectionClass($this);
 
         // NOTE Split with @ because this is border to anonymous class in PHP
@@ -28,7 +45,7 @@ trait BaseService
             $className .= '__anonymous_' . explode(':', basename($anonymousPath))[0];
         }
 
-        $name = Formatter::removeSign($className);
+        $name = Formatter::removeSign($className . ($this->labelSuffix ? '_' . $this->labelSuffix : ''));
 
         if ($this->parent !== null) {
             return $this->parent->label() . '_' . $name;

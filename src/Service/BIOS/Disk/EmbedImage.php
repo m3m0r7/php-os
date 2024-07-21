@@ -20,14 +20,17 @@ class EmbedImage implements ServiceInterface
 
     public function process(): InstructionInterface
     {
-        [$image, $vesa] = $this->parameters + [
+        [$image] = $this->parameters + [
             null,
-            VESA::VIDEO_640x480x32bpp,
         ];
 
-        assert($vesa instanceof VESA);
         assert($image instanceof Image);
-        [, , $bitType] = $vesa->resolutions();
+        [, , $bitType] = $this->code
+            ->architecture()
+            ->runtime()
+            ->style()
+            ->screen()
+            ->resolutions();
         assert($bitType instanceof VideoBitType);
 
         Variable::createWithNameBy(

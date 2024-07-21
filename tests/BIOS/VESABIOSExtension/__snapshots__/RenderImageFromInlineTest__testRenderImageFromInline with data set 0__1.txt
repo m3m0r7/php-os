@@ -63,28 +63,29 @@ __php_PHPOS_Service_BIOS_VESABIOSExtension_LoadVESAVideoAddress:
 
 add edi, 407790
 
-mov esi, __php_var___php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline_image
-__php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer:
-  mov ecx, 56
-__php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer:
-  push ecx
-  mov ecx, 140
-__php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner:
-  __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner_code:
-    __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderPixel:
-      push ecx
-      mov ecx, 3
-      __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderPixel_code:
-        __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImage_copy_pixel_from_destination:
-          lodsb 
-          mov [edi], al
-          inc edi
-          loop __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImage_copy_pixel_from_destination
-      pop ecx
-  loop __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner
-  pop ecx
-  add edi, 1500
-loop __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer
+__php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline:
+  mov esi, __php_var___php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline_image
+  __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImage_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer:
+    mov ecx, 56
+  __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImage_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer:
+    push ecx
+    mov ecx, 140
+  __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImage_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner:
+    __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImage_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner_code:
+      __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImage_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderPixel:
+        push ecx
+        mov ecx, 3
+        __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImage_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderPixel_code:
+          __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImage_copy_pixel_from_destination:
+            lodsb 
+            mov [edi], al
+            inc edi
+            loop __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImage_copy_pixel_from_destination
+        pop ecx
+    loop __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImage_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner
+    pop ecx
+    add edi, 1500
+  loop __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInline_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImage_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer
 
 __php_var_Q291bGQgbm90IHNldCBWRVNBIG1vZGUh:
   db "Could not set VESA mode!", 0

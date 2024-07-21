@@ -11,6 +11,7 @@ use PHPOS\Architecture\Operation\SourceInterface;
 use PHPOS\Architecture\Register\RegisterCollection;
 use PHPOS\Architecture\Variable\VariableCollection;
 use PHPOS\OS\DefineInterface;
+use PHPOS\Service\GUI\StyleInterface;
 
 interface RuntimeInterface
 {
@@ -27,4 +28,5 @@ interface RuntimeInterface
     public function reserveByte(string $name, int $bytes, KeyValueOptionInterface $keyValueOption): KeyValueInterface;
     public function findReserveByte(string $name): KeyValueInterface;
     public function reserveBytes(): array;
+    public function style(): StyleInterface;
 }

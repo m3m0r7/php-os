@@ -23,12 +23,10 @@ class RenderPixel implements ServiceInterface
 
     public function process(): InstructionInterface
     {
-        [$vesa, $innerInstruction] = $this->parameters + [
-            VESA::VIDEO_640x480x32bpp,
+        [$innerInstruction] = $this->parameters + [
             null
         ];
 
-        assert($vesa instanceof VESA);
         assert(is_callable($innerInstruction));
 
         $registers = $this->code->architecture()->runtime()->registers();
@@ -36,7 +34,12 @@ class RenderPixel implements ServiceInterface
         $counter = $registers->get(RegisterType::COUNTER_BITS_32);
         assert($counter instanceof DataRegisterInterface);
 
-        [$XResolution, $YResolution, $bitType] = $vesa->resolutions();
+        [$XResolution, $YResolution, $bitType] = $this->code
+            ->architecture()
+            ->runtime()
+            ->style()
+            ->screen()
+            ->resolutions();
         assert($bitType instanceof VideoBitType);
 
         return (new Instruction($this->code))

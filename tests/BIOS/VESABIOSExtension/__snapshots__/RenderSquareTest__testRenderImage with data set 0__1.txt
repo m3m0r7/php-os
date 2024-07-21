@@ -63,19 +63,20 @@ __php_PHPOS_Service_BIOS_VESABIOSExtension_LoadVESAVideoAddress:
 
 add edi, 365610
 
-__php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer:
-  mov ecx, 100
-__php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer:
-  push ecx
-  mov ecx, 100
-__php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner:
-  __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner_code:
-    mov dword [edi], 0xFFFFFF
-    add edi, 3
-  loop __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner
-  pop ecx
-  add edi, 1620
-loop __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer
+__php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare:
+  __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer:
+    mov ecx, 100
+  __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer:
+    push ecx
+    mov ecx, 100
+  __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner:
+    __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner_code:
+      mov dword [edi], 0xFFFFFF
+      add edi, 3
+    loop __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner
+    pop ecx
+    add edi, 1620
+  loop __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer
 
 __php_var_Q291bGQgbm90IHNldCBWRVNBIG1vZGUh:
   db "Could not set VESA mode!", 0

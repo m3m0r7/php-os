@@ -43,7 +43,7 @@ enum VESA: int
      *       because video resolutions are dynamically definition.
      *       but NASM cannot calculates 2 registers over concurrently.
      *
-     * @return array{int, int, VideoBitType}
+     * @return array{0: int, 1: int, 2: VideoBitType}
      */
     public function resolutions(): array
     {

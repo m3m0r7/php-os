@@ -13,6 +13,7 @@ use PHPOS\Architecture\Register\RegisterCollection;
 use PHPOS\Architecture\Variable\VariableCollection;
 use PHPOS\Exception\VariableNotFoundException;
 use PHPOS\OS\DefineInterface;
+use PHPOS\Service\GUI\StyleInterface;
 
 class Runtime implements RuntimeInterface
 {
@@ -26,6 +27,7 @@ class Runtime implements RuntimeInterface
         protected RegisterCollection $registers,
         protected VariableCollection $variables,
         protected OperationCollection $operations,
+        protected StyleInterface $style,
     ) {
     }
 
@@ -123,5 +125,10 @@ class Runtime implements RuntimeInterface
     public function definedDefinitions(): array
     {
         return $this->definedDefinitions;
+    }
+
+    public function style(): StyleInterface
+    {
+        return $this->style;
     }
 }

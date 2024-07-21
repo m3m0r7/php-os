@@ -24,14 +24,12 @@ class RenderSquareIntoCenter implements ServiceInterface
 
     public function process(): InstructionInterface
     {
-        [$vesa, $color, $width, $height] = $this->parameters + [
-            VESA::VIDEO_640x480x32bpp,
+        [$color, $width, $height] = $this->parameters + [
             new RGBA(0xFF, 0xFF, 0xFF),
             100,
             100,
         ];
 
-        assert($vesa instanceof VESA);
         assert($color instanceof RGBA);
 
         $registers = $this->code->architecture()->runtime()->registers();
@@ -39,7 +37,13 @@ class RenderSquareIntoCenter implements ServiceInterface
         $di = $registers->get(RegisterType::DESTINATION_INDEX_BITS_32);
         assert($di instanceof IndexRegisterInterface);
 
-        [$XResolution, $YResolution, $bitType] = $vesa->resolutions();
+        [$XResolution, $YResolution, $bitType] = $this->code
+            ->architecture()
+            ->runtime()
+            ->style()
+            ->screen()
+            ->resolutions();
+
         assert($bitType instanceof VideoBitType);
 
         $centeredPos = (new Align(AlignType::CENTER_CENTER))

@@ -11,35 +11,37 @@ use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\VESABIOSExtension\VESA;
-use PHPOS\Service\Component\Image\Image;
+use PHPOS\Service\Component\Text\FontInterface;
 use PHPOS\Service\Component\Variable;
 use PHPOS\Service\Component\VESA\VideoBitType;
 use PHPOS\Service\ServiceInterface;
 
-class RenderImageFromInline implements ServiceInterface
+class RenderText implements ServiceInterface
 {
     use BaseService;
 
     public function process(): InstructionInterface
     {
-        [$image] = $this->parameters + [
+        [$font, $vesa] = $this->parameters + [
             null,
+            VESA::VIDEO_640x480x32bpp,
         ];
 
-        assert($image instanceof Image);
+        assert($font instanceof FontInterface);
+        assert($vesa instanceof VESA);
 
         $registers = $this->code->architecture()->runtime()->registers();
 
         $si = $registers->get(RegisterType::SOURCE_INDEX_BITS_32);
         assert($si instanceof IndexRegisterInterface);
 
-        [, , $bitType] = $this->code->architecture()->runtime()->style()->screen()->resolutions();
+        [, , $bitType] = $vesa->resolutions();
         assert($bitType instanceof VideoBitType);
 
         $variable = Variable::createWithNameBy(
             $this->code,
             $this->label() . '_image',
-            array_chunk($image->as8BitsRGBAList(), ($bitType->value / 8) * 16),
+            array_chunk($font->as8BitsRGBAList(), ($bitType->value / 8) * 16),
         );
 
         return (new Instruction($this->code))
@@ -47,7 +49,7 @@ class RenderImageFromInline implements ServiceInterface
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction
                     ->append(Mov::class, $si->index(), $variable->name())
-                    ->include(new RenderImage($this->code, $this, $image->width(), $image->height())),
+                    ->include(new RenderImage($this->code, $this, $font->width(), $font->height(), $vesa)),
             );
     }
 }

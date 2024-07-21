@@ -26,15 +26,13 @@ class RenderImage implements ServiceInterface
 
     public function process(): InstructionInterface
     {
-        [$width, $height, $vesa] = $this->parameters + [
+        [$width, $height] = $this->parameters + [
             null,
             null,
-            VESA::VIDEO_640x480x32bpp,
         ];
 
         assert(is_int($width));
         assert(is_int($height));
-        assert($vesa instanceof VESA);
 
         $registers = $this->code->architecture()->runtime()->registers();
 
@@ -53,7 +51,13 @@ class RenderImage implements ServiceInterface
         $si = $registers->get(RegisterType::SOURCE_INDEX_BITS_32);
         assert($si instanceof IndexRegisterInterface);
 
-        [$XResolution, $YResolution, $bitType] = $vesa->resolutions();
+        [$XResolution, $YResolution, $bitType] = $this->code
+            ->architecture()
+            ->runtime()
+            ->style()
+            ->screen()
+            ->resolutions();
+
         assert($bitType instanceof VideoBitType);
 
         $nextLineCursor = ($bitType->value / 8) * ($XResolution - $width);
@@ -61,15 +65,13 @@ class RenderImage implements ServiceInterface
         return (new Instruction($this->code))
             ->include(new Renderer(
                 $this->code,
-                null,
+                $this,
                 $width,
                 $height,
-                $vesa,
                 fn (InstructionInterface $instruction) => $instruction
                     ->include(new RenderPixel(
                         $this->code,
-                        null,
-                        $vesa,
+                        $this,
                         fn (InstructionInterface $instruction) => $instruction
                             ->label(
                                 $this->label() . '_copy_pixel_from_destination',

@@ -8,7 +8,7 @@ use PHPOS\OS\CodeInterface;
 
 interface ImageInterface
 {
-    public function path(): string;
+    public function path(): ?string;
     /**
      * @return RGBA[]
      */

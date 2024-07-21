@@ -7,6 +7,7 @@ namespace PHPOS\Architecture;
 use PHPOS\Exception\RuntimeNotRegisteredException;
 use PHPOS\Runtime\Runtime;
 use PHPOS\Runtime\RuntimeInterface;
+use PHPOS\Service\GUI\DefaultStyle;
 
 class Architecture implements ArchitectureInterface
 {
@@ -21,6 +22,7 @@ class Architecture implements ArchitectureInterface
                 \PHPOS\Architecture\Register\x86_64\Register::registers(),
                 \PHPOS\Architecture\Variable\x86_64\Variable::variables(),
                 \PHPOS\Architecture\Operation\x86_64\Mnemonic::operations(),
+                new DefaultStyle(),
             )
         );
     }
