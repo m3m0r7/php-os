@@ -8,4 +8,5 @@ interface KeyValueOptionInterface
 {
     public function isGlobal(): bool;
     public function isExtern(): bool;
+    public function aliasName(): ?string;
 }

@@ -11,6 +11,7 @@
 ;
 
 
+resb_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionInformation: resb 256
 [bits 16]
 
 [org 0x0000]
@@ -79,4 +80,3 @@ loop __php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer
 __php_var_Q291bGQgbm90IHNldCBWRVNBIG1vZGUh:
   db "Could not set VESA mode!", 0
 
-resb_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionInformation: resb 256

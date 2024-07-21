@@ -16,4 +16,6 @@ interface ImageInterface
 
     public function width(): int;
     public function height(): int;
+
+    public function size24Bits(): int;
 }

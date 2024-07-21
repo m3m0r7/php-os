@@ -20,7 +20,7 @@
 [org 0x0000]
 
 __php_PHPOS_Service_BIOS_Disk_LoadSector:
-  mov bx, 0
+  mov ebx, 0
   mov ah, 0x0002
   mov al, __php_define_x86_64_test_code_sectors
   mov ch, 0x0000

@@ -30,21 +30,6 @@ class CallCode implements ServiceInterface
             $code,
         );
 
-        // Including extern definitions
-        foreach ($this->code->architecture()->runtime()->reserveBytes() as $value) {
-            assert($value instanceof KeyValueInterface);
-            if (!$value->option()->isGlobal()) {
-                continue;
-            }
-            $code->architecture()->runtime()->reserveBytes(
-                $value->name(),
-                $value->value(),
-                new KeyValueOption(
-                    isExtern: true,
-                ),
-            );
-        }
-
         return (new Instruction($this->code))
             ->label(
                 $this->label(),

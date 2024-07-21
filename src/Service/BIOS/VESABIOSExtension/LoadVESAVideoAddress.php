@@ -8,6 +8,7 @@ use PHPOS\Architecture\Register\DataRegisterInterface;
 use PHPOS\Architecture\Register\IndexRegisterInterface;
 use PHPOS\Architecture\Register\RegisterType;
 use PHPOS\Operation\Mov;
+use PHPOS\OS\CodeInterface;
 use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
@@ -21,6 +22,9 @@ class LoadVESAVideoAddress implements ServiceInterface
 
     public function process(): InstructionInterface
     {
+        [$video] = $this->parameters + [null];
+        assert($video instanceof CodeInterface || $video === null);
+
         $registers = $this->code->architecture()->runtime()->registers();
 
         $ac = $registers->get(RegisterType::ACCUMULATOR_BITS_32);
@@ -31,6 +35,18 @@ class LoadVESAVideoAddress implements ServiceInterface
 
         $di = $registers->get(RegisterType::DESTINATION_INDEX_BITS_32);
         assert($di instanceof IndexRegisterInterface);
+
+        if ($video instanceof CodeInterface) {
+            return (new Instruction($this->code))
+                ->label(
+                    $this->label(),
+                    fn (InstructionInterface $instruction) => $instruction
+                        ->append(Mov::class, $ac->value(), (string) new Indirect(
+                            $video->origin() . ' + ' . VESA::PHYS_BASE_PTR_ADD,
+                        ))
+                        ->append(Mov::class, $di->index(), $ac->value())
+                );
+        }
 
         $resb = $this->code->architecture()->runtime()
             ->findReserveByte(Formatter::removeSign(SetVESABIOSExtensionInformation::class));

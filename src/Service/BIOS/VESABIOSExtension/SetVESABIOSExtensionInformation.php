@@ -9,6 +9,7 @@ use PHPOS\Architecture\Register\IndexRegisterInterface;
 use PHPOS\Architecture\Register\RegisterType;
 use PHPOS\Operation\Int_;
 use PHPOS\Operation\Mov;
+use PHPOS\OS\CodeInterface;
 use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Runtime\KeyValueOption;
@@ -23,8 +24,8 @@ class SetVESABIOSExtensionInformation implements ServiceInterface
 
     public function process(): InstructionInterface
     {
-        [$resolution] = $this->parameters + [VESA::VIDEO_640x480x32bpp];
-
+        [$video, $resolution] = $this->parameters + [null, VESA::VIDEO_640x480x32bpp];
+        assert($video instanceof CodeInterface || $video === null);
         assert($resolution instanceof VESA);
 
         $registers = $this->code->architecture()->runtime()->registers();
@@ -41,10 +42,20 @@ class SetVESABIOSExtensionInformation implements ServiceInterface
         $di = $registers->get(RegisterType::DESTINATION_INDEX_BITS_32);
         assert($di instanceof IndexRegisterInterface);
 
+        if ($video instanceof CodeInterface) {
+            return (new Instruction($this->code))
+                ->label(
+                    $this->label(),
+                    fn (InstructionInterface $instruction) => $instruction
+                        ->append(Mov::class, $ac->value(), VESA::GET_INFO->value)
+                        ->append(Mov::class, $counter->value(), $resolution->value | VESA::GRAPHIC_MODE)
+                        ->append(Mov::class, $di->index(), $video->origin())
+                        ->append(Int_::class, BIOS::VIDEO_INTERRUPT->value)
+                );
+        }
+
         $resb = $this->code->architecture()->runtime()
-            ->reserveByte(Formatter::removeSign(static::class), 256, new KeyValueOption(
-                isGlobal: true,
-            ));
+            ->reserveByte(Formatter::removeSign(static::class), 256);
 
         return (new Instruction($this->code))
             ->label(

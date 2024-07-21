@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PHPOS\Assembly\Processor;
 
-use PHPOS\Architecture\Support\Hex;
 use PHPOS\OS\CodeInterface;
 use PHPOS\OS\DefineInterface;
+use PHPOS\OS\InstructionInterface;
 use PHPOS\Runtime\KeyValue;
 use PHPOS\Service\BIOS\Standard\DefineBitSize;
 use PHPOS\Service\BIOS\Standard\DefineOrigin;
@@ -24,36 +24,12 @@ class Text implements ProcessorInterface
     {
         $assembly = '';
 
+        $preProcessedServices = [];
         foreach ($this->createServices() as [$service, $parameters]) {
             $service = new $service($this->code, null, ...$parameters);
 
             assert($service instanceof ServiceInterface);
-            $assembly .= $v = $service->process()->assemble() . "\n";
-        }
-
-        $definitions = '';
-        /**
-         * @var DefineInterface $value
-         */
-        foreach ($this->code->architecture()->runtime()->definedDefinitions() as $value) {
-            $definitions .= sprintf(
-                "%%define %s %s" . "\n",
-                $value->name(),
-                $value->value() ?? '(null)',
-            );
-        }
-
-        $assembly = $definitions . "\n" . $assembly;
-
-        /**
-         * @var KeyValue $value
-         */
-        foreach ($this->code->architecture()->runtime()->definedVariables() as $value) {
-            $assembly .= (new Variable(
-                $this->code,
-                null,
-                $value,
-            ))->process()->assemble() . "\n";
+            $preProcessedServices[] = $service->process();
         }
 
         /**
@@ -87,6 +63,36 @@ class Text implements ProcessorInterface
                 "extern %s\n",
                 $value->name(),
             );
+        }
+
+        foreach ($preProcessedServices as $service) {
+            assert($service instanceof InstructionInterface);
+            $assembly .= $service->assemble() . "\n";
+        }
+
+        $definitions = '';
+        /**
+         * @var DefineInterface $value
+         */
+        foreach ($this->code->architecture()->runtime()->definedDefinitions() as $value) {
+            $definitions .= sprintf(
+                "%%define %s %s" . "\n",
+                $value->name(),
+                $value->value() ?? '(null)',
+            );
+        }
+
+        $assembly = $definitions . "\n" . $assembly;
+
+        /**
+         * @var KeyValue $value
+         */
+        foreach ($this->code->architecture()->runtime()->definedVariables() as $value) {
+            $assembly .= (new Variable(
+                $this->code,
+                null,
+                $value,
+            ))->process()->assemble() . "\n";
         }
 
         foreach ($this->postServices as [$service, $parameters]) {

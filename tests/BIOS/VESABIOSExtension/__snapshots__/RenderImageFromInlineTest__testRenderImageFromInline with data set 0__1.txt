@@ -11,6 +11,7 @@
 ;
 
 
+resb_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionInformation: resb 256
 [bits 16]
 
 [org 0x0000]
@@ -580,4 +581,3 @@ __php_var___php_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImageFromInl
   db 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163
   db 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163, 215, 101, 163
 
-resb_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionInformation: resb 256

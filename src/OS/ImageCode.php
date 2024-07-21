@@ -15,8 +15,8 @@ class ImageCode extends Code implements ImageCodeInterface
     {
         parent::__construct($this->architecture, $this->option);
 
-        $this->registerService(EmbedImage::class, $this->image)
-            ->registerPostService(CodeSignature::class);
+        $this->setSectors((int) ceil($image->size24Bits() / OSInfo::PAGE_SIZE))
+            ->registerService(EmbedImage::class, $this->image);
     }
 
     public function width(): int

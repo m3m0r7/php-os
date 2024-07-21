@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PHPOS\Service\BIOS\Disk;
 
+use PHPOS\Architecture\Register\DataRegisterInterface;
 use PHPOS\Architecture\Register\DataRegisterWithHighAndLowInterface;
 use PHPOS\Architecture\Register\RegisterType;
 use PHPOS\Architecture\Support\Hex;
@@ -33,8 +34,8 @@ class LoadSector implements ServiceInterface
         $ac = $registers->get(RegisterType::ACCUMULATOR_BITS_16);
         assert($ac instanceof DataRegisterWithHighAndLowInterface);
 
-        $base = $registers->get(RegisterType::BASE_BITS_16);
-        assert($base instanceof DataRegisterWithHighAndLowInterface);
+        $base = $registers->get(RegisterType::BASE_BITS_32);
+        assert($base instanceof DataRegisterInterface);
 
         $counter = $registers->get(RegisterType::COUNTER_BITS_16);
         assert($counter instanceof DataRegisterWithHighAndLowInterface);

@@ -17,7 +17,7 @@ class KeyValue implements KeyValueInterface
 
     public function name(): string
     {
-        return $this->name;
+        return $this->keyValueOption->aliasName() ?? $this->name;
     }
 
     public function value(): string|Hex|int|array|null
@@ -40,5 +40,10 @@ class KeyValue implements KeyValueInterface
     public function option(): KeyValueOptionInterface
     {
         return $this->keyValueOption;
+    }
+
+    public function originalName(): string
+    {
+        return $this->name;
     }
 }

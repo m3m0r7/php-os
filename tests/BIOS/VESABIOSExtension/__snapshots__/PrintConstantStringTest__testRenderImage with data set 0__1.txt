@@ -11,6 +11,7 @@
 ;
 
 
+resb_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionInformation: resb 256
 [bits 16]
 
 [org 0x0000]
@@ -83,4 +84,3 @@ __php_var_Q291bGQgbm90IHNldCBWRVNBIG1vZGUh:
 __php_var_SGVsbG8gV29ybGQh:
   db "Hello World!", 0
 
-resb_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionInformation: resb 256

@@ -35,6 +35,11 @@ class Image implements ImageInterface
         return $this->YResolution;
     }
 
+    public function size24Bits(): int
+    {
+        return $this->width() * $this->height() * 3;
+    }
+
     /**
      * @return RGBA[]
      */
