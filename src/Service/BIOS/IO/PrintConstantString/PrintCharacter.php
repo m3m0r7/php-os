@@ -25,7 +25,7 @@ class PrintCharacter implements ServiceInterface
     {
         $registers = $this->code->architecture()->runtime()->registers();
 
-        [$color256Set] = $this->parameters;
+        [$color256Set] = $this->parameters + [Color256Set::WHITE];
         assert($color256Set instanceof Color256Set);
 
         $ac = $registers->get(RegisterType::ACCUMULATOR_BITS_16);

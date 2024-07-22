@@ -33,14 +33,12 @@ class PrintConstantString implements ServiceInterface
         /**
          * @var string $string
          * @var Color256Set $textColor
-         * @var RegisterType $loadIndexFrom
          */
-        [$string, $textColor, $loadIndexFrom] = $this->parameters + ['', Color256Set::WHITE, RegisterType::SOURCE_INDEX_BITS_32];
+        [$string, $textColor] = $this->parameters + ['', Color256Set::WHITE];
 
         assert(is_string($string));
-        assert($loadIndexFrom instanceof RegisterType);
 
-        $si = $registers->get($loadIndexFrom);
+        $si = $registers->get(RegisterType::SOURCE_INDEX_BITS_32);
         assert($si instanceof IndexRegisterInterface);
 
         $ac = $registers->get(RegisterType::ACCUMULATOR_BITS_16);
@@ -57,7 +55,7 @@ class PrintConstantString implements ServiceInterface
                     ->name(),
             )
             ->append(Call::class, $this->label())
-            ->append(Jmp::class, $printDone)
+            ->append(Jmp::class, $this->label() . '_finish')
             ->include($printCharacter)
             ->label(
                 $this->label(),
@@ -69,6 +67,7 @@ class PrintConstantString implements ServiceInterface
                         ->append(Call::class, $printCharacter)
                         ->append(Jmp::class, $this)
             )
-            ->include($printDone);
+            ->include($printDone)
+            ->label($this->label() . '_finish');
     }
 }
