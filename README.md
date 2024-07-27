@@ -369,6 +369,7 @@ $bundler->distribute();
 - [Enable A20 line and Transit to 32-bit mode](doc/example/04-enable-a20-line-and-transit-to-32bit-mode/README.md)
 - [Render a text](doc/example/05-render-a-text/README.md)
 - [GUI with menubar and fill background](doc/example/06-gui-with-menubar-and-fill-background/README.md)
+- [Capture and Print mouse position](doc/example/07-capture-and-print-mouse-position/README.md)
 
 ## Test
 
