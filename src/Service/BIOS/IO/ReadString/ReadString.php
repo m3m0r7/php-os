@@ -7,6 +7,7 @@ namespace PHPOS\Service\BIOS\IO\ReadString;
 use PHPOS\Architecture\Register\DataRegisterWithHighAndLowInterface;
 use PHPOS\Architecture\Register\IndexRegisterInterface;
 use PHPOS\Architecture\Register\RegisterType;
+use PHPOS\Operation\Call;
 use PHPOS\Operation\Cmp;
 use PHPOS\Operation\Inc;
 use PHPOS\Operation\Int_;
@@ -64,6 +65,8 @@ class ReadString implements ServiceInterface
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction
                     ->append(Mov::class, $di->index(), $buffer->name())
+                    ->append(Call::class, $this->label() . '_char_read')
+                    ->append(Jmp::class, $this->label() . '_done')
                     ->label(
                         $this->label() . '_char_read',
                         fn (InstructionInterface $instruction) => $instruction
@@ -87,6 +90,7 @@ class ReadString implements ServiceInterface
                                     ->append(Ret::class),
                             )
                     ),
-            );
+            )
+            ->label($this->label() . '_done');
     }
 }
