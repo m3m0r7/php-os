@@ -16,7 +16,7 @@ class PrintInputtedTextTest extends TestCase
     use MatchesSnapshots;
 
     #[DataProvider('architectures')]
-    public function testHelloWorld(CodeInterface $code): void
+    public function testPrintInputtedText(CodeInterface $code): void
     {
         $result = $code
             ->registerService(\PHPOS\Service\BIOS\Standard\DefineBitSize::class, \PHPOS\OS\BitType::BIT_16)
