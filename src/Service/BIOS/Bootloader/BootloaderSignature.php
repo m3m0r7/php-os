@@ -11,7 +11,7 @@ use PHPOS\OS\InstructionInterface;
 use PHPOS\OS\OSInfo;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\Standard\DefineByte;
-use PHPOS\Service\BIOS\Standard\DoubleDefineByte;
+use PHPOS\Service\ServiceManagerInterface;
 use PHPOS\Service\BIOS\Standard\Times;
 use PHPOS\Service\ServiceInterface;
 
@@ -19,9 +19,9 @@ class BootloaderSignature implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->include(new Times(
                 $this->code,
                 null,

@@ -17,7 +17,7 @@
 
 mov esi, __php_var_
 call __php_PHPOS_Service_BIOS_IO_PrintConstantString
-jmp __php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone
+jmp __php_PHPOS_Service_BIOS_IO_PrintConstantString_finish
 __php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintCharacter:
   mov ah, 14
   mov ebx, 15
@@ -31,6 +31,7 @@ __php_PHPOS_Service_BIOS_IO_PrintConstantString:
   jmp __php_PHPOS_Service_BIOS_IO_PrintConstantString
 __php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone:
   ret 
+__php_PHPOS_Service_BIOS_IO_PrintConstantString_finish:
 
 __php_var_:
   db "", 0

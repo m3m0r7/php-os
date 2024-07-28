@@ -10,14 +10,15 @@ use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\Standard\Times;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class CodeSignature implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->include(new Times(
                 $this->code,
                 null,

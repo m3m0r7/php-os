@@ -9,7 +9,7 @@ use PHPOS\Service\Component\Extern;
 
 interface ServiceInterface
 {
-    public function process(): InstructionInterface;
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface;
 
     public function extern(): Extern;
 

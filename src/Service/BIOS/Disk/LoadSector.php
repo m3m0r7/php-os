@@ -19,12 +19,13 @@ use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\BIOS;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class LoadSector implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         $registers = $this->code->architecture()->runtime()->registers();
 
@@ -68,7 +69,7 @@ class LoadSector implements ServiceInterface
 
         $finishLabel = $this->label() . '_finish';
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) =>

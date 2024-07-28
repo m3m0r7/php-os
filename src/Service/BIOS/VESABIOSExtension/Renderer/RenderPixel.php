@@ -16,12 +16,13 @@ use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\VESABIOSExtension\VESA;
 use PHPOS\Service\Component\VESA\VideoBitType;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class RenderPixel implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         [$innerInstruction] = $this->parameters + [
             null
@@ -42,7 +43,7 @@ class RenderPixel implements ServiceInterface
             ->resolutions();
         assert($bitType instanceof VideoBitType);
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction

@@ -16,12 +16,13 @@ use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class UpdateCHSAddress implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         $registers = $this->code->architecture()->runtime()->registers();
 
@@ -39,7 +40,7 @@ class UpdateCHSAddress implements ServiceInterface
 
         $updateCHSLabelFinished = $this->label() . '_finished';
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction

@@ -11,12 +11,13 @@ use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class Times implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         /**
          * @var string $loops
@@ -24,7 +25,7 @@ class Times implements ServiceInterface
         [$loops, $destination, $variableType] = $this->parameters + ['0', '0', VariableType::BITS_8];
 
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->append(
                 function (DestinationInterface $destination, SourceInterface ...$sources) use ($loops, $variableType) {
                     $variables = $this->code->architecture()->runtime()->variables();

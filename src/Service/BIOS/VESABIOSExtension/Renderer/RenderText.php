@@ -15,12 +15,13 @@ use PHPOS\Service\Component\Text\FontInterface;
 use PHPOS\Service\Component\Variable;
 use PHPOS\Service\Component\VESA\VideoBitType;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class RenderText implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         [$font, $vesa] = $this->parameters + [
             null,
@@ -44,7 +45,7 @@ class RenderText implements ServiceInterface
             array_chunk($font->as8BitsRGBAList(), ($bitType->value / 8) * 16),
         );
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction

@@ -15,12 +15,13 @@ use PHPOS\Service\Component\Image\Image;
 use PHPOS\Service\Component\Variable;
 use PHPOS\Service\Component\VESA\VideoBitType;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class RenderImageFromInline implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         [$image] = $this->parameters + [
             null,
@@ -42,7 +43,7 @@ class RenderImageFromInline implements ServiceInterface
             array_chunk($image->as8BitsRGBAList(), ($bitType->value / 8) * 16),
         );
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction

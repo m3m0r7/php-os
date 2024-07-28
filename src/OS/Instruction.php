@@ -7,6 +7,7 @@ namespace PHPOS\OS;
 use PHPOS\Architecture\Operation\Destination;
 use PHPOS\Architecture\Operation\Source;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 use Traversable;
 
 class Instruction implements InstructionInterface, \IteratorAggregate
@@ -20,7 +21,7 @@ class Instruction implements InstructionInterface, \IteratorAggregate
 
     protected array $includedServices = [];
 
-    public function __construct(public readonly CodeInterface $code, protected int $indentSize = 0)
+    public function __construct(public readonly CodeInterface $code, protected readonly ServiceManagerInterface $serviceManager, protected int $indentSize = 0)
     {
     }
 
@@ -43,6 +44,7 @@ class Instruction implements InstructionInterface, \IteratorAggregate
     {
         $new = new self(
             $this->code,
+            $this->serviceManager,
             $this->indentSize + 2,
         );
         $this->instructions[] = ["{$name}:", null, null, $this->indentSize];
@@ -59,7 +61,7 @@ class Instruction implements InstructionInterface, \IteratorAggregate
             return $this;
         }
         $this->includedServices[] = $service->label();
-        foreach ($service->process()->instructions as $record) {
+        foreach ($service->process($this->serviceManager)->instructions as $record) {
             $record[self::INDENT] += $this->indentSize;
             $this->instructions[] = $record;
         }

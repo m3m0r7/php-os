@@ -11,6 +11,7 @@ use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\IO\PrintConstantString\PrintCharacter;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 use PHPOS\Test\CreateCode;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -27,9 +28,9 @@ class LabelTest extends TestCase
         $createLabelService = fn (?ServiceInterface $parent) => new class ($code, $parent) implements ServiceInterface {
             use BaseService;
 
-            public function process(): InstructionInterface
+            public function process(ServiceManagerInterface $serviceManager): InstructionInterface
             {
-                return (new Instruction($this->code))
+                return (new Instruction($this->code, $serviceManager))
                     ->label(
                         $this->label(),
                         fn (InstructionInterface $instruction) => $instruction

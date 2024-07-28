@@ -14,19 +14,20 @@ use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class EnableA20Line implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         $registers = $this->code->architecture()->runtime()->registers();
 
         $ac = $registers->get(RegisterType::ACCUMULATOR_BITS_16);
         assert($ac instanceof DataRegisterWithHighAndLowInterface);
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->append(Cli::class)
             ->append(In::class, $ac->low(), 0x92)
             ->append(Or_::class, $ac->low(), 2)

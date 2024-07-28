@@ -11,6 +11,7 @@ use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 use PHPOS\Test\CreateCode;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -37,7 +38,7 @@ class DefineTest extends TestCase
         $service = new class ($code) implements ServiceInterface {
             use BaseService;
 
-            public function process(): InstructionInterface
+            public function process(ServiceManagerInterface $serviceManager): InstructionInterface
             {
                 $definedForTested = $this
                     ->code
@@ -45,7 +46,7 @@ class DefineTest extends TestCase
                     ->runtime()
                     ->define(new Define('name', 'value'));
 
-                return (new Instruction($this->code))
+                return (new Instruction($this->code, $serviceManager))
                     ->append(Mov::class, $definedForTested);
             }
         };

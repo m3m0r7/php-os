@@ -21,12 +21,13 @@ use PHPOS\Service\BIOS\IO\PrintConstantString\PrintDone;
 use PHPOS\Service\Component\Color256Set;
 use PHPOS\Service\Component\Variable;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class PrintConstantString implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         $registers = $this->code->architecture()->runtime()->registers();
 
@@ -47,7 +48,7 @@ class PrintConstantString implements ServiceInterface
         $printDone = new PrintDone($this->code, $this);
         $printCharacter = new PrintCharacter($this->code, $this, $textColor);
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->append(
                 Mov::class,
                 $si->index(),

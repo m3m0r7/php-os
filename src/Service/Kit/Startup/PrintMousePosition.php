@@ -18,12 +18,13 @@ use PHPOS\Service\BIOS\IO\PrintNumberFromAX;
 use PHPOS\Service\Component\Address\Indirect;
 use PHPOS\Service\PCI\PS2\Mouse;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class PrintMousePosition implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         $registers = $this->code->architecture()->runtime()->registers();
 
@@ -63,7 +64,7 @@ class PrintMousePosition implements ServiceInterface
         $si = $registers->get(RegisterType::SOURCE_INDEX_BITS_32);
         assert($si instanceof IndexRegisterInterface);
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction

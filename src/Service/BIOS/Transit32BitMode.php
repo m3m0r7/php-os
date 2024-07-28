@@ -18,12 +18,13 @@ use PHPOS\Service\BIOS\VESABIOSExtension\Renderer\RenderImageFromInline;
 use PHPOS\Service\Component\Address\Indirect;
 use PHPOS\Service\Component\Address\SegmentBased;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class Transit32BitMode implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         $toBe32BitsLabel = $this->label() . '_32bits_mode';
 
@@ -42,7 +43,7 @@ class Transit32BitMode implements ServiceInterface
 
         $defineBits = new DefineBitSize($this->code, $this, BitType::BIT_32);
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction

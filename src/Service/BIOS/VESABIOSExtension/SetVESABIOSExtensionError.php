@@ -14,12 +14,13 @@ use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\IO\PrintConstantString;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class SetVESABIOSExtensionError implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         $registers = $this->code->architecture()->runtime()->registers();
 
@@ -32,7 +33,7 @@ class SetVESABIOSExtensionError implements ServiceInterface
         $ac = $registers->get(RegisterType::ACCUMULATOR_BITS_32);
         assert($ac instanceof DataRegisterInterface);
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) =>

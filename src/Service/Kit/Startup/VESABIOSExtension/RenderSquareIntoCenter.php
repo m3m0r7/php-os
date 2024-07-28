@@ -17,12 +17,13 @@ use PHPOS\Service\Component\VESA\Align;
 use PHPOS\Service\Component\VESA\AlignType;
 use PHPOS\Service\Component\VESA\VideoBitType;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class RenderSquareIntoCenter implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         [$color, $width, $height] = $this->parameters + [
             new RGBA(0xFF, 0xFF, 0xFF),
@@ -55,7 +56,7 @@ class RenderSquareIntoCenter implements ServiceInterface
                 $height,
             );
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->append(
                 Add::class,
                 $di->index(),

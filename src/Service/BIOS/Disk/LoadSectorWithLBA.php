@@ -23,12 +23,13 @@ use PHPOS\Service\BIOS\BIOS;
 use PHPOS\Service\BIOS\Disk\LBA\LBAError;
 use PHPOS\Service\BIOS\Disk\LBA\UpdateCHSAddress;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class LoadSectorWithLBA implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         [$code] = $this->parameters + [null];
         assert($code instanceof CodeInterface);
@@ -52,7 +53,7 @@ class LoadSectorWithLBA implements ServiceInterface
             ->runtime()
             ->define($code->sectors());
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->append(Mov::class, $counter->value(), $sectors->value())
             ->label(
                 $this->label(),

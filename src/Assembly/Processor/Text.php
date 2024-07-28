@@ -14,6 +14,7 @@ use PHPOS\Service\BIOS\Standard\Times;
 use PHPOS\Service\BIOS\Standard\Variable;
 use PHPOS\Service\Component\Extern;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManager;
 use PHPOS\Utility\AutomaticallyGeneratedFileSignature;
 
 class Text implements ProcessorInterface
@@ -29,12 +30,14 @@ class Text implements ProcessorInterface
         $preProcessedServices = [];
         $extern = [];
 
+        $serviceManager = new ServiceManager();
+
         foreach ($this->createServices() as [$service, $parameters]) {
             $service = new $service($this->code, null, ...$parameters);
             assert($service instanceof ServiceInterface);
 
             $extern[] = $service->extern();
-            $preProcessedServices[] = $service->process();
+            $preProcessedServices[] = $service->process($serviceManager);
         }
 
         /**
@@ -90,7 +93,7 @@ class Text implements ProcessorInterface
                 $this->code,
                 null,
                 $value,
-            ))->process()->assemble() . "\n";
+            ))->process($serviceManager)->assemble() . "\n";
         }
 
         /**
@@ -101,14 +104,14 @@ class Text implements ProcessorInterface
                     $this->code,
                     null,
                     $value->value(),
-                ))->process()->assemble() . "\n";
+                ))->process($serviceManager)->assemble() . "\n";
         }
 
         foreach ($this->postServices as [$service, $parameters]) {
             $service = new $service($this->code, null, ...$parameters);
 
             assert($service instanceof ServiceInterface);
-            $assembly .= $service->process()->assemble() . "\n";
+            $assembly .= $service->process($serviceManager)->assemble() . "\n";
         }
 
         return AutomaticallyGeneratedFileSignature::createHeader(';') . $assembly;

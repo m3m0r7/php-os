@@ -23,6 +23,7 @@ use PHPOS\Service\BIOS\BIOS;
 use PHPOS\Service\Component\Address\ByteIndirect;
 use PHPOS\Service\Component\Address\Indirect;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class ReadString implements ServiceInterface
 {
@@ -47,7 +48,7 @@ class ReadString implements ServiceInterface
             );
     }
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         $registers = $this->code->architecture()->runtime()->registers();
         $ax = $registers->get(RegisterType::ACCUMULATOR_BITS_16);
@@ -58,7 +59,7 @@ class ReadString implements ServiceInterface
 
         $buffer = $this->extern->get($this->label() . '_buffer');
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction

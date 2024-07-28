@@ -8,12 +8,13 @@ use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class GlobalDescriptorTable implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         $GDTStart = $this->label();
         $GDTNull = $this->label() . '_null';
@@ -27,7 +28,7 @@ class GlobalDescriptorTable implements ServiceInterface
         $dataSegmentAccessByte = 0b10010010;
         $dataSegmentFlag = 0b11001111;
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->label(
                 $GDTNull,
                 fn (InstructionInterface $instruction) => $instruction

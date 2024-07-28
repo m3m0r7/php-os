@@ -9,12 +9,13 @@ use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class DefineBitSize implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         $variables = $this->code->architecture()->runtime()->variables();
 
@@ -25,7 +26,7 @@ class DefineBitSize implements ServiceInterface
 
         assert($bitType instanceof BitType);
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->append(
                 fn () => $this
                     ->code

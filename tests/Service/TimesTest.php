@@ -7,6 +7,7 @@ namespace PHPOS\Test\Service;
 use PHPOS\Architecture\Variable\VariableType;
 use PHPOS\OS\CodeInterface;
 use PHPOS\Service\BIOS\Standard\Times;
+use PHPOS\Service\ServiceManager;
 use PHPOS\Test\CreateCode;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -29,7 +30,7 @@ class TimesTest extends TestCase
 
         $this->assertSame(
             "times test db 0\n",
-            $times->process()->assemble()
+            $times->process(new ServiceManager())->assemble()
         );
     }
 
@@ -47,7 +48,7 @@ class TimesTest extends TestCase
 
         $this->assertSame(
             "times test dw 0\n",
-            $times->process()->assemble()
+            $times->process(new ServiceManager())->assemble()
         );
     }
 }

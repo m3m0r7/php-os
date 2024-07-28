@@ -30,7 +30,7 @@ main:
   sti 
 mov esi, __php_var_SGVsbG8gV29ybGQh
 call __php_PHPOS_Service_BIOS_IO_PrintConstantString
-jmp __php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone
+jmp __php_PHPOS_Service_BIOS_IO_PrintConstantString_finish
 __php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintCharacter:
   mov ah, 14
   mov ebx, 15
@@ -44,6 +44,7 @@ __php_PHPOS_Service_BIOS_IO_PrintConstantString:
   jmp __php_PHPOS_Service_BIOS_IO_PrintConstantString
 __php_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone:
   ret 
+__php_PHPOS_Service_BIOS_IO_PrintConstantString_finish:
 hlt 
 
 __php_var_SGVsbG8gV29ybGQh:

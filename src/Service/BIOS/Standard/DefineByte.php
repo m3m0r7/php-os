@@ -12,12 +12,13 @@ use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class DefineByte implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         $variables = $this->code->architecture()->runtime()->variables();
 
@@ -37,7 +38,7 @@ class DefineByte implements ServiceInterface
             $sources[] = 0;
         }
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->append(
                 fn (DestinationInterface $destination, SourceInterface ...$sources) => $this
                 ->code

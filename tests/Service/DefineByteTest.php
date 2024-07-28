@@ -9,6 +9,7 @@ use PHPOS\Architecture\Support\Text;
 use PHPOS\Architecture\Variable\VariableType;
 use PHPOS\OS\CodeInterface;
 use PHPOS\Service\BIOS\Standard\DefineByte;
+use PHPOS\Service\ServiceManager;
 use PHPOS\Test\CreateCode;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -31,7 +32,7 @@ class DefineByteTest extends TestCase
 
         $this->assertSame(
             "db \"test\", 0\n",
-            $definedByte->process()->assemble()
+            $definedByte->process(new ServiceManager())->assemble()
         );
     }
 
@@ -48,7 +49,7 @@ class DefineByteTest extends TestCase
 
         $this->assertSame(
             "dw \"test\", 0\n",
-            $definedByte->process()->assemble()
+            $definedByte->process(new ServiceManager())->assemble()
         );
     }
 
@@ -65,7 +66,7 @@ class DefineByteTest extends TestCase
 
         $this->assertSame(
             "db 0x0029\n",
-            $definedByte->process()->assemble()
+            $definedByte->process(new ServiceManager())->assemble()
         );
     }
 
@@ -82,7 +83,7 @@ class DefineByteTest extends TestCase
 
         $this->assertSame(
             "dw 0xEE29\n",
-            $definedByte->process()->assemble()
+            $definedByte->process(new ServiceManager())->assemble()
         );
     }
 
@@ -99,7 +100,7 @@ class DefineByteTest extends TestCase
 
         $this->assertSame(
             "dw 0x0029\n",
-            $definedByte->process()->assemble()
+            $definedByte->process(new ServiceManager())->assemble()
         );
     }
 }

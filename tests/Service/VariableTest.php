@@ -7,6 +7,7 @@ namespace PHPOS\Test\Service;
 use PHPOS\Architecture\Variable\VariableType;
 use PHPOS\OS\CodeInterface;
 use PHPOS\Service\BIOS\Standard\Variable;
+use PHPOS\Service\ServiceManager;
 use PHPOS\Test\CreateCode;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -29,7 +30,7 @@ class VariableTest extends TestCase
 
         $this->assertSame(
             "variable_name:\n  db \"value\", 0\n",
-            $variable->process()->assemble()
+            $variable->process(new ServiceManager())->assemble()
         );
     }
 
@@ -47,7 +48,7 @@ class VariableTest extends TestCase
 
         $this->assertSame(
             "variable_name:\n  dw \"value\", 0\n",
-            $variable->process()->assemble()
+            $variable->process(new ServiceManager())->assemble()
         );
     }
 }

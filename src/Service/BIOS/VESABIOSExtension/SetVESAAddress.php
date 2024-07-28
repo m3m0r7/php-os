@@ -16,16 +16,17 @@ use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\BIOS;
 use PHPOS\Service\Component\Formatter;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class SetVESAAddress implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         $resb = $this->code->architecture()->runtime()
             ->reserveByte(Formatter::removeSign(static::class), 256);
 
-        return new Instruction($this->code);
+        return new Instruction($this->code, $serviceManager);
     }
 }

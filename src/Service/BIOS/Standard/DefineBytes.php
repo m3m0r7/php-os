@@ -12,12 +12,13 @@ use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class DefineBytes implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         $variables = $this->code->architecture()->runtime()->variables();
 
@@ -30,7 +31,7 @@ class DefineBytes implements ServiceInterface
 
         $db = $variables->get($variableType ?? VariableType::BITS_8);
 
-        $instruction = new Instruction($this->code);
+        $instruction = new Instruction($this->code, $serviceManager);
 
         foreach (array_chunk($sources, $chunkSize) as $chunkedSource) {
             $instruction = $instruction

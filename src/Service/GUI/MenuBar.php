@@ -16,12 +16,13 @@ use PHPOS\Service\Component\Image\RGBA;
 use PHPOS\Service\Component\Text\Font;
 use PHPOS\Service\Component\VESA\AlignType;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class MenuBar implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         $style = $this->code
             ->architecture()
@@ -75,7 +76,7 @@ class MenuBar implements ServiceInterface
             $calculatedTextPosition,
         );
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction

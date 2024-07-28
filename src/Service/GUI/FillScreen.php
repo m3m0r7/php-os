@@ -12,12 +12,13 @@ use PHPOS\Service\BIOS\VESABIOSExtension\Renderer\RenderSquare;
 use PHPOS\Service\BIOS\VESABIOSExtension\VESA;
 use PHPOS\Service\Component\Image\RGBA;
 use PHPOS\Service\ServiceInterface;
+use PHPOS\Service\ServiceManagerInterface;
 
 class FillScreen implements ServiceInterface
 {
     use BaseService;
 
-    public function process(): InstructionInterface
+    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         $registers = $this->code->architecture()->runtime()->registers();
 
@@ -41,7 +42,7 @@ class FillScreen implements ServiceInterface
         );
         $loadVESAVideoAddress = new LoadVESAVideoAddress($this->code, $this);
 
-        return (new Instruction($this->code))
+        return (new Instruction($this->code, $serviceManager))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction
