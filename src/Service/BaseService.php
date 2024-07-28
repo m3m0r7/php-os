@@ -5,16 +5,19 @@ declare(strict_types=1);
 namespace PHPOS\Service;
 
 use PHPOS\OS\CodeInterface;
+use PHPOS\Service\Component\Extern;
 use PHPOS\Service\Component\Formatter;
 
 trait BaseService
 {
+    protected Extern $extern;
     protected array $parameters = [];
     protected ?string $label = null;
     protected ?string $labelSuffix = null;
 
     public function __construct(protected CodeInterface $code, protected ?ServiceInterface $parent = null, ...$parameters)
     {
+        $this->extern = new Extern();
         $this->parameters = $parameters;
     }
 
@@ -28,6 +31,11 @@ trait BaseService
     {
         $this->labelSuffix = $suffix;
         return $this;
+    }
+
+    public function extern(): Extern
+    {
+        return $this->extern;
     }
 
     public function label(): string

@@ -33,37 +33,37 @@ class Mouse implements ServiceInterface
         __construct as __baseConstruct;
     }
 
-
-    protected KeyValueInterface $mouseData;
-    protected KeyValueInterface $mouseX;
-    protected KeyValueInterface $mouseY;
-
     public function __construct(protected CodeInterface $code, protected ?ServiceInterface $parent = null, ...$parameters)
     {
         $this->__baseConstruct($code, $parent, $parameters);
 
-        $this->mouseData = $this->code
-            ->architecture()
-            ->runtime()
-            ->reserveByte(
-                $this->label() . '_mouse_data',
-                3,
-            );
-
-        $this->mouseX = $this->code
-            ->architecture()
-            ->runtime()
-            ->reserveByte(
-                $this->label() . '_mouse_x',
-                2,
-            );
-
-        $this->mouseY = $this->code
-            ->architecture()
-            ->runtime()
-            ->reserveByte(
-                $this->label() . '_mouse_y',
-                2,
+        $this->extern
+            ->set(
+                $this->code
+                    ->architecture()
+                    ->runtime()
+                    ->reserveByte(
+                        $this->label() . '_mouse_data',
+                        3,
+                    )
+            )
+            ->set(
+                $this->code
+                    ->architecture()
+                    ->runtime()
+                    ->reserveByte(
+                        $this->label() . '_mouse_x',
+                        2,
+                    )
+            )
+            ->set(
+                $this->code
+                    ->architecture()
+                    ->runtime()
+                    ->reserveByte(
+                        $this->label() . '_mouse_y',
+                        2,
+                    )
             );
     }
 
@@ -77,6 +77,10 @@ class Mouse implements ServiceInterface
         $waitLabel = $this->label() . '_wait';
         $waitInputLabel = $this->label() . '_wait_input';
 
+        $mouseData = $this->extern->get($this->label() . '_mouse_data');
+        $mouseX = $this->extern->get($this->label() . '_mouse_x');
+        $mouseY = $this->extern->get($this->label() . '_mouse_y');
+
         return (new Instruction($this->code))
             ->label(
                 $this->label(),
@@ -84,26 +88,26 @@ class Mouse implements ServiceInterface
                     // Read mouse data
                     ->append(Call::class, $waitInputLabel)
                     ->append(In::class, $ac->low(), 0x60)
-                    ->append(Mov::class, new Indirect($this->mouseData->name()), $ac->low())
+                    ->append(Mov::class, new Indirect($mouseData->name()), $ac->low())
 
                     ->append(Call::class, $waitInputLabel)
                     ->append(In::class, $ac->low(), 0x60)
-                    ->append(Mov::class, new Indirect($this->mouseData->name() . ' + 1'), $ac->low())
+                    ->append(Mov::class, new Indirect($mouseData->name() . ' + 1'), $ac->low())
 
                     ->append(Call::class, $waitInputLabel)
                     ->append(In::class, $ac->low(), 0x60)
-                    ->append(Mov::class, new Indirect($this->mouseData->name() . ' + 2'), $ac->low())
+                    ->append(Mov::class, new Indirect($mouseData->name() . ' + 2'), $ac->low())
 
                     // Read mouse position
                     ->append(Movsx::class, $ac->value(), (string) new ByteIndirect(
-                        $this->mouseData->name() . ' + 1',
+                        $mouseData->name() . ' + 1',
                     ))
-                    ->append(Add::class, (string) new Indirect($this->mouseX->name()), $ac->value())
+                    ->append(Add::class, (string) new Indirect($mouseX->name()), $ac->value())
 
                     ->append(Movsx::class, $ac->value(), (string) new ByteIndirect(
-                        $this->mouseData->name() . ' + 2',
+                        $mouseData->name() . ' + 2',
                     ))
-                    ->append(Sub::class, (string) new Indirect($this->mouseY->name()), $ac->value())
+                    ->append(Sub::class, (string) new Indirect($mouseY->name()), $ac->value())
 
                     ->append(Ret::class)
             )

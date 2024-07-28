@@ -80,15 +80,13 @@ class Runtime implements RuntimeInterface
         return $this->definedReservedBytes;
     }
 
-    public function reserveByte(string $name, int $bytes, KeyValueOptionInterface $keyValueOption = new KeyValueOption()): KeyValueInterface
+    public function reserveByte(string $name, int $bytes): KeyValueInterface
     {
         return $this->definedReservedBytes[$name] = new KeyValue(
             $name,
             $bytes,
             new KeyValueOption(
                 aliasName: 'resb_' . $name,
-                isGlobal: $keyValueOption->isGlobal(),
-                isExtern: $keyValueOption->isExtern(),
             ),
         );
     }

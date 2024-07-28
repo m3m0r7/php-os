@@ -30,7 +30,7 @@ interface RuntimeInterface
     public function definedNullFilledVariables(): array;
     public function define(DefineInterface $define): DefineInterface;
     public function definedDefinitions(): array;
-    public function reserveByte(string $name, int $bytes, KeyValueOptionInterface $keyValueOption): KeyValueInterface;
+    public function reserveByte(string $name, int $bytes): KeyValueInterface;
     public function findReserveByte(string $name): KeyValueInterface;
     public function reserveBytes(): array;
     public function style(): StyleInterface;

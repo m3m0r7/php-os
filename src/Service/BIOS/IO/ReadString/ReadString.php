@@ -18,7 +18,6 @@ use PHPOS\Operation\Xor_;
 use PHPOS\OS\CodeInterface;
 use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
-use PHPOS\Runtime\KeyValueInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\BIOS;
 use PHPOS\Service\Component\Address\ByteIndirect;
@@ -31,18 +30,20 @@ class ReadString implements ServiceInterface
         __construct as __baseConstruct;
     }
 
-    protected KeyValueInterface $buffer;
-
     public function __construct(protected CodeInterface $code, protected ?ServiceInterface $parent = null, ...$parameters)
     {
         $this->__baseConstruct($code, $parent, $parameters);
 
-        $this->buffer = $this->code
-            ->architecture()
-            ->runtime()
-            ->setNullFilledVariable(
-                $this->label() . '_buffer',
-                256,
+        $this
+            ->extern
+            ->set(
+                $this->code
+                    ->architecture()
+                    ->runtime()
+                    ->setNullFilledVariable(
+                        $this->label() . '_buffer',
+                        256,
+                    )
             );
     }
 
@@ -55,11 +56,13 @@ class ReadString implements ServiceInterface
         $di = $registers->get(RegisterType::DESTINATION_INDEX_BITS_16);
         assert($di instanceof IndexRegisterInterface);
 
+        $buffer = $this->extern->get($this->label() . '_buffer');
+
         return (new Instruction($this->code))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction
-                    ->append(Mov::class, $di->index(), $this->buffer->name())
+                    ->append(Mov::class, $di->index(), $buffer->name())
                     ->label(
                         $this->label() . '_char_read',
                         fn (InstructionInterface $instruction) => $instruction

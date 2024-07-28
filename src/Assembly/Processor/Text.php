@@ -7,11 +7,12 @@ namespace PHPOS\Assembly\Processor;
 use PHPOS\OS\CodeInterface;
 use PHPOS\OS\DefineInterface;
 use PHPOS\OS\InstructionInterface;
-use PHPOS\Runtime\KeyValue;
+use PHPOS\Runtime\KeyValueInterface;
 use PHPOS\Service\BIOS\Standard\DefineBitSize;
 use PHPOS\Service\BIOS\Standard\DefineOrigin;
 use PHPOS\Service\BIOS\Standard\Times;
 use PHPOS\Service\BIOS\Standard\Variable;
+use PHPOS\Service\Component\Extern;
 use PHPOS\Service\ServiceInterface;
 use PHPOS\Utility\AutomaticallyGeneratedFileSignature;
 
@@ -26,44 +27,40 @@ class Text implements ProcessorInterface
         $assembly = '';
 
         $preProcessedServices = [];
+        $extern = [];
+
         foreach ($this->createServices() as [$service, $parameters]) {
             $service = new $service($this->code, null, ...$parameters);
-
             assert($service instanceof ServiceInterface);
+
+            $extern[] = $service->extern();
             $preProcessedServices[] = $service->process();
         }
 
         /**
-         * @var KeyValue $value
+         * @var KeyValueInterface $value
          */
         foreach ($this->code->architecture()->runtime()->reserveBytes() as $value) {
-            if (!$value->option()->isExtern()) {
-                $assembly .= sprintf(
-                    "%s: resb %d\n",
-                    $value->name(),
-                    $value->value(),
-                );
-            }
-            if ($value->option()->isGlobal()) {
-                $assembly .= sprintf(
-                    "global %s\n",
-                    $value->name(),
-                );
-            }
+            $assembly .= sprintf(
+                "%s: resb %d\n",
+                $value->name(),
+                $value->value(),
+            );
         }
 
         /**
-         * @var KeyValue $value
+         * @var Extern $externValues
          */
-        foreach ($this->code->architecture()->runtime()->reserveBytes() as $value) {
-            if (!$value->option()->isExtern()) {
-                continue;
+        foreach ($extern as $externValues) {
+            /**
+             * @var KeyValueInterface $value
+             */
+            foreach ($externValues->values() as $value) {
+                $assembly .= sprintf(
+                    "extern %s\n",
+                    $value->name(),
+                );
             }
-
-            $assembly .= sprintf(
-                "extern %s\n",
-                $value->name(),
-            );
         }
 
         foreach ($preProcessedServices as $service) {
@@ -86,7 +83,7 @@ class Text implements ProcessorInterface
         $assembly = $definitions . "\n" . $assembly;
 
         /**
-         * @var KeyValue $value
+         * @var KeyValueInterface $value
          */
         foreach ($this->code->architecture()->runtime()->definedVariables() as $value) {
             $assembly .= (new Variable(
@@ -97,7 +94,7 @@ class Text implements ProcessorInterface
         }
 
         /**
-         * @var KeyValue $value
+         * @var KeyValueInterface $value
          */
         foreach ($this->code->architecture()->runtime()->definedNullFilledVariables() as $value) {
             $assembly .= $value->name() . ":\n  " . (new Times(
