@@ -20,9 +20,14 @@ interface RuntimeInterface
     public function operations(): OperationCollection;
     public function call(OperationType $operationType, DestinationInterface $destination, SourceInterface ...$sources): string;
     public function callRaw(string $asm, DestinationInterface|null $destination = null, SourceInterface ...$sources): string;
+
+    public function setNullFilledVariable(string $variableName, int $value): KeyValueInterface;
+    public function findNullFilledVariable(string $variableName): KeyValueInterface;
+
     public function setVariable(string $variableName, string|array $value): KeyValueInterface;
     public function findVariable(string $variableName): KeyValueInterface;
     public function definedVariables(): array;
+    public function definedNullFilledVariables(): array;
     public function define(DefineInterface $define): DefineInterface;
     public function definedDefinitions(): array;
     public function reserveByte(string $name, int $bytes, KeyValueOptionInterface $keyValueOption): KeyValueInterface;

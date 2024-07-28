@@ -10,6 +10,7 @@ use PHPOS\OS\InstructionInterface;
 use PHPOS\Runtime\KeyValue;
 use PHPOS\Service\BIOS\Standard\DefineBitSize;
 use PHPOS\Service\BIOS\Standard\DefineOrigin;
+use PHPOS\Service\BIOS\Standard\Times;
 use PHPOS\Service\BIOS\Standard\Variable;
 use PHPOS\Service\ServiceInterface;
 use PHPOS\Utility\AutomaticallyGeneratedFileSignature;
@@ -93,6 +94,17 @@ class Text implements ProcessorInterface
                 null,
                 $value,
             ))->process()->assemble() . "\n";
+        }
+
+        /**
+         * @var KeyValue $value
+         */
+        foreach ($this->code->architecture()->runtime()->definedNullFilledVariables() as $value) {
+            $assembly .= $value->name() . ":\n  " . (new Times(
+                    $this->code,
+                    null,
+                    $value->value(),
+                ))->process()->assemble() . "\n";
         }
 
         foreach ($this->postServices as [$service, $parameters]) {

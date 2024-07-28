@@ -55,7 +55,7 @@ class Mouse implements ServiceInterface
             ->runtime()
             ->reserveByte(
                 $this->label() . '_mouse_x',
-                4,
+                2,
             );
 
         $this->mouseY = $this->code
@@ -63,7 +63,7 @@ class Mouse implements ServiceInterface
             ->runtime()
             ->reserveByte(
                 $this->label() . '_mouse_y',
-                4,
+                2,
             );
     }
 

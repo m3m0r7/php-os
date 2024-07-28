@@ -21,6 +21,7 @@ class Runtime implements RuntimeInterface
     protected array $definedReservedBytesFromExtern = [];
     protected array $definedVariables = [];
     protected array $definedDefinitions = [];
+    protected array $definedNullFilledVariables = [];
 
     public function __construct(
         protected ArchitectureInterface $architecture,
@@ -130,5 +131,23 @@ class Runtime implements RuntimeInterface
     public function style(): StyleInterface
     {
         return $this->style;
+    }
+
+    public function setNullFilledVariable(string $variableName, int $value): KeyValueInterface
+    {
+        return $this->definedNullFilledVariables[$variableName] = new KeyValue(
+            $variableName,
+            $value,
+        );
+    }
+
+    public function findNullFilledVariable(string $variableName): KeyValueInterface
+    {
+        return $this->definedNullFilledVariables[$variableName];
+    }
+
+    public function definedNullFilledVariables(): array
+    {
+        return $this->definedNullFilledVariables;
     }
 }
