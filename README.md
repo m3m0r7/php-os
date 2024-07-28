@@ -370,6 +370,8 @@ $bundler->distribute();
 - [Render a text](doc/example/05-render-a-text/README.md)
 - [GUI with menubar and fill background](doc/example/06-gui-with-menubar-and-fill-background/README.md)
 - [Capture and Print mouse position](doc/example/07-capture-and-print-mouse-position/README.md)
+- [Enable Text Mode](doc/example/08-enable-text-mode/README.md)
+- [Capture inputting keys](doc/example/09-capture-inputting-keys/README.md)
 
 ## Test
 

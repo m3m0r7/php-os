@@ -1,5 +1,5 @@
-# Capture and print mouse position
-The example is printing the positions X, Y via the PS/2 mouse cursor.
+# Enable Text Mode
+The PHP-OS is designed to be as simple as possible, but VESA is somewhat complex for outputting regular text. Therefore, a text mode can be executed for easily outputting text and for displaying initial processing logs while BIOS interrupts are enabled.
 
 ```php
 <?php
@@ -24,8 +24,11 @@ $bootloader
     // Setup segments (initialize registers for assembly)
     ->registerService(\PHPOS\Service\BIOS\Standard\Segment\SetupSegments::class)
 
-    // Print mouse position into bootloader screen
-    ->registerService(\PHPOS\Service\Kit\Startup\PrintMousePosition::class)
+    // Enable Text Mode
+    ->registerService(\PHPOS\Service\BIOS\VESABIOSExtension\TextMode::class)
+
+    // Print Hello World!
+    ->registerService(\PHPOS\Service\BIOS\IO\PrintConstantString::class, 'Hello World!')
 
     // Add bootloader signature
     ->registerPostService(\PHPOS\Service\BIOS\Bootloader\BootloaderSignature::class);

@@ -1,7 +1,9 @@
-# Capture and print mouse position
-The example is printing the positions X, Y via the PS/2 mouse cursor.
+# Capture inputting keys
+This is an example that displays the entered text using BIOS interrupts.
+This is only possible in 16-bit real mode. Other methods are required in 32-bit protected mode, such as receiving input via PS/2 or USB.
 
 ```php
+
 <?php
 $bootloader = new \PHPOS\OS\Code(
     new \PHPOS\Architecture\Architecture(
@@ -24,8 +26,11 @@ $bootloader
     // Setup segments (initialize registers for assembly)
     ->registerService(\PHPOS\Service\BIOS\Standard\Segment\SetupSegments::class)
 
-    // Print mouse position into bootloader screen
-    ->registerService(\PHPOS\Service\Kit\Startup\PrintMousePosition::class)
+    // Enable Text Mode
+    ->registerService(\PHPOS\Service\BIOS\VESABIOSExtension\TextMode::class)
+
+    // Print inputted text
+    ->registerService(\PHPOS\Service\Kit\Startup\PrintInputtedText::class)
 
     // Add bootloader signature
     ->registerPostService(\PHPOS\Service\BIOS\Bootloader\BootloaderSignature::class);
@@ -44,8 +49,8 @@ $bundler = new \PHPOS\OS\Bundler\Bundler(
 
 // Distribute Makefile and assembly into `dist` directory by the ConfigureOption
 $bundler->distribute();
-
 ```
+
 
 ### Screenshot
 

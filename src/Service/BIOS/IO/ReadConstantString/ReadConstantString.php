@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PHPOS\Service\BIOS\IO\ReadString;
+namespace PHPOS\Service\BIOS\IO\ReadConstantString;
 
 use PHPOS\Architecture\Register\DataRegisterWithHighAndLowInterface;
 use PHPOS\Architecture\Register\IndexRegisterInterface;
@@ -26,7 +26,7 @@ use PHPOS\Service\Component\Address\Indirect;
 use PHPOS\Service\ServiceInterface;
 use PHPOS\Service\ServiceManagerInterface;
 
-class ReadString implements ServiceInterface
+class ReadConstantString implements ServiceInterface
 {
     use BaseService {
         __construct as __baseConstruct;
@@ -80,7 +80,7 @@ class ReadString implements ServiceInterface
 
                             ->append(Cmp::class, $ax->low(), 0x0D)
                             ->append(Je::class, $this->label() . '_done_read')
-                            ->append(Inc::class, $ax->value())
+                            ->append(Inc::class, $di->index())
                             ->append(Jmp::class, $this->label() . '_char_read')
 
                             ->label(
