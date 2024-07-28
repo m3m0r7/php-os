@@ -25,8 +25,8 @@ class CallCode implements ServiceInterface
         [$code] = $this->parameters + [null];
         assert($code instanceof CodeInterface);
 
-        $loadSector = new LoadSector(
-            $this->code,
+        $loadSector = $serviceManager->createServiceWithParent(
+            LoadSector::class,
             $this,
             $code,
         );

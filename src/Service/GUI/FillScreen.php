@@ -29,8 +29,9 @@ class FillScreen implements ServiceInterface
             ->screen()
             ->resolutions();
 
-        $renderSquare = new RenderSquare(
-            $this->code,
+
+        $renderSquare = $serviceManager->createServiceWithParent(
+            RenderSquare::class,
             $this,
             $width,
             $height,
@@ -40,7 +41,11 @@ class FillScreen implements ServiceInterface
                 ->style()
                 ->backgroundColor(),
         );
-        $loadVESAVideoAddress = new LoadVESAVideoAddress($this->code, $this);
+
+        $loadVESAVideoAddress = $serviceManager->createServiceWithParent(
+            LoadVESAVideoAddress::class,
+            $this,
+        );
 
         return (new Instruction($this->code, $serviceManager))
             ->label(

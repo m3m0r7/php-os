@@ -30,7 +30,7 @@ class VariableTest extends TestCase
 
         $this->assertSame(
             "variable_name:\n  db \"value\", 0\n",
-            $variable->process(new ServiceManager())->assemble()
+            $variable->process(new ServiceManager($code))->assemble()
         );
     }
 
@@ -48,7 +48,7 @@ class VariableTest extends TestCase
 
         $this->assertSame(
             "variable_name:\n  dw \"value\", 0\n",
-            $variable->process(new ServiceManager())->assemble()
+            $variable->process(new ServiceManager($code))->assemble()
         );
     }
 }

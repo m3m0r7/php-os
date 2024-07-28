@@ -56,12 +56,14 @@ class RenderSquareIntoCenter implements ServiceInterface
                 $height,
             );
 
+        $renderSquare = $serviceManager->createService($width, $height, $color);
+
         return (new Instruction($this->code, $serviceManager))
             ->append(
                 Add::class,
                 $di->index(),
                 $centeredPos,
             )
-            ->include(new RenderSquare($this->code, null, $width, $height, $color, $vesa));
+            ->include($renderSquare);
     }
 }

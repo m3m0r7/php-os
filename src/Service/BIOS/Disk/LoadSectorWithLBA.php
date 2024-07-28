@@ -45,8 +45,8 @@ class LoadSectorWithLBA implements ServiceInterface
         $counter = $registers->get(RegisterType::COUNTER_BITS_16);
         assert($counter instanceof DataRegisterWithHighAndLowInterface);
 
-        $updateCHSAddress = new UpdateCHSAddress($this->code, $this);
-        $error = new LBAError($this->code, $this);
+        $updateCHSAddress = $serviceManager->createServiceWithParent(UpdateCHSAddress::class, $this);
+        $error = $serviceManager->createServiceWithParent(LBAError::class, $this);
 
         $sectors = $this->code
             ->architecture()

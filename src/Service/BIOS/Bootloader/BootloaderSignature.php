@@ -22,16 +22,23 @@ class BootloaderSignature implements ServiceInterface
     public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         return (new Instruction($this->code, $serviceManager))
-            ->include(new Times(
-                $this->code,
-                null,
-                sprintf(
-                    '%s-($-$$)',
-                    // NOTE: After writing 2 bytes
-                    (string) (OSInfo::BOOTLOADER_SIZE - 2),
+            ->include(
+                $serviceManager->createService(
+                    Times::class,
+                    sprintf(
+                        '%s-($-$$)',
+                        // NOTE: After writing 2 bytes
+                        (string) (OSInfo::BOOTLOADER_SIZE - 2),
+                    ),
+                    '0',
                 ),
-                '0',
-            ))
-            ->include(new DefineByte($this->code, null, VariableType::BITS_16, new Hex(0xAA55)));
+            )
+            ->include(
+                $serviceManager->createService(
+                    DefineByte::class,
+                    VariableType::BITS_16,
+                    new Hex(0xAA55),
+                ),
+            );
     }
 }

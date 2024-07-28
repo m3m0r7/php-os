@@ -22,8 +22,11 @@ class HelloWorld implements ServiceInterface
     {
         [$text] = $this->parameters + ['Hello World!'];
 
-        $printStringService = new PrintConstantString($this->code, null, $text);
-
+        $printStringService = $serviceManager->createServiceWithParent(
+            PrintConstantString::class,
+            $this,
+            $text,
+        );
         return (new Instruction($this->code, $serviceManager))
             ->label(
                 OSInfo::ENTRY_POINT,

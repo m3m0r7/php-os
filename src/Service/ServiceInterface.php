@@ -14,4 +14,5 @@ interface ServiceInterface
     public function extern(): Extern;
 
     public function label(): string;
+    public function setLabel(string $label): ServiceInterface;
 }

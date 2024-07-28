@@ -12,6 +12,7 @@ use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\BIOS;
+use PHPOS\Service\BIOS\VESABIOSExtension\Renderer\RenderImage;
 use PHPOS\Service\ServiceInterface;
 use PHPOS\Service\ServiceManagerInterface;
 
@@ -33,7 +34,10 @@ class SetVESABIOSExtension implements ServiceInterface
         $base = $registers->get(RegisterType::BASE_BITS_32);
         assert($base instanceof DataRegisterInterface);
 
-        $error = new SetVESABIOSExtensionError($this->code, $this);
+        $error = $serviceManager->createServiceWithParent(
+            SetVESABIOSExtensionError::class,
+            $this,
+        );
 
         return (new Instruction($this->code, $serviceManager))
             ->label(

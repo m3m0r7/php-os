@@ -30,7 +30,9 @@ class Text implements ProcessorInterface
         $preProcessedServices = [];
         $extern = [];
 
-        $serviceManager = new ServiceManager();
+        $serviceManager = new ServiceManager(
+            $this->code,
+        );
 
         foreach ($this->createServices() as [$service, $parameters]) {
             $service = new $service($this->code, null, ...$parameters);

@@ -43,12 +43,19 @@ class RenderImageFromInline implements ServiceInterface
             array_chunk($image->as8BitsRGBAList(), ($bitType->value / 8) * 16),
         );
 
+        $renderImage = $serviceManager->createServiceWithParent(
+            RenderImage::class,
+            $this,
+            $image->width(),
+            $image->height(),
+        );
+
         return (new Instruction($this->code, $serviceManager))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction
                     ->append(Mov::class, $si->index(), $variable->name())
-                    ->include(new RenderImage($this->code, $this, $image->width(), $image->height())),
+                    ->include($renderImage),
             );
     }
 }

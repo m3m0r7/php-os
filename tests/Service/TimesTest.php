@@ -30,7 +30,7 @@ class TimesTest extends TestCase
 
         $this->assertSame(
             "times test db 0\n",
-            $times->process(new ServiceManager())->assemble()
+            $times->process(new ServiceManager($code))->assemble()
         );
     }
 
@@ -48,7 +48,7 @@ class TimesTest extends TestCase
 
         $this->assertSame(
             "times test dw 0\n",
-            $times->process(new ServiceManager())->assemble()
+            $times->process(new ServiceManager($code))->assemble()
         );
     }
 }

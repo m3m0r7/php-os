@@ -27,12 +27,6 @@ trait BaseService
         return $this;
     }
 
-    public function setLabelSuffix(string $suffix): self
-    {
-        $this->labelSuffix = $suffix;
-        return $this;
-    }
-
     public function extern(): Extern
     {
         return $this->extern;

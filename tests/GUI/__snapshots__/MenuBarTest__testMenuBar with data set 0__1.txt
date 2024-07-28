@@ -16,14 +16,14 @@ resb_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionInformation: resb 
 
 [org 0x0000]
 
-cli 
+cli
 xor ax, ax
 xor bx, bx
 mov ds, ax
 mov es, ax
 mov ss, ax
 mov sp, 0
-sti 
+sti
 
 __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension:
   mov eax, 20226
@@ -39,17 +39,17 @@ __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension:
       mov ah, 14
       mov ebx, 15
       int 16
-      ret 
+      ret
     __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString:
-      lodsb 
+      lodsb
       or al, al
       jz __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone
       call __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintCharacter
       jmp __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString
     __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString_PHPOS_Service_BIOS_IO_PrintConstantString_PrintDone:
-      ret 
+      ret
     __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_PHPOS_Service_BIOS_IO_PrintConstantString_finish:
-    hlt 
+    hlt
     __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtension_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionError_success:
 
 __php_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionInformation:
@@ -77,25 +77,26 @@ __php_PHPOS_Service_GUI_MenuBar:
         mov dword [edi], 0xC5C6D0
         add edi, 3
       loop __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner
+      loop __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare1_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner
       pop ecx
       add edi, 0
     loop __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer
-  __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare_border:
-    __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare_border_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer:
+  __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare1:
+    __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare1_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer:
       mov ecx, 1
-    __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare_border_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer:
+    __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare1_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer:
       push ecx
       mov ecx, 640
-    __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare_border_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner:
-      __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare_border_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner_code:
+    __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare1_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner:
+      __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare1_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner_code:
         mov dword [edi], 0x000000
         add edi, 3
-      loop __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare_border_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner
+      loop __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare1_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_inner
       pop ecx
       add edi, 0
-    loop __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare_border_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer
+    loop __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderSquare1_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_Renderer_outer
   __php_PHPOS_Service_GUI_MenuBar_start_text:
-    __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_LoadVESAVideoAddress_start_text:
+    __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_LoadVESAVideoAddress1:
       mov eax, [resb_PHPOS_Service_BIOS_VESABIOSExtension_SetVESABIOSExtensionInformation + 40]
       mov edi, eax
     add edi, 5781
@@ -113,7 +114,7 @@ __php_PHPOS_Service_GUI_MenuBar:
             mov ecx, 3
             __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderText_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImage_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderPixel_code:
               __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderText_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImage_copy_pixel_from_destination:
-                lodsb 
+                lodsb
                 mov [edi], al
                 inc edi
                 loop __php_PHPOS_Service_GUI_MenuBar_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderText_PHPOS_Service_BIOS_VESABIOSExtension_Renderer_RenderImage_copy_pixel_from_destination

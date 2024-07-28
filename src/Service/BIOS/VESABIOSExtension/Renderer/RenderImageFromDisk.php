@@ -29,22 +29,26 @@ class RenderImageFromDisk implements ServiceInterface
         $si = $registers->get(RegisterType::SOURCE_INDEX_BITS_32);
         assert($si instanceof IndexRegisterInterface);
 
+        $loadSector = $serviceManager->createServiceWithParent(
+            LoadSector::class,
+            $this,
+            $image,
+        );
+
+        $renderImage = $serviceManager->createServiceWithParent(
+            RenderImage::class,
+            $this,
+            $image->width(),
+            $image->height(),
+        );
+
         return (new Instruction($this->code, $serviceManager))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction
-                    ->include(new LoadSector(
-                        $this->code,
-                        $this,
-                        $image,
-                    ))
+                    ->include($loadSector)
                     ->append(Mov::class, $si->index(), $image->origin())
-                    ->include(new RenderImage(
-                        $this->code,
-                        $this,
-                        $image->width(),
-                        $image->height(),
-                    )),
+                    ->include($renderImage),
             );
     }
 }

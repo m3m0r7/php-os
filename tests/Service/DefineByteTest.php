@@ -32,7 +32,7 @@ class DefineByteTest extends TestCase
 
         $this->assertSame(
             "db \"test\", 0\n",
-            $definedByte->process(new ServiceManager())->assemble()
+            $definedByte->process(new ServiceManager($code))->assemble()
         );
     }
 
@@ -49,7 +49,7 @@ class DefineByteTest extends TestCase
 
         $this->assertSame(
             "dw \"test\", 0\n",
-            $definedByte->process(new ServiceManager())->assemble()
+            $definedByte->process(new ServiceManager($code))->assemble()
         );
     }
 
@@ -66,7 +66,7 @@ class DefineByteTest extends TestCase
 
         $this->assertSame(
             "db 0x0029\n",
-            $definedByte->process(new ServiceManager())->assemble()
+            $definedByte->process(new ServiceManager($code))->assemble()
         );
     }
 
@@ -83,7 +83,7 @@ class DefineByteTest extends TestCase
 
         $this->assertSame(
             "dw 0xEE29\n",
-            $definedByte->process(new ServiceManager())->assemble()
+            $definedByte->process(new ServiceManager($code))->assemble()
         );
     }
 
@@ -100,7 +100,7 @@ class DefineByteTest extends TestCase
 
         $this->assertSame(
             "dw 0x0029\n",
-            $definedByte->process(new ServiceManager())->assemble()
+            $definedByte->process(new ServiceManager($code))->assemble()
         );
     }
 }

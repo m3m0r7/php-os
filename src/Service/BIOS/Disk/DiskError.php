@@ -18,18 +18,19 @@ class DiskError implements ServiceInterface
 
     public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
-        $printStringService = new PrintConstantString(
-            $this->code,
-            $this,
-            'Load disk error!',
-        );
-
         return (new Instruction($this->code, $serviceManager))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) =>
                 $instruction
-                    ->include($printStringService)
+                    ->include(
+                        $serviceManager->
+                            createServiceWithParent(
+                                PrintConstantString::class,
+                                $this,
+                                'Load disk error!',
+                        ),
+                    )
                     ->append(Hlt::class)
             );
     }

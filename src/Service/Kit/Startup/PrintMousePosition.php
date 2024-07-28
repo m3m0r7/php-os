@@ -44,20 +44,32 @@ class PrintMousePosition implements ServiceInterface
             ->findReserveByte($mouse->label() . '_mouse_y');
 
 
-        $stringX = (new PrintConstantString($this->code, $this, 'X: '))
-            ->setLabelSuffix('x');
+        $stringX = $serviceManager->createServiceWithParent(
+            PrintConstantString::class,
+            $this,
+            'X: ',
+        );
 
-        $stringY = (new PrintConstantString($this->code, $this, 'Y: '))
-            ->setLabelSuffix('y');
+        $stringY = $serviceManager->createServiceWithParent(
+            PrintConstantString::class,
+            $this,
+            'Y: ',
+        );
 
-        $stringComma = (new PrintConstantString($this->code, $this, ', '))
-            ->setLabelSuffix('comma');
+        $stringComma = $serviceManager->createServiceWithParent(
+            PrintConstantString::class,
+            $this,
+            ', ',
+        );
 
-        $stringSpace = (new PrintConstantString($this->code, $this, ' '))
-            ->setLabelSuffix('space');
+        $stringSpace = $serviceManager->createServiceWithParent(
+            PrintConstantString::class,
+            $this,
+            ' ',
+        );
 
-        $printNumberFromAX = new PrintNumberFromAX(
-            $this->code,
+        $printNumberFromAX = $serviceManager->createServiceWithParent(
+            PrintNumberFromAX::class,
             $this,
         );
 

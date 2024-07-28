@@ -63,26 +63,30 @@ class RenderImage implements ServiceInterface
 
         $nextLineCursor = ($bitType->value / 8) * ($XResolution - $width);
 
+        $renderPixel = $serviceManager->createServiceWithParent(
+            RenderPixel::class,
+            $this,
+            fn (InstructionInterface $instruction) => $instruction
+                ->label(
+                    $this->label() . '_copy_pixel_from_destination',
+                    fn (InstructionInterface $instruction) => $instruction
+                        ->append(Lodsb::class)
+                        ->append(Mov::class, new Indirect($di->index()->realName()), $ac->low())
+                        ->append(Inc::class, $di->index())
+                        ->append(Loop::class, $this->label() . '_copy_pixel_from_destination')
+                ),
+        );
+
+        $renderer = $serviceManager->createServiceWithParent(
+            Renderer::class,
+            $this,
+            $width,
+            $height,
+            fn (InstructionInterface $instruction) => $instruction
+                ->include($renderPixel),
+        );
+
         return (new Instruction($this->code, $serviceManager))
-            ->include(new Renderer(
-                $this->code,
-                $this,
-                $width,
-                $height,
-                fn (InstructionInterface $instruction) => $instruction
-                    ->include(new RenderPixel(
-                        $this->code,
-                        $this,
-                        fn (InstructionInterface $instruction) => $instruction
-                            ->label(
-                                $this->label() . '_copy_pixel_from_destination',
-                                fn (InstructionInterface $instruction) => $instruction
-                                    ->append(Lodsb::class)
-                                    ->append(Mov::class, new Indirect($di->index()->realName()), $ac->low())
-                                    ->append(Inc::class, $di->index())
-                                    ->append(Loop::class, $this->label() . '_copy_pixel_from_destination')
-                            )
-                    ))
-            ));
+            ->include($renderer);
     }
 }

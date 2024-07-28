@@ -45,8 +45,8 @@ class PrintConstantString implements ServiceInterface
         $ac = $registers->get(RegisterType::ACCUMULATOR_BITS_16);
         assert($ac instanceof DataRegisterWithHighAndLowInterface);
 
-        $printDone = new PrintDone($this->code, $this);
-        $printCharacter = new PrintCharacter($this->code, $this, $textColor);
+        $printDone = $serviceManager->createServiceWithParent(PrintDone::class, $this);
+        $printCharacter = $serviceManager->createServiceWithParent(PrintCharacter::class, $this, $textColor);
 
         return (new Instruction($this->code, $serviceManager))
             ->append(

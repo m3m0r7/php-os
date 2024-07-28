@@ -51,21 +51,21 @@ class RenderSquare implements ServiceInterface
 
         $nextLineCursor = ($bitType->value / 8) * ($XResolution - $width);
 
+        $renderer = $serviceManager->createServiceWithParent(
+            Renderer::class,
+            $this,
+            $width,
+            $height,
+            fn (InstructionInterface $instruction) => $instruction
+                ->append(Mov::class, new DoubleWord($di->index()), $color->asHexByVideoType($bitType))
+                ->append(Add::class, $di->index(), $bitType->value / 8),
+        );
+
         return (new Instruction($this->code, $serviceManager))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction
-                ->include(
-                    new Renderer(
-                        $this->code,
-                        $this,
-                        $width,
-                        $height,
-                        fn (InstructionInterface $instruction) => $instruction
-                            ->append(Mov::class, new DoubleWord($di->index()), $color->asHexByVideoType($bitType))
-                            ->append(Add::class, $di->index(), $bitType->value / 8),
-                    )
-                )
+                    ->include($renderer)
             );
     }
 }

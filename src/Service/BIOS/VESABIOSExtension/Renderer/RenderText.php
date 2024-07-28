@@ -6,11 +6,13 @@ namespace PHPOS\Service\BIOS\VESABIOSExtension\Renderer;
 
 use PHPOS\Architecture\Register\IndexRegisterInterface;
 use PHPOS\Architecture\Register\RegisterType;
+use PHPOS\Operation\Add;
 use PHPOS\Operation\Mov;
 use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\VESABIOSExtension\VESA;
+use PHPOS\Service\Component\Address\DoubleWord;
 use PHPOS\Service\Component\Text\FontInterface;
 use PHPOS\Service\Component\Variable;
 use PHPOS\Service\Component\VESA\VideoBitType;
@@ -45,12 +47,20 @@ class RenderText implements ServiceInterface
             array_chunk($font->as8BitsRGBAList(), ($bitType->value / 8) * 16),
         );
 
+        $renderImage = $serviceManager->createServiceWithParent(
+            RenderImage::class,
+            $this,
+            $font->width(),
+            $font->height(),
+            $vesa,
+        );
+
         return (new Instruction($this->code, $serviceManager))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction
                     ->append(Mov::class, $si->index(), $variable->name())
-                    ->include(new RenderImage($this->code, $this, $font->width(), $font->height(), $vesa)),
+                    ->include($renderImage),
             );
     }
 }

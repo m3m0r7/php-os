@@ -19,8 +19,6 @@ class Instruction implements InstructionInterface, \IteratorAggregate
 
     protected array $instructions = [];
 
-    protected array $includedServices = [];
-
     public function __construct(public readonly CodeInterface $code, protected readonly ServiceManagerInterface $serviceManager, protected int $indentSize = 0)
     {
     }
@@ -29,7 +27,7 @@ class Instruction implements InstructionInterface, \IteratorAggregate
     {
         $new = new self(
             $this->code,
-            0,
+            $this->serviceManager,
         );
         $this->instructions[] = ["section {$name}", null, null, 2];
         $this->instructions = [
@@ -57,10 +55,6 @@ class Instruction implements InstructionInterface, \IteratorAggregate
 
     public function include(ServiceInterface $service): self
     {
-        if (in_array($service->label(), $this->includedServices, true)) {
-            return $this;
-        }
-        $this->includedServices[] = $service->label();
         foreach ($service->process($this->serviceManager)->instructions as $record) {
             $record[self::INDENT] += $this->indentSize;
             $this->instructions[] = $record;

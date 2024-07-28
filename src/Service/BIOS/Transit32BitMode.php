@@ -28,7 +28,7 @@ class Transit32BitMode implements ServiceInterface
     {
         $toBe32BitsLabel = $this->label() . '_32bits_mode';
 
-        $GDT = new GlobalDescriptorTable($this->code);
+        $GDT = $serviceManager->createService(GlobalDescriptorTable::class);
 
         $setupSegment = new SetupSegments(
             $this->code,
@@ -41,7 +41,11 @@ class Transit32BitMode implements ServiceInterface
             false,
         );
 
-        $defineBits = new DefineBitSize($this->code, $this, BitType::BIT_32);
+        $defineBits = $serviceManager->createServiceWithParent(
+            DefineBitSize::class,
+            $this,
+            BitType::BIT_32,
+        );
 
         return (new Instruction($this->code, $serviceManager))
             ->label(

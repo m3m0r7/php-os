@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PHPOS\Service\BIOS\Disk;
 
-use PHPOS\OS\CodeInfo;
 use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
@@ -19,14 +18,15 @@ class CodeSignature implements ServiceInterface
     public function process(ServiceManagerInterface $serviceManager): InstructionInterface
     {
         return (new Instruction($this->code, $serviceManager))
-            ->include(new Times(
-                $this->code,
-                null,
-                sprintf(
-                    '%s-($-$$)',
-                    (string) (((int) $this->code->sectors()->value()) * \PHPOS\OS\OSInfo::PAGE_SIZE),
+            ->include(
+                $serviceManager->createService(
+                    Times::class,
+                    sprintf(
+                        '%s-($-$$)',
+                        (string) (((int) $this->code->sectors()->value()) * \PHPOS\OS\OSInfo::PAGE_SIZE),
+                    ),
+                    '0',
                 ),
-                '0',
-            ));
+            );
     }
 }

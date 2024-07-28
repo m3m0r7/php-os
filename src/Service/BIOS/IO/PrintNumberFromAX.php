@@ -62,8 +62,9 @@ class PrintNumberFromAX implements ServiceInterface
         $base = $registers->get(RegisterType::BASE_BITS_16);
         assert($base instanceof DataRegisterWithHighAndLowInterface);
 
-        $printDone = new PrintDone($this->code, $this);
-        $printCharacter = new PrintCharacter($this->code, $this, $textColor);
+
+        $printDone = $serviceManager->createServiceWithParent(PrintDone::class, $this);
+        $printCharacter = $serviceManager->createServiceWithParent(PrintCharacter::class, $this, $textColor);
 
         return (new Instruction($this->code, $serviceManager))
             ->label(

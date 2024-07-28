@@ -24,8 +24,8 @@ class SetVESABIOSExtensionError implements ServiceInterface
     {
         $registers = $this->code->architecture()->runtime()->registers();
 
-        $printStringService = new PrintConstantString(
-            $this->code,
+        $printStringService = $serviceManager->createServiceWithParent(
+            PrintConstantString::class,
             $this,
             'Could not set VESA mode!',
         );

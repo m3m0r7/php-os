@@ -21,7 +21,7 @@ class MenuBarTest extends TestCase
     use MatchesSnapshots;
 
     #[DataProvider('architectures')]
-    public function testFillScreen(CodeInterface $code): void
+    public function testMenuBar(CodeInterface $code): void
     {
         $result = $code
             ->registerService(SetupSegments::class)
