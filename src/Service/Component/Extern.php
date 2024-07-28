@@ -13,7 +13,7 @@ class Extern
 
     public function set(KeyValueInterface $value): self
     {
-        $this->values[$value->name()] = $value;
+        $this->values[$value->originalName()] = $value;
         return $this;
     }
 
