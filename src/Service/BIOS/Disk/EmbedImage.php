@@ -13,13 +13,13 @@ use PHPOS\Service\Component\Image\Image;
 use PHPOS\Service\Component\Variable;
 use PHPOS\Service\Component\VESA\VideoBitType;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class EmbedImage implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
         [$image] = $this->parameters + [
             null,
@@ -40,6 +40,6 @@ class EmbedImage implements ServiceInterface
             array_chunk($image->as8BitsRGBAList(), ($bitType->value / 8) * 16),
         );
 
-        return new Instruction($this->code, $serviceManager);
+        return new Instruction($this->code, $serviceComponent);
     }
 }

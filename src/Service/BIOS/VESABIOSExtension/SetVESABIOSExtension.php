@@ -14,13 +14,13 @@ use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\BIOS;
 use PHPOS\Service\BIOS\VESABIOSExtension\Renderer\RenderImage;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class SetVESABIOSExtension implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
         [$resolution] = $this->parameters + [VESA::VIDEO_640x480x32bpp];
 
@@ -34,12 +34,12 @@ class SetVESABIOSExtension implements ServiceInterface
         $base = $registers->get(RegisterType::BASE_BITS_32);
         assert($base instanceof DataRegisterInterface);
 
-        $error = $serviceManager->createServiceWithParent(
+        $error = $serviceComponent->createServiceWithParent(
             SetVESABIOSExtensionError::class,
             $this,
         );
 
-        return (new Instruction($this->code, $serviceManager))
+        return (new Instruction($this->code, $serviceComponent))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction

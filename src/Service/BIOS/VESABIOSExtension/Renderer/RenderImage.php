@@ -19,13 +19,13 @@ use PHPOS\Service\BIOS\VESABIOSExtension\VESA;
 use PHPOS\Service\Component\Address\Indirect;
 use PHPOS\Service\Component\VESA\VideoBitType;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class RenderImage implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
         [$width, $height] = $this->parameters + [
             null,
@@ -63,7 +63,7 @@ class RenderImage implements ServiceInterface
 
         $nextLineCursor = ($bitType->value / 8) * ($XResolution - $width);
 
-        $renderPixel = $serviceManager->createServiceWithParent(
+        $renderPixel = $serviceComponent->createServiceWithParent(
             RenderPixel::class,
             $this,
             fn (InstructionInterface $instruction) => $instruction
@@ -77,7 +77,7 @@ class RenderImage implements ServiceInterface
                 ),
         );
 
-        $renderer = $serviceManager->createServiceWithParent(
+        $renderer = $serviceComponent->createServiceWithParent(
             Renderer::class,
             $this,
             $width,
@@ -86,7 +86,7 @@ class RenderImage implements ServiceInterface
                 ->include($renderPixel),
         );
 
-        return (new Instruction($this->code, $serviceManager))
+        return (new Instruction($this->code, $serviceComponent))
             ->include($renderer);
     }
 }

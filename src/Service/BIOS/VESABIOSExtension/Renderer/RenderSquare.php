@@ -17,13 +17,13 @@ use PHPOS\Service\Component\Address\DoubleWord;
 use PHPOS\Service\Component\Image\RGBA;
 use PHPOS\Service\Component\VESA\VideoBitType;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class RenderSquare implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
         [$width, $height, $color] = $this->parameters + [
             null,
@@ -51,7 +51,7 @@ class RenderSquare implements ServiceInterface
 
         $nextLineCursor = ($bitType->value / 8) * ($XResolution - $width);
 
-        $renderer = $serviceManager->createServiceWithParent(
+        $renderer = $serviceComponent->createServiceWithParent(
             Renderer::class,
             $this,
             $width,
@@ -61,7 +61,7 @@ class RenderSquare implements ServiceInterface
                 ->append(Add::class, $di->index(), $bitType->value / 8),
         );
 
-        return (new Instruction($this->code, $serviceManager))
+        return (new Instruction($this->code, $serviceComponent))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction

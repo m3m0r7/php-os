@@ -35,11 +35,13 @@ class Text implements ProcessorInterface
         );
 
         foreach ($this->createServices() as [$service, $parameters]) {
-            $service = new $service($this->code, null, ...$parameters);
+            $serviceComponent = $serviceManager->createComponent();
+            $service = $serviceComponent->createIndependencyService($service, ...$parameters);
+
             assert($service instanceof ServiceInterface);
 
             $extern[] = $service->extern();
-            $preProcessedServices[] = $service->process($serviceManager);
+            $preProcessedServices[] = $service->process($serviceComponent);
         }
 
         /**
@@ -91,29 +93,27 @@ class Text implements ProcessorInterface
          * @var KeyValueInterface $value
          */
         foreach ($this->code->architecture()->runtime()->definedVariables() as $value) {
-            $assembly .= (new Variable(
-                $this->code,
-                null,
-                $value,
-            ))->process($serviceManager)->assemble() . "\n";
+            $serviceComponent = $serviceManager->createComponent();
+            $service = $serviceComponent->createIndependencyService(Variable::class, $value);
+            $assembly .= $service->process($serviceComponent)->assemble() . "\n";
         }
 
         /**
          * @var KeyValueInterface $value
          */
         foreach ($this->code->architecture()->runtime()->definedNullFilledVariables() as $value) {
-            $assembly .= $value->name() . ":\n  " . (new Times(
-                    $this->code,
-                    null,
-                    $value->value(),
-                ))->process($serviceManager)->assemble() . "\n";
+            $serviceComponent = $serviceManager->createComponent();
+            $service = $serviceComponent->createIndependencyService(Times::class, $value->value());
+
+            $assembly .= $value->name() . ":\n  " . $service->process($serviceComponent)->assemble() . "\n";
         }
 
         foreach ($this->postServices as [$service, $parameters]) {
-            $service = new $service($this->code, null, ...$parameters);
+            $serviceComponent = $serviceManager->createComponent();
+            $service = $serviceComponent->createIndependencyService($service, ...$parameters);
 
             assert($service instanceof ServiceInterface);
-            $assembly .= $service->process($serviceManager)->assemble() . "\n";
+            $assembly .= $service->process($serviceComponent)->assemble() . "\n";
         }
 
         return AutomaticallyGeneratedFileSignature::createHeader(';') . $assembly;

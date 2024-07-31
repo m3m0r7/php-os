@@ -15,45 +15,45 @@ use PHPOS\Service\BIOS\IO\PrintConstantString\PrintNewLine;
 use PHPOS\Service\BIOS\IO\ReadConstantString\ReadConstantString;
 use PHPOS\Service\BIOS\Standard\Segment\SetupSegments;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class PrintInputtedText implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
-        $enter = $serviceManager->createServiceWithParent(
+        $enter = $serviceComponent->createServiceWithParent(
             PrintConstantString::class,
             $this,
             'Enter text: '
         );
 
-        $readText = $serviceManager->createServiceWithParent(
+        $readText = $serviceComponent->createServiceWithParent(
             ReadConstantString::class,
             $this,
         );
 
-        $entered = $serviceManager->createServiceWithParent(
+        $entered = $serviceComponent->createServiceWithParent(
             PrintConstantString::class,
             $this,
             'Your entered: '
         );
 
-        return (new Instruction($this->code, $serviceManager))
+        return (new Instruction($this->code, $serviceComponent))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction
                     ->include($enter)
                     ->include($readText)
-                    ->include($serviceManager->createServiceWithParent(PrintNewLine::class, $this))
+                    ->include($serviceComponent->createServiceWithParent(PrintNewLine::class, $this))
                     ->include($entered)
-                    ->include($serviceManager->createServiceWithParent(
+                    ->include($serviceComponent->createServiceWithParent(
                         PrintConstantString::class,
                         $this,
                         $readText->extern()->get($readText->label() . '_buffer'),
                     ))
-                    ->include($serviceManager->createServiceWithParent(PrintNewLine::class, $this))
+                    ->include($serviceComponent->createServiceWithParent(PrintNewLine::class, $this))
                     ->append(Jmp::class, $this->label())
             )
             ->append(Hlt::class);

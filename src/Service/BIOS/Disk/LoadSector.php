@@ -19,13 +19,13 @@ use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\BIOS;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class LoadSector implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
         $registers = $this->code->architecture()->runtime()->registers();
 
@@ -65,11 +65,11 @@ class LoadSector implements ServiceInterface
             ->runtime()
             ->define($code->drive());
 
-        $diskError = $serviceManager->createServiceWithParent(DiskError::class, $this);
+        $diskError = $serviceComponent->createServiceWithParent(DiskError::class, $this);
 
         $finishLabel = $this->label() . '_finish';
 
-        return (new Instruction($this->code, $serviceManager))
+        return (new Instruction($this->code, $serviceComponent))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) =>

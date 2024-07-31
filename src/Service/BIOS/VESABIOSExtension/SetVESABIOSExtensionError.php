@@ -14,17 +14,17 @@ use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\IO\PrintConstantString;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class SetVESABIOSExtensionError implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
         $registers = $this->code->architecture()->runtime()->registers();
 
-        $printStringService = $serviceManager->createServiceWithParent(
+        $printStringService = $serviceComponent->createServiceWithParent(
             PrintConstantString::class,
             $this,
             'Could not set VESA mode!',
@@ -33,7 +33,7 @@ class SetVESABIOSExtensionError implements ServiceInterface
         $ac = $registers->get(RegisterType::ACCUMULATOR_BITS_32);
         assert($ac instanceof DataRegisterInterface);
 
-        return (new Instruction($this->code, $serviceManager))
+        return (new Instruction($this->code, $serviceComponent))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) =>

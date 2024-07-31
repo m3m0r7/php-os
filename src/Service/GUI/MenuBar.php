@@ -14,13 +14,13 @@ use PHPOS\Service\BIOS\VESABIOSExtension\Renderer\SetRenderPosition;
 use PHPOS\Service\Component\Text\Font;
 use PHPOS\Service\Component\VESA\AlignType;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class MenuBar implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
         $style = $this->code
             ->architecture()
@@ -29,7 +29,7 @@ class MenuBar implements ServiceInterface
 
         [$width] = $style->screen()->resolutions();
 
-        $renderSquare = $serviceManager->createServiceWithParent(
+        $renderSquare = $serviceComponent->createServiceWithParent(
             RenderSquare::class,
             $this,
             $width,
@@ -37,7 +37,7 @@ class MenuBar implements ServiceInterface
             $style->menubarBackground(),
         );
 
-        $renderBorder = $serviceManager->createServiceWithParent(
+        $renderBorder = $serviceComponent->createServiceWithParent(
             RenderSquare::class,
             $this,
             $width,
@@ -45,17 +45,17 @@ class MenuBar implements ServiceInterface
             $style->menubarBorderColor(),
         );
 
-        $loadVESAVideoAddress = $serviceManager->createServiceWithParent(
+        $loadVESAVideoAddress = $serviceComponent->createServiceWithParent(
             LoadVESAVideoAddress::class,
             $this,
         );
 
-        $loadVESAVideoAddressForStartText = $serviceManager->createServiceWithParent(
+        $loadVESAVideoAddressForStartText = $serviceComponent->createServiceWithParent(
             LoadVESAVideoAddress::class,
             $this,
         );
 
-        $renderText = $serviceManager->createServiceWithParent(
+        $renderText = $serviceComponent->createServiceWithParent(
             RenderText::class,
             $this,
             $font = new Font(
@@ -69,7 +69,7 @@ class MenuBar implements ServiceInterface
 
         $calculatedTextPosition = (($style->menubarHeight() - $font->height()) / 2);
 
-        $setRenderPosition = $serviceManager->createServiceWithParent(
+        $setRenderPosition = $serviceComponent->createServiceWithParent(
             SetRenderPosition::class,
             $this,
             $font->width(),
@@ -79,7 +79,7 @@ class MenuBar implements ServiceInterface
             $calculatedTextPosition,
         );
 
-        return (new Instruction($this->code, $serviceManager))
+        return (new Instruction($this->code, $serviceComponent))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction

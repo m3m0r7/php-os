@@ -7,7 +7,7 @@ namespace PHPOS\OS;
 use PHPOS\Architecture\Operation\Destination;
 use PHPOS\Architecture\Operation\Source;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 use Traversable;
 
 class Instruction implements InstructionInterface, \IteratorAggregate
@@ -19,7 +19,7 @@ class Instruction implements InstructionInterface, \IteratorAggregate
 
     protected array $instructions = [];
 
-    public function __construct(public readonly CodeInterface $code, protected readonly ServiceManagerInterface $serviceManager, protected int $indentSize = 0)
+    public function __construct(public readonly CodeInterface $code, protected readonly ServiceComponentInterface $serviceComponent, protected int $indentSize = 0)
     {
     }
 
@@ -27,7 +27,7 @@ class Instruction implements InstructionInterface, \IteratorAggregate
     {
         $new = new self(
             $this->code,
-            $this->serviceManager,
+            $this->serviceComponent,
         );
         $this->instructions[] = ["section {$name}", null, null, 2];
         $this->instructions = [
@@ -42,7 +42,7 @@ class Instruction implements InstructionInterface, \IteratorAggregate
     {
         $new = new self(
             $this->code,
-            $this->serviceManager,
+            $this->serviceComponent,
             $this->indentSize + 2,
         );
         $this->instructions[] = ["{$name}:", null, null, $this->indentSize];
@@ -55,7 +55,7 @@ class Instruction implements InstructionInterface, \IteratorAggregate
 
     public function include(ServiceInterface $service): self
     {
-        foreach ($service->process($this->serviceManager)->instructions as $record) {
+        foreach ($service->process($this->serviceComponent)->instructions as $record) {
             $record[self::INDENT] += $this->indentSize;
             $this->instructions[] = $record;
         }

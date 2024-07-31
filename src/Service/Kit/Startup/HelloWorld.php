@@ -12,22 +12,22 @@ use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\IO\PrintConstantString;
 use PHPOS\Service\BIOS\Standard\Segment\SetupSegments;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class HelloWorld implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
         [$text] = $this->parameters + ['Hello World!'];
 
-        $printStringService = $serviceManager->createServiceWithParent(
+        $printStringService = $serviceComponent->createServiceWithParent(
             PrintConstantString::class,
             $this,
             $text,
         );
-        return (new Instruction($this->code, $serviceManager))
+        return (new Instruction($this->code, $serviceComponent))
             ->label(
                 OSInfo::ENTRY_POINT,
                 fn (InstructionInterface $instruction) => $instruction

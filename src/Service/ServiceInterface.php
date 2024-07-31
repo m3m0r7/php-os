@@ -6,10 +6,11 @@ namespace PHPOS\Service;
 
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\Component\Extern;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 interface ServiceInterface
 {
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface;
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface;
 
     public function extern(): Extern;
 

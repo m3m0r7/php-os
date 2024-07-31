@@ -29,13 +29,13 @@ use PHPOS\Service\BIOS\IO\PrintConstantString\PrintCharacter;
 use PHPOS\Service\BIOS\IO\PrintConstantString\PrintDone;
 use PHPOS\Service\Component\Color256Set;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class PrintNumberFromAX implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
         $registers = $this->code->architecture()->runtime()->registers();
 
@@ -63,10 +63,10 @@ class PrintNumberFromAX implements ServiceInterface
         assert($base instanceof DataRegisterWithHighAndLowInterface);
 
 
-        $printDone = $serviceManager->createServiceWithParent(PrintDone::class, $this);
-        $printCharacter = $serviceManager->createServiceWithParent(PrintCharacter::class, $this, $textColor);
+        $printDone = $serviceComponent->createServiceWithParent(PrintDone::class, $this);
+        $printCharacter = $serviceComponent->createServiceWithParent(PrintCharacter::class, $this, $textColor);
 
-        return (new Instruction($this->code, $serviceManager))
+        return (new Instruction($this->code, $serviceComponent))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction

@@ -16,13 +16,13 @@ use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\BIOS;
 use PHPOS\Service\Component\Color256Set;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class PrintCharacter implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
         $registers = $this->code->architecture()->runtime()->registers();
 
@@ -35,7 +35,7 @@ class PrintCharacter implements ServiceInterface
         $base = $registers->get(RegisterType::BASE_BITS_32);
         assert($base instanceof DataRegisterInterface);
 
-        return (new Instruction($this->code, $serviceManager))
+        return (new Instruction($this->code, $serviceComponent))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) =>

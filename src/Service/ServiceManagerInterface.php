@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace PHPOS\Service;
 
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
+
 interface ServiceManagerInterface
 {
-    public function createService(string $serviceName, mixed ...$parameters): ServiceInterface;
-    public function createServiceWithParent(string $serviceName, ServiceInterface $parent, mixed ...$parameters): ServiceInterface;
+    public function createComponent(?ServiceInterface $parent = null): ServiceComponentInterface;
 }

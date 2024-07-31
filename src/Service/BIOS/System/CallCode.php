@@ -14,24 +14,24 @@ use PHPOS\Runtime\KeyValueOption;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\Disk\LoadSector;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class CallCode implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
         [$code] = $this->parameters + [null];
         assert($code instanceof CodeInterface);
 
-        $loadSector = $serviceManager->createServiceWithParent(
+        $loadSector = $serviceComponent->createServiceWithParent(
             LoadSector::class,
             $this,
             $code,
         );
 
-        return (new Instruction($this->code, $serviceManager))
+        return (new Instruction($this->code, $serviceComponent))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) =>

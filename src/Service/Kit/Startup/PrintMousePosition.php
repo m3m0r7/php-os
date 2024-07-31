@@ -18,13 +18,13 @@ use PHPOS\Service\BIOS\IO\PrintNumberFromAX;
 use PHPOS\Service\Component\Address\Indirect;
 use PHPOS\Service\PCI\PS2\Mouse;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class PrintMousePosition implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
         $registers = $this->code->architecture()->runtime()->registers();
 
@@ -44,31 +44,31 @@ class PrintMousePosition implements ServiceInterface
             ->findReserveByte($mouse->label() . '_mouse_y');
 
 
-        $stringX = $serviceManager->createServiceWithParent(
+        $stringX = $serviceComponent->createServiceWithParent(
             PrintConstantString::class,
             $this,
             'X: ',
         );
 
-        $stringY = $serviceManager->createServiceWithParent(
+        $stringY = $serviceComponent->createServiceWithParent(
             PrintConstantString::class,
             $this,
             'Y: ',
         );
 
-        $stringComma = $serviceManager->createServiceWithParent(
+        $stringComma = $serviceComponent->createServiceWithParent(
             PrintConstantString::class,
             $this,
             ', ',
         );
 
-        $stringSpace = $serviceManager->createServiceWithParent(
+        $stringSpace = $serviceComponent->createServiceWithParent(
             PrintConstantString::class,
             $this,
             ' ',
         );
 
-        $printNumberFromAX = $serviceManager->createServiceWithParent(
+        $printNumberFromAX = $serviceComponent->createServiceWithParent(
             PrintNumberFromAX::class,
             $this,
         );
@@ -76,7 +76,7 @@ class PrintMousePosition implements ServiceInterface
         $si = $registers->get(RegisterType::SOURCE_INDEX_BITS_32);
         assert($si instanceof IndexRegisterInterface);
 
-        return (new Instruction($this->code, $serviceManager))
+        return (new Instruction($this->code, $serviceComponent))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction

@@ -13,13 +13,13 @@ use PHPOS\OS\InstructionInterface;
 use PHPOS\Runtime\KeyValueInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class Variable implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
         $variables = $this->code->architecture()->runtime()->variables();
 
@@ -34,7 +34,7 @@ class Variable implements ServiceInterface
         assert($variable instanceof KeyValueInterface);
 
         if (is_array($variable->value())) {
-            return (new Instruction($this->code, $serviceManager))
+            return (new Instruction($this->code, $serviceComponent))
                 ->label(
                     $variable->name(),
                     function (InstructionInterface $instruction) use ($variable, $db) {
@@ -71,7 +71,7 @@ class Variable implements ServiceInterface
             $sources = [0];
         }
 
-        return (new Instruction($this->code, $serviceManager))
+        return (new Instruction($this->code, $serviceComponent))
             ->label(
                 $variable->name(),
                 fn (InstructionInterface $instruction) => $instruction

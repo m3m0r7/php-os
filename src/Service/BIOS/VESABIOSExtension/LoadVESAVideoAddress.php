@@ -15,13 +15,13 @@ use PHPOS\Service\BaseService;
 use PHPOS\Service\Component\Address\Indirect;
 use PHPOS\Service\Component\Formatter;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class LoadVESAVideoAddress implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
         [$video] = $this->parameters + [null];
         assert($video instanceof CodeInterface || $video === null);
@@ -38,7 +38,7 @@ class LoadVESAVideoAddress implements ServiceInterface
         assert($di instanceof IndexRegisterInterface);
 
         if ($video instanceof CodeInterface) {
-            return (new Instruction($this->code, $serviceManager))
+            return (new Instruction($this->code, $serviceComponent))
                 ->label(
                     $this->label(),
                     fn (InstructionInterface $instruction) => $instruction
@@ -52,7 +52,7 @@ class LoadVESAVideoAddress implements ServiceInterface
         $resb = $this->code->architecture()->runtime()
             ->findReserveByte(Formatter::removeSign(SetVESABIOSExtensionInformation::class));
 
-        return (new Instruction($this->code, $serviceManager))
+        return (new Instruction($this->code, $serviceComponent))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction

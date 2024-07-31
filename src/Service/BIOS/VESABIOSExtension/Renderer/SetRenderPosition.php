@@ -15,13 +15,13 @@ use PHPOS\Service\Component\VESA\Align;
 use PHPOS\Service\Component\VESA\AlignType;
 use PHPOS\Service\Component\VESA\VideoBitType;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class SetRenderPosition implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
         [$width, $height, $alignType, $x, $y] = $this->parameters + [
             null,
@@ -61,7 +61,7 @@ class SetRenderPosition implements ServiceInterface
                 $y,
             );
 
-        return (new Instruction($this->code, $serviceManager))
+        return (new Instruction($this->code, $serviceComponent))
             ->append(
                 Add::class,
                 $di->index(),

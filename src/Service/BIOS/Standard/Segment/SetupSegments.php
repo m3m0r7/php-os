@@ -17,13 +17,13 @@ use PHPOS\OS\Instruction;
 use PHPOS\OS\InstructionInterface;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class SetupSegments implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
         [$dataSegmentSelector, $withSetInterrupt] = $this->parameters + [null, true];
         assert($dataSegmentSelector === null || is_int($dataSegmentSelector));
@@ -50,7 +50,7 @@ class SetupSegments implements ServiceInterface
         assert($sp instanceof StackPointerRegisterInterface);
 
 
-        $instruction = new Instruction($this->code, $serviceManager);
+        $instruction = new Instruction($this->code, $serviceComponent);
 
         $instruction = $instruction->append(Cli::class);
 

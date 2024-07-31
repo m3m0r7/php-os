@@ -11,7 +11,7 @@ use PHPOS\OS\InstructionInterface;
 use PHPOS\OS\OSInfo;
 use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\Standard\DefineByte;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 use PHPOS\Service\BIOS\Standard\Times;
 use PHPOS\Service\ServiceInterface;
 
@@ -19,11 +19,11 @@ class BootloaderSignature implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
-        return (new Instruction($this->code, $serviceManager))
+        return (new Instruction($this->code, $serviceComponent))
             ->include(
-                $serviceManager->createService(
+                $serviceComponent->createService(
                     Times::class,
                     sprintf(
                         '%s-($-$$)',
@@ -34,7 +34,7 @@ class BootloaderSignature implements ServiceInterface
                 ),
             )
             ->include(
-                $serviceManager->createService(
+                $serviceComponent->createService(
                     DefineByte::class,
                     VariableType::BITS_16,
                     new Hex(0xAA55),

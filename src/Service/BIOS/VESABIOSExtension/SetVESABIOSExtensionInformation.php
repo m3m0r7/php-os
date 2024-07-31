@@ -17,13 +17,13 @@ use PHPOS\Service\BaseService;
 use PHPOS\Service\BIOS\BIOS;
 use PHPOS\Service\Component\Formatter;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class SetVESABIOSExtensionInformation implements ServiceInterface
 {
     use BaseService;
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
         [$video, $resolution] = $this->parameters + [null, VESA::VIDEO_640x480x32bpp];
         assert($video instanceof CodeInterface || $video === null);
@@ -44,7 +44,7 @@ class SetVESABIOSExtensionInformation implements ServiceInterface
         assert($di instanceof IndexRegisterInterface);
 
         if ($video instanceof CodeInterface) {
-            return (new Instruction($this->code, $serviceManager))
+            return (new Instruction($this->code, $serviceComponent))
                 ->label(
                     $this->label(),
                     fn (InstructionInterface $instruction) => $instruction
@@ -58,7 +58,7 @@ class SetVESABIOSExtensionInformation implements ServiceInterface
         $resb = $this->code->architecture()->runtime()
             ->reserveByte(Formatter::removeSign(static::class), 256);
 
-        return (new Instruction($this->code, $serviceManager))
+        return (new Instruction($this->code, $serviceComponent))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction

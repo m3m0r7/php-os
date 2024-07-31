@@ -26,7 +26,7 @@ use PHPOS\Service\BaseService;
 use PHPOS\Service\Component\Address\ByteIndirect;
 use PHPOS\Service\Component\Address\Indirect;
 use PHPOS\Service\ServiceInterface;
-use PHPOS\Service\ServiceManagerInterface;
+use PHPOS\Service\ServiceManager\ServiceComponentInterface;
 
 class Mouse implements ServiceInterface
 {
@@ -68,7 +68,7 @@ class Mouse implements ServiceInterface
             );
     }
 
-    public function process(ServiceManagerInterface $serviceManager): InstructionInterface
+    public function process(ServiceComponentInterface $serviceComponent): InstructionInterface
     {
         $registers = $this->code->architecture()->runtime()->registers();
 
@@ -82,7 +82,7 @@ class Mouse implements ServiceInterface
         $mouseX = $this->extern->get($this->label() . '_mouse_x');
         $mouseY = $this->extern->get($this->label() . '_mouse_y');
 
-        return (new Instruction($this->code, $serviceManager))
+        return (new Instruction($this->code, $serviceComponent))
             ->label(
                 $this->label(),
                 fn (InstructionInterface $instruction) => $instruction
